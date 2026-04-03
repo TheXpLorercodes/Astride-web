@@ -16,7 +16,7 @@ export default function AsteroidHero() {
           repeat: Infinity,
           ease: "easeInOut"
         }}
-        className="absolute w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px] pointer-events-none" 
+        className="absolute w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-purple-600/10 rounded-full blur-[80px] md:blur-[120px] pointer-events-none" 
       />
 
       {/* Main Asteroid Logo */}
@@ -35,11 +35,11 @@ export default function AsteroidHero() {
           transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
         >
           <Image 
-            src="/asteroid_logo.png" // I'll rename the generated file or just use the absolute path later in the assemble phase
+            src="/asteroid_logo.png" 
             alt="Astride Logo"
-            width={400}
-            height={400}
-            className="drop-shadow-[0_0_30px_rgba(139,92,246,0.3)] filter contrast-125 brightness-110"
+            width={280}
+            height={280}
+            className="md:w-[400px] md:h-[400px] drop-shadow-[0_0_30px_rgba(139,92,246,0.3)] filter contrast-125 brightness-110"
             priority
           />
         </motion.div>

@@ -39,32 +39,32 @@ export default function LaunchTimer({ data }) {
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-        className="flex flex-col items-center text-center max-w-4xl"
+        className="flex flex-col items-center text-center w-full max-w-4xl"
       >
         <div className="mb-6 px-6 py-2 bg-pink-500/10 border border-pink-500/20 rounded-full text-[10px] font-bold tracking-[0.4em] text-pink-400 uppercase">
           {"T-Minus Verification // IGNITION"}
         </div>
 
-        <h2 className="text-4xl md:text-6xl font-orbitron font-bold text-white mb-12 tracking-tight">
+        <h2 className="text-3xl md:text-6xl font-orbitron font-bold text-white mb-12 tracking-tight line-clamp-2 px-4">
           {data.name?.split('|')[0] || data.name}
         </h2>
 
         <div className="flex gap-4 md:gap-10">
           {[
-            { label: 'Hours', val: timeLeft.h },
-            { label: 'Minutes', val: timeLeft.m },
-            { label: 'Seconds', val: timeLeft.s }
+            { label: 'Hrs', val: timeLeft.h },
+            { label: 'Min', val: timeLeft.m },
+            { label: 'Sec', val: timeLeft.s }
           ].map((unit, i) => (
             <div key={unit.label} className="flex flex-col items-center">
               <div className="relative">
                 {/* Glow behind numbers */}
-                <div className="absolute inset-0 bg-pink-500/20 blur-2xl pointer-events-none" />
-                <span className="relative text-7xl md:text-9xl font-orbitron font-medium text-white tabular-nums tracking-normal">
+                <div className="absolute inset-0 bg-pink-500/20 blur-xl md:blur-2xl pointer-events-none" />
+                <span className="relative text-5xl md:text-9xl font-orbitron font-medium text-white tabular-nums tracking-normal">
                   {unit.val}
                 </span>
               </div>
-              <p className="card-subtitle tracking-[0.3em] font-black text-pink-500 animate-pulse uppercase">{"Ignition Sequence Active"}</p>
-              <span className="mt-4 text-[10px] text-pink-400/60 uppercase tracking-[0.5em] font-bold">
+              <p className="hidden md:block card-subtitle tracking-[0.3em] font-black text-pink-500 animate-pulse uppercase">{"Ignition Sequence"}</p>
+              <span className="mt-2 md:mt-4 text-[8px] md:text-[10px] text-pink-400/60 uppercase tracking-[0.3em] md:tracking-[0.5em] font-bold">
                 {unit.label}
               </span>
             </div>

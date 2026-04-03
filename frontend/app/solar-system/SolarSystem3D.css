@@ -186,3 +186,48 @@
   0%, 100% { opacity: 0.1; }
   50% { opacity: 0.3; }
 }
+@media (max-width: 1024px) {
+  .ss3d-overlay {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .ss3d-glass-hud {
+    padding: 1.5rem;
+    max-width: 100%;
+    border-radius: 16px;
+  }
+  
+  .ss3d-glass-hud h1 {
+    font-size: 1.2rem;
+  }
+
+  .ss3d-detail-panel {
+    top: auto;
+    bottom: 2rem;
+    left: 1.5rem;
+    right: 1.5rem;
+    max-width: none;
+    padding: 1.5rem;
+    border-radius: 20px;
+  }
+  
+  .ss3d-detail-panel h2 {
+    font-size: 1.4rem;
+  }
+  
+  .panel-actions {
+    flex-direction: column;
+  }
+  
+  .btn-v4-explore {
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .ss3d-instructions {
+     display: none;
+  }
+}

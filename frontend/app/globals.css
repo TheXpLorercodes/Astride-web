@@ -377,12 +377,39 @@ body {
   background: linear-gradient(to bottom, white, transparent);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .hero-title-v4 {
-    font-size: 5rem;
+    font-size: clamp(3rem, 15vw, 6rem);
+  }
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: 1.5rem 1rem;
+  }
+  
+  .hero-title-v4 {
+    font-size: 4rem;
+    letter-spacing: -1px;
   }
 
   .grid-3 {
-    grid-template-columns: 1fr !important;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .hero-bottom-actions {
+    margin-top: 2rem;
+  }
+
+  .btn-v4-explore {
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-title-v4 {
+    font-size: 3rem;
   }
 }

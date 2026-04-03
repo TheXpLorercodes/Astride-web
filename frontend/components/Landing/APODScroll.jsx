@@ -12,14 +12,14 @@ export default function APODScroll({ data }) {
         whileInView={{ opacity: 1, y: 0, x: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-        className="relative group max-w-2xl"
+        className="relative group w-full max-w-2xl"
       >
         {/* Glow Effect */}
         <div className="absolute inset-0 bg-purple-500/10 blur-[80px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
 
         {/* Glass Card */}
-        <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] backdrop-blur-3xl shadow-2xl">
-          <div className="relative h-[300px] md:h-[400px]">
+        <div className="relative overflow-hidden rounded-[24px] md:rounded-[32px] border border-white/10 bg-white/[0.03] backdrop-blur-3xl shadow-2xl">
+          <div className="relative h-[250px] md:h-[400px]">
             {data.media_type === 'video' ? (
               <iframe src={data.url} className="w-full h-full border-none" title={data.title} />
             ) : (
@@ -34,7 +34,7 @@ export default function APODScroll({ data }) {
             </div>
           </div>
 
-          <div className="p-8 md:p-10">
+          <div className="p-6 md:p-10">
             <h2 className="text-2xl md:text-3xl font-orbitron font-bold text-white mb-4 line-clamp-2">
               {data.title}
             </h2>

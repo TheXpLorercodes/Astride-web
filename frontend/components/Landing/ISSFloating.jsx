@@ -33,7 +33,7 @@ export default function ISSFloating() {
         whileInView={{ opacity: 1, x: 0, scale: 1 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-        className="relative p-10 rounded-[40px] border border-cyan-500/20 bg-cyan-950/10 backdrop-blur-2xl w-full max-w-xl group"
+        className="relative p-6 md:p-10 rounded-[30px] md:rounded-[40px] border border-cyan-500/20 bg-cyan-950/10 backdrop-blur-2xl w-full max-w-xl group"
       >
         {/* Glow */}
         <div className="absolute inset-0 bg-cyan-500/5 blur-[100px] pointer-events-none" />
@@ -48,14 +48,14 @@ export default function ISSFloating() {
         <div className="space-y-8">
           <div className="grid grid-cols-2 gap-8">
             <div className="space-y-2">
-              <span className="text-[10px] text-gray-500 uppercase tracking-widest font-mono">Latitude</span>
-              <p className="text-3xl font-orbitron font-medium text-white tabular-nums">
+              <span className="text-[8px] md:text-[10px] text-gray-500 uppercase tracking-widest font-mono">Latitude</span>
+              <p className="text-xl md:text-3xl font-orbitron font-medium text-white tabular-nums">
                 {loading ? '---' : position.lat.toFixed(4)}°
               </p>
             </div>
             <div className="space-y-2">
-              <span className="text-[10px] text-gray-500 uppercase tracking-widest font-mono">Longitude</span>
-              <p className="text-3xl font-orbitron font-medium text-white tabular-nums">
+              <span className="text-[8px] md:text-[10px] text-gray-500 uppercase tracking-widest font-mono">Longitude</span>
+              <p className="text-xl md:text-3xl font-orbitron font-medium text-white tabular-nums">
                 {loading ? '---' : position.lng.toFixed(4)}°
               </p>
             </div>

@@ -27,16 +27,17 @@
 
 .dash-welcome h1 {
   font-family: 'Orbitron', sans-serif;
-  font-size: 3rem;
+  font-size: clamp(1.8rem, 5vw, 3rem);
   font-weight: 900;
   margin-bottom: 0.5rem;
+  line-height: 1.2;
 }
 
 /* Grid Layout */
 .dash-grid {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  gap: 2rem;
+  gap: 1rem;
 }
 
 /* Planet-Style Card (Redesigned) */
@@ -111,7 +112,7 @@
 .card-body {
   margin-top: 2rem;
   z-index: 10;
-  max-width: 65%;
+  max-width: 70%;
 }
 
 .card-desc {
@@ -226,20 +227,60 @@
 }
 
 @media (max-width: 1024px) {
+  .dashboard-content {
+    padding: 2rem 1rem;
+  }
 
   .card-feature,
   .card-widget,
   .card-wide {
     grid-column: span 12;
+    padding: 2rem;
   }
 
   .dash-news-tile {
     grid-column: span 6;
   }
+  
+  .card-planet-wrap {
+    width: 200px;
+    height: 200px;
+    right: -5%;
+  }
+
+  .card-body {
+    max-width: 100%;
+  }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .dash-news-tile {
     grid-column: span 12;
+  }
+
+  .card-planet-wrap {
+    width: 150px;
+    height: 150px;
+    top: -5%;
+    right: -2%;
+    opacity: 0.3;
+  }
+  
+  .card-body {
+     margin-top: 1rem;
+  }
+
+  .card-title {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .quick-action-tile {
+    padding: 1.5rem;
+  }
+  
+  .quick-action-icon {
+    font-size: 1.5rem;
   }
 }
