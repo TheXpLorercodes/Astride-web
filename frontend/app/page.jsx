@@ -1,9 +1,9 @@
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
-import Starfield from '../components/Landing/Starfield'; // We'll wrap this with dynamic below
+// We'll wrap this with dynamic below
 import AsteroidHero from '../components/Landing/AsteroidHero';
 import APODScroll from '../components/Landing/APODScroll';
-import ISSFloating from '../components/Landing/ISSFloating';
+// We'll wrap this with dynamic below
 import LaunchTimer from '../components/Landing/LaunchTimer';
 import NewsStaggered from '../components/Landing/NewsStaggered';
 import JourneyCTA from '../components/Landing/JourneyCTA';

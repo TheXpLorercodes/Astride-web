@@ -4,10 +4,7 @@ import { useRef } from 'react';
 
 export default function Starfield() {
   const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end end"]
-  });
+  const { scrollYProgress } = useScroll();
 
   const translateY1 = useTransform(scrollYProgress, [0, 1], [0, -150]);
   const translateY2 = useTransform(scrollYProgress, [0, 1], [0, -300]);
