@@ -1,6 +1,8 @@
 import dynamic from 'next/dynamic';
 import React, { Suspense } from 'react';
 import Link from 'next/link';
+
+export const dynamic = 'force-dynamic';
 // We'll wrap this with dynamic below
 import AsteroidHero from '../components/Landing/AsteroidHero';
 import APODScroll from '../components/Landing/APODScroll';

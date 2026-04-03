@@ -9,6 +9,8 @@ import dynamic from 'next/dynamic';
 import JourneyCTA from '../../components/Landing/JourneyCTA';
 import './Dashboard.css';
 
+export const dynamic = 'force-dynamic';
+
 const DynamicStarfield = dynamic(() => import('../../components/Landing/Starfield'), { ssr: false });
 
 const fadeInUp = {

@@ -7,6 +7,8 @@ import SolarSystemModel from './SolarSystemModel';
 import FavoritesButton from '../../components/Favorites/FavoritesButton';
 import './SolarSystem3D.css';
 
+export const dynamic = 'force-dynamic';
+
 const planetData = {
   Mercury: { desc: "The smallest planet and closest to the Sun.", type: "Terrestrial" },
   Venus: { desc: "The hottest planet in our solar system.", type: "Terrestrial" },
