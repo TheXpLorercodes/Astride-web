@@ -9,13 +9,6 @@ const nextConfig = {
       { protocol: 'https', hostname: 'images-assets.nasa.gov' },
     ],
   },
-  // Speed up Vercel builds by ignoring these checks
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
 };
 
 module.exports = nextConfig;
