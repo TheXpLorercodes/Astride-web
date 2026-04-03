@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+// Deployment Heartbeat: 2026-04-03T19:22:00Z (Forcing Vercel Sync)
 const nextConfig = {
   images: {
     remotePatterns: [
