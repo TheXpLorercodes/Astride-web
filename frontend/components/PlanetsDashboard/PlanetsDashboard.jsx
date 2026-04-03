@@ -86,11 +86,11 @@ export default function PlanetsDashboard({ planets }) {
                 <ul className="pd-facts-list">
                   {(selectedPlanet.facts || []).map((fact, idx) => (
                     <li key={idx}>
-                       <span style={{ color: selectedPlanet.color }}>//</span> {fact}
+                        <span style={{ color: selectedPlanet.color }}>{"//"}</span> {fact}
                     </li>
                   ))}
                   {(!selectedPlanet.facts || selectedPlanet.facts.length === 0) && (
-                    <li><span style={{ color: selectedPlanet.color }}>//</span> Detailed facts currently being synchronized...</li>
+                    <li><span style={{ color: selectedPlanet.color }}>{"//"}</span> Detailed facts currently being synchronized...</li>
                   )}
                 </ul>
               </motion.div>

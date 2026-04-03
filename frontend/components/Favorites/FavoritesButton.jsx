@@ -9,22 +9,22 @@ export default function FavoritesButton({ itemId, itemType, itemData }) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (user) {
-      checkIsFavorite();
+    let active = true;
+    async function check() {
+      if (!user) return;
+      const { data } = await supabase
+        .from('favorites')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('item_id', itemId)
+        .eq('item_type', itemType)
+        .single();
+
+      if (active && data) setIsFavorite(true);
     }
-  }, [user, itemId]);
-
-  const checkIsFavorite = async () => {
-    const { data, error } = await supabase
-      .from('favorites')
-      .select('id')
-      .eq('user_id', user.id)
-      .eq('item_id', itemId)
-      .eq('item_type', itemType)
-      .single();
-
-    if (data) setIsFavorite(true);
-  };
+    check();
+    return () => { active = false; };
+  }, [user, itemId, itemType]);
 
   const toggleFavorite = async (e) => {
     e.preventDefault();

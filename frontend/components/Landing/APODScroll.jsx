@@ -44,7 +44,7 @@ export default function APODScroll({ data }) {
             <div className="flex items-center justify-between mt-auto">
               <span className="text-[10px] text-gray-500 tracking-widest uppercase font-mono">{data.date}</span>
               <button className="text-xs text-purple-400 font-bold tracking-widest uppercase hover:text-white transition-colors">
-                Read Abstract // 01
+                {"Read Abstract // 01"}
               </button>
             </div>
           </div>

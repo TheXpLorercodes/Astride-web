@@ -42,7 +42,7 @@ export default function LaunchTimer({ data }) {
         className="flex flex-col items-center text-center max-w-4xl"
       >
         <div className="mb-6 px-6 py-2 bg-pink-500/10 border border-pink-500/20 rounded-full text-[10px] font-bold tracking-[0.4em] text-pink-400 uppercase">
-          T-Minus Verification // IGNITION
+          {"T-Minus Verification // IGNITION"}
         </div>
 
         <h2 className="text-4xl md:text-6xl font-orbitron font-bold text-white mb-12 tracking-tight">
@@ -63,6 +63,7 @@ export default function LaunchTimer({ data }) {
                   {unit.val}
                 </span>
               </div>
+              <p className="card-subtitle tracking-[0.3em] font-black text-pink-500 animate-pulse uppercase">{"Ignition Sequence Active"}</p>
               <span className="mt-4 text-[10px] text-pink-400/60 uppercase tracking-[0.5em] font-bold">
                 {unit.label}
               </span>

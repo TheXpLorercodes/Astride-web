@@ -1,5 +1,6 @@
 import dynamic from 'next/dynamic';
-import { Suspense } from 'react';
+import React, { Suspense } from 'react';
+import Link from 'next/link';
 // We'll wrap this with dynamic below
 import AsteroidHero from '../components/Landing/AsteroidHero';
 import APODScroll from '../components/Landing/APODScroll';
@@ -26,14 +27,16 @@ async function LaunchSection() {
 }
 
 async function NewsSection() {
+  let news = [];
   try {
     const res = await fetch(`https://api.spaceflightnewsapi.net/v4/articles/?limit=4`, { next: { revalidate: 3600 } });
-    const news = await res.json();
-    return <NewsStaggered news={news.results || []} />;
+    const data = await res.json();
+    news = data.results || [];
   } catch (err) {
     console.error('News fetch error:', err);
     return null;
   }
+  return <NewsStaggered news={news} />;
 }
 
 // Low-overhead skeleton for loading states
@@ -85,7 +88,7 @@ export default function LandingPage() {
 
       <footer className="py-20 text-center border-t border-white/5 bg-black/50 backdrop-blur-md">
         <p className="text-[10px] tracking-[0.8em] text-gray-600 uppercase">
-          Astride Gateway // Unauthorized Access Prohibited
+          {"Astride Gateway // Unauthorized Access Prohibited"}
         </p>
       </footer>
     </div>

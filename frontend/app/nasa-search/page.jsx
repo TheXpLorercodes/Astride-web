@@ -30,7 +30,7 @@ export default function NASASearch() {
     <div className="search-page">
       <header className="search-header">
         <h1 className="search-title">NASA <span className="gradient-text">Archive</span></h1>
-        <p className="search-subtitle">Search through millions of astronomical images from NASA's history.</p>
+        <p className="search-subtitle">Search through millions of astronomical images from NASA&apos;s history.</p>
         
         <form className="search-box" onSubmit={handleSearch}>
           <input 

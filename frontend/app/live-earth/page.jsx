@@ -89,7 +89,7 @@ export default function LiveEarth() {
             </div>
           </div>
         ) : (
-          <div className="epic-empty">Downlink failed. Satellite may be in Earth's shadow.</div>
+          <div className="epic-empty">Downlink failed. Satellite may be in Earth&apos;s shadow.</div>
         )}
       </main>
     </div>

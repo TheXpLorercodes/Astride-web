@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, Suspense } from 'react';
+import Link from 'next/link';
 import { Canvas } from '@react-three/fiber';
 import { useRouter } from 'next/navigation';
 import SolarSystemModel from './SolarSystemModel';
@@ -47,7 +48,7 @@ export default function SolarSystemPage() {
           </div>
 
           <div className="ss3d-instructions">
-            DRAG TO ROTATE // SCROLL TO ZOOM // CLICK PLANETS
+            {"DRAG TO ROTATE // SCROLL TO ZOOM // CLICK PLANETS"}
           </div>
         </div>
 

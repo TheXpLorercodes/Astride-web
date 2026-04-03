@@ -55,6 +55,7 @@ export default function AsteroidHero() {
         <h1 className="text-4xl md:text-6xl font-orbitron font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-white via-purple-400 to-white">
           ASTRIDE
         </h1>
+        <p className="text-cyan-400 font-black tracking-[0.8em] uppercase text-[10px] mb-6">{"Astride // Asteroid Watch"}</p>
         <p className="mt-4 text-sm md:text-base tracking-[0.5em] text-gray-400 uppercase font-medium">
           Infinite Exploration
         </p>

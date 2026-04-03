@@ -26,9 +26,7 @@ export default function NewsStaggered({ news }) {
   return (
     <section className="relative min-h-screen py-40 px-6 md:px-20 max-w-7xl mx-auto">
       <div className="mb-20 text-center md:text-left">
-        <h2 className="text-sm font-orbitron font-bold tracking-[0.4em] text-purple-400 uppercase mb-4">
-          Latest Dispatches // SECTOR-7
-        </h2>
+        <p className="text-purple-500 font-black tracking-[0.6em] uppercase text-[10px] mb-4">{"Latest Dispatches // SECTOR-7"}</p>
         <h3 className="text-3xl md:text-5xl font-orbitron font-bold text-white tracking-tight">
           Cosmic News Feed
         </h3>
@@ -70,7 +68,7 @@ export default function NewsStaggered({ news }) {
 
       <div className="mt-20 flex justify-center">
         <Link href="/news" className="text-sm font-bold tracking-[0.3em] text-gray-500 hover:text-white uppercase transition-colors border-b border-white/10 pb-2">
-          View Archive // Deep Feed →
+          {"View Archive // Deep Feed →"}
         </Link>
       </div>
     </section>

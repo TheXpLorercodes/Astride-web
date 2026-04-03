@@ -96,7 +96,7 @@ export default function ObjectDetailsClient({ table, id, item, related, encData,
                   {item.facts && Array.isArray(item.facts) ? (
                     item.facts.map((fact, idx) => (
                       <li key={idx}>
-                        <span style={{color: themeColor}}>//</span> {fact}
+                         <span style={{color: themeColor}}>{"//"}</span> {fact}
                       </li>
                     ))
                   ) : encData ? (
@@ -107,7 +107,7 @@ export default function ObjectDetailsClient({ table, id, item, related, encData,
                       </li>
                     ))
                   ) : (
-                    <li><span style={{color: themeColor}}>//</span> Extended encyclopedic data is not yet available for this body.</li>
+                    <li><span style={{color: themeColor}}>{"//"}</span> Extended encyclopedic data is not yet available for this body.</li>
                   )}
                 </motion.ul>
               )}

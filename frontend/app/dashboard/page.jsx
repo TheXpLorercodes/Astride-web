@@ -180,9 +180,9 @@ export default function MissionControl() {
       <div className="dashboard-content relative z-10">
         
         <header className="dash-welcome">
-          <p className="text-purple-500 font-black tracking-[0.6em] uppercase text-[10px] mb-4">Astride // Mission Control</p>
+          <p className="text-purple-500 font-black tracking-[0.6em] uppercase text-[10px] mb-4">{"Astride // Mission Control"}</p>
           <h1 className="text-white">Welcome back, <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-600">{user?.email?.split('@')[0]}</span></h1>
-          <p className="text-gray-400 tracking-widest uppercase text-xs mt-2">All systems nominal // 2026-04-03</p>
+          <p className="text-gray-400 tracking-widest uppercase text-xs mt-2">{"All systems nominal // 2026-04-03"}</p>
         </header>
 
         <div className="dash-grid">
