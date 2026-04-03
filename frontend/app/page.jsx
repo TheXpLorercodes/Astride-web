@@ -1,4 +1,4 @@
-import dynamic from 'next/dynamic';
+import nextDynamic from 'next/dynamic';
 import React, { Suspense } from 'react';
 import Link from 'next/link';
 
@@ -12,8 +12,8 @@ import NewsStaggered from '../components/Landing/NewsStaggered';
 import JourneyCTA from '../components/Landing/JourneyCTA';
 
 // Lazy load heavy/client-only components
-const DynamicStarfield = dynamic(() => import('../components/Landing/Starfield'));
-const DynamicISSFloating = dynamic(() => import('../components/Landing/ISSFloating'));
+const DynamicStarfield = nextDynamic(() => import('../components/Landing/Starfield'));
+const DynamicISSFloating = nextDynamic(() => import('../components/Landing/ISSFloating'));
 
 async function APODSection() {
   const NASA_KEY = process.env.NASA_API_KEY;

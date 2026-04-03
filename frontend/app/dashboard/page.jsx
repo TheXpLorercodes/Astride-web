@@ -5,13 +5,13 @@ import { supabase } from '../../lib/supabaseClient';
 import { useAuth } from '../../context/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
+import nextDynamic from 'next/dynamic';
 import JourneyCTA from '../../components/Landing/JourneyCTA';
 import './Dashboard.css';
 
 export const dynamic = 'force-dynamic';
 
-const DynamicStarfield = dynamic(() => import('../../components/Landing/Starfield'), { ssr: false });
+const DynamicStarfield = nextDynamic(() => import('../../components/Landing/Starfield'), { ssr: false });
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
