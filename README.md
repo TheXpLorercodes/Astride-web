@@ -1,17 +1,18 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Astride - Space Exploration Platform
+
+This is a professional space exploration platform built with Next.js, featuring real-time NASA data and a Gemini-powered Cosmic Assistant.
+
+## Repository Structure
+- **/frontend**: The main Next.js application.
+- **/backend**: Supabase/Database configuration and schema files.
 
 ## Getting Started
 
-First, run the development server:
+To run the development server:
 
 ```bash
+cd frontend
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
