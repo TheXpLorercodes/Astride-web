@@ -1,0 +1,83 @@
+/* ISSTracker.css */
+.iss-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.iss-header {
+  margin-bottom: 2rem;
+}
+
+.iss-title {
+  font-family: 'Orbitron', sans-serif;
+  color: var(--accent-pink);
+  margin: 0;
+}
+
+.iss-desc {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+
+.iss-pulse-indicator {
+  width: 12px;
+  height: 12px;
+  background-color: var(--accent-pink);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--accent-pink), 0 0 20px var(--accent-pink);
+  animation: pulse-ring 2s infinite;
+}
+
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(236, 72, 153, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(236, 72, 153, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(236, 72, 153, 0); }
+}
+
+.iss-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.iss-panel {
+  background: rgba(236, 72, 153, 0.05);
+  border: 1px solid rgba(236, 72, 153, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.iss-panel-label {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+}
+
+.iss-panel-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  font-family: 'Orbitron', monospace;
+  color: white;
+}
+
+.iss-panel-value.coord {
+  font-size: 1.2rem;
+}
+
+.iss-panel-unit {
+  font-size: 1rem;
+  color: var(--accent-pink);
+}
+
+.leaflet-container {
+  background-color: #000;
+}
+
+/* Smooth move transitions for ISS marker delivery app style */
+.leaflet-marker-pane .leaflet-marker-icon {
+  transition: transform 1.5s linear !important;
+}

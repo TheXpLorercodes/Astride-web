@@ -1,0 +1,144 @@
+.mars-style-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 2.5rem;
+  height: 280px;
+  border-radius: 32px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  text-decoration: none;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  isolation: isolate;
+}
+
+.mars-style-card:hover {
+  transform: translateY(-12px);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--card-color);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 255, 255, 0.05);
+}
+
+.mars-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  z-index: 5;
+  margin-bottom: 0.5rem;
+}
+
+.mars-card-titles h3 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: white;
+  margin: 0;
+  line-height: 1;
+}
+
+.mars-card-subtitle {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin-top: 0.4rem;
+  letter-spacing: 1px;
+}
+
+.mars-card-plus {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 300;
+}
+
+.mars-card-body {
+  margin-top: 1.5rem;
+  z-index: 10;
+  max-width: 60%;
+  position: relative;
+}
+
+.mars-card-desc {
+  font-size: 0.85rem;
+  color: #cbd5e1;
+  line-height: 1.5;
+  margin-bottom: 2rem;
+  opacity: 0.8;
+}
+
+.mars-card-stats {
+  position: absolute;
+  bottom: -40px;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.mars-stat-pill {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(5px);
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  border-left: 3px solid var(--card-color);
+  min-width: 120px;
+}
+
+.mars-stat-pill .label {
+  font-size: 0.6rem;
+  font-weight: 800;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.mars-stat-pill .value {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 900;
+  margin-top: 0.2rem;
+}
+
+.mars-card-planet-wrap {
+  position: absolute;
+  top: 10%;
+  right: -15%;
+  width: 260px;
+  height: 260px;
+  z-index: 1;
+  transition: transform 0.6s ease;
+  pointer-events: none;
+}
+
+.mars-style-card:hover .mars-card-planet-wrap {
+  transform: scale(1.1) rotate(10deg) translateX(-10px);
+}
+
+.mars-card-planet-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.mars-card-sphere {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.mars-card-planet-shadow {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow: inset -20px -20px 40px rgba(0, 0, 0, 0.8), inset 10px 10px 20px rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+}

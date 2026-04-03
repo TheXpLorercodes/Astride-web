@@ -1,0 +1,236 @@
+/* ObjectDetails.css */
+.odc-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem 1rem 6rem;
+}
+
+.odc-back-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #94a3b8;
+  padding: 0.5rem 1.25rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.odc-back-btn:hover {
+  background: rgba(255,255,255,0.05);
+  color: white;
+}
+
+/* Header & Siblings Selector */
+.odc-header {
+  margin-bottom: 3rem;
+}
+.odc-db-label {
+  font-family: 'Orbitron', sans-serif;
+  color: #06b6d4;
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.odc-count {
+  font-size: 0.8rem;
+  background: rgba(255,255,255,0.1);
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  color: #94a3b8;
+}
+
+.odc-selector-strip {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--theme) rgba(255,255,255,0.05);
+}
+.odc-selector-strip::-webkit-scrollbar { height: 6px; }
+.odc-selector-strip::-webkit-scrollbar-thumb { background: var(--theme); border-radius: 3px; }
+
+.odc-selector-btn {
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 1rem;
+  min-width: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  color: #94a3b8;
+  text-decoration: none;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+.odc-selector-btn:hover {
+  background: rgba(255,255,255,0.05);
+  color: white;
+}
+.odc-selector-btn.active {
+  background: rgba(0,0,0,0.6);
+  color: white;
+}
+.odc-selector-img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+}
+
+/* Dashboard Visual */
+.odc-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.odc-visual-wrapper {
+  margin: 2rem 0 3rem;
+}
+.odc-planet-sphere {
+  width: 350px;
+  height: 350px;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.5s ease;
+}
+.odc-galaxy-visual {
+  width: 400px;
+  height: 300px;
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.5s ease;
+}
+
+.odc-scanline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--theme);
+  opacity: 0.5;
+  box-shadow: 0 0 10px var(--theme);
+  animation: odc-scan 4s linear infinite;
+}
+@keyframes odc-scan {
+  0% { top: -10%; }
+  100% { top: 110%; }
+}
+
+.odc-planet-name {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 3.5rem;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+/* Data Section */
+.odc-data-section {
+  width: 100%;
+  max-width: 900px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.05);
+  padding: 2.5rem;
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+}
+
+.odc-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  overflow-x: auto;
+}
+.odc-tab-btn {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding-bottom: 1rem;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 1px;
+}
+.odc-tab-btn:hover { color: white; }
+
+.odc-facts-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.odc-facts-list li {
+  background: rgba(0,0,0,0.3);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.05);
+  font-size: 1.05rem;
+  color: #cbd5e1;
+  line-height: 1.6;
+}
+
+.odc-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+@media (max-width: 768px) { .odc-stats-grid { grid-template-columns: 1fr 1fr; } }
+.odc-stat-box {
+  background: rgba(0,0,0,0.3);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.05);
+  text-align: center;
+}
+.odc-stat-lbl {
+  color: #94a3b8;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 1rem;
+}
+.odc-stat-val {
+  font-size: 1.5rem;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.odc-atmos-list { display: flex; flex-direction: column; gap: 1.5rem; }
+.odc-atmos-item { width: 100%; }
+.odc-atmos-header {
+  display: flex; justify-content: space-between; margin-bottom: 0.5rem; color: white; font-weight: 500; text-transform: uppercase; letter-spacing: 1px;
+}
+.odc-atmos-bar-bg { height: 6px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; }
+.odc-atmos-bar-fill { height: 100%; border-radius: 4px; }
+
+.odc-mission-log { display: flex; flex-direction: column; gap: 1rem; }
+.odc-mission-card {
+  padding: 1rem 1.5rem;
+  border-left: 3px solid;
+  background: rgba(0,0,0,0.3);
+  border-radius: 0 8px 8px 0;
+  transition: background 0.3s ease;
+}
+.odc-mission-card:hover {
+  background: rgba(255,255,255,0.05);
+}
+.odc-mission-year { font-weight: 700; margin-bottom: 0.4rem; font-family: 'Orbitron', sans-serif; text-transform: uppercase; letter-spacing: 1px; }
+.odc-mission-name { color: white; font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; }
+.odc-mission-desc { color: #94a3b8; line-height: 1.5; font-size: 0.95rem; }

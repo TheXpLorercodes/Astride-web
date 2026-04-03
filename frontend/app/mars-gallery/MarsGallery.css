@@ -1,0 +1,151 @@
+.mars-page {
+  padding: 8rem 2rem 4rem;
+  min-height: 100vh;
+  background: radial-gradient(circle at top right, rgba(239, 68, 68, 0.1), transparent);
+}
+
+.mars-header {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 4rem;
+}
+
+.mars-title {
+  font-size: 3.5rem;
+  letter-spacing: -1px;
+  margin-bottom: 1rem;
+}
+
+.mars-subtitle {
+  color: var(--text-secondary, #94a3b8);
+  font-size: 1.2rem;
+}
+
+.mars-controls {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.rover-selector {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.rover-btn {
+  padding: 0.6rem 1.5rem;
+  border-radius: 20px;
+  border: none;
+  background: transparent;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.rover-btn.active {
+  background: #ef4444;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+}
+
+.sol-input {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--text-secondary);
+}
+
+.sol-field {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 8px;
+  width: 100px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.mars-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.mars-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.mars-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.mars-img-wrapper {
+  position: relative;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+}
+
+.mars-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.mars-card:hover img {
+  transform: scale(1.1);
+}
+
+.mars-img-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+  display: flex;
+  align-items: flex-end;
+  padding: 1rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.mars-card:hover .mars-img-overlay {
+  opacity: 1;
+}
+
+.mars-img-overlay span {
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.mars-card-info {
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.mars-loading, .mars-empty {
+  text-align: center;
+  padding: 5rem;
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+}

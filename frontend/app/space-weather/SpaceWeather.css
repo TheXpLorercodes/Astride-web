@@ -1,0 +1,152 @@
+.weather-page {
+  padding: 8rem 2rem 4rem;
+  min-height: 100vh;
+  background: radial-gradient(circle at top left, rgba(245, 158, 11, 0.05), transparent);
+}
+
+.weather-header {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 5rem;
+}
+
+.weather-title {
+  font-size: 3.5rem;
+}
+
+.weather-subtitle {
+  color: #94a3b8;
+  margin-top: 1rem;
+}
+
+.weather-timeline {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  position: relative;
+}
+
+.weather-timeline::before {
+  content: '';
+  position: absolute;
+  left: 2.5rem;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255,255,255,0.1);
+}
+
+.weather-event {
+  display: flex;
+  gap: 3rem;
+  position: relative;
+}
+
+.event-date {
+  width: 5rem;
+  height: 5rem;
+  min-width: 5rem;
+  background: #1e293b;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.event-date .day {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.event-date .month {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #64748b;
+}
+
+.event-card {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.event-card:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.event-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.event-header h3 {
+  font-size: 1.3rem;
+  color: #fff;
+}
+
+.activity-id {
+  font-size: 0.7rem;
+  font-family: 'Courier New', Courier, monospace;
+  color: #64748b;
+}
+
+.event-metrics {
+  display: flex;
+  gap: 3rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+}
+
+.metric span {
+  font-size: 0.65rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.metric strong {
+  font-size: 1rem;
+  color: #e2e8f0;
+}
+
+.event-note {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.status-badge {
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.weather-loading, .weather-empty {
+  text-align: center;
+  padding: 5rem;
+  color: #94a3b8;
+}

@@ -1,0 +1,130 @@
+.ss3d-canvas-container {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  background: #000;
+  overflow: hidden;
+}
+
+.ss3d-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 3rem;
+}
+
+.ss3d-glass-hud {
+  pointer-events: auto;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  border-radius: 24px;
+  max-width: 350px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  animation: slideInLeft 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes slideInLeft {
+  from { transform: translateX(-50px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.ss3d-glass-hud h1 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.5rem;
+  color: white;
+  margin-bottom: 0.25rem;
+}
+
+.ss3d-glass-hud p {
+  font-size: 0.65rem;
+  letter-spacing: 3px;
+  color: var(--accent-cyan);
+  font-weight: 800;
+  margin-bottom: 2rem;
+}
+
+.ss3d-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ss3d-controls label {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  letter-spacing: 1px;
+}
+
+.ss3d-controls input[type="range"] {
+  width: 100%;
+  accent-color: var(--accent-cyan);
+}
+
+.ss3d-instructions {
+  margin-top: 2rem;
+  font-size: 0.6rem;
+  color: #475569;
+  letter-spacing: 2px;
+}
+
+.ss3d-detail-panel {
+  pointer-events: auto;
+  position: absolute;
+  top: 3rem;
+  right: 3rem;
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--accent-cyan);
+  padding: 2.5rem;
+  border-radius: 24px;
+  max-width: 400px;
+  animation: slideInRight 0.5s ease-out;
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(50px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  opacity: 0.5;
+}
+
+.close-btn:hover { opacity: 1; }
+
+.ss3d-loader {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.loader-inner {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 10px;
+  color: rgba(255, 255, 255, 0.1);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.1; }
+  50% { opacity: 0.3; }
+}
