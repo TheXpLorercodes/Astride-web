@@ -25,7 +25,7 @@ export default function Starfield() {
       <motion.div style={{ y: translateY1 }} className="absolute inset-0">
         <div className="stars-layer-high-density" />
       </motion.div>
-      
+
       <motion.div style={{ y: translateY2 }} className="absolute inset-0">
         <div className="stars-layer-mid-density" />
       </motion.div>

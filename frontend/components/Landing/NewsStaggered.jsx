@@ -34,7 +34,7 @@ export default function NewsStaggered({ news }) {
         </h3>
       </div>
 
-      <motion.div 
+      <motion.div
         variants={container}
         initial="hidden"
         whileInView="show"
@@ -44,13 +44,13 @@ export default function NewsStaggered({ news }) {
         {displayNews.map((article, idx) => (
           <motion.div key={idx} variants={item} className="group cursor-pointer">
             <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] backdrop-blur-xl aspect-[16/9]">
-              <img 
-                src={article.image || article.urlToImage} 
-                alt={article.title} 
+              <img
+                src={article.image || article.urlToImage}
+                alt={article.title}
                 className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 opacity-60 group-hover:opacity-90"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#020205] to-transparent opacity-80" />
-              
+
               <div className="absolute bottom-0 p-8 w-full">
                 <span className="text-[10px] text-purple-400 font-bold tracking-widest uppercase mb-2 block">
                   {article.source?.name || 'NASA News'}

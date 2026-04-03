@@ -16,28 +16,15 @@ const SPACE_FACTS = [
 const EMOJIS = ['🚀', '🛰️', '☄️', '🌌', '🛸', '👽', '🔭'];
 
 export default function LoadingSpinner() {
-  const [fact, setFact] = useState('');
-  const [emoji, setEmoji] = useState('🚀');
-
-  useEffect(() => {
-    setFact(SPACE_FACTS[Math.floor(Math.random() * SPACE_FACTS.length)]);
-    setEmoji(EMOJIS[Math.floor(Math.random() * EMOJIS.length)]);
-    
-    const interval = setInterval(() => {
-      setFact(SPACE_FACTS[Math.floor(Math.random() * SPACE_FACTS.length)]);
-      setEmoji(EMOJIS[Math.floor(Math.random() * EMOJIS.length)]);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, []);
-
   return (
     <div className="fun-loading-container">
-       <div className="fun-loading-ring"></div>
-       <div className="fun-loading-emoji">{emoji}</div>
-       <div className="fun-loading-fact">
-          <div className="fact-badge">INCOMING TELEMETRY</div>
-          <p>{fact}</p>
+       <div className="loading-orbit-wrapper">
+          <div className="loading-ring-outer"></div>
+          <div className="loading-ring-inner"></div>
+          <div className="loading-core"></div>
        </div>
+       <div className="loading-text-glitch" data-text="SYNCHRONIZING">SYNCHRONIZING</div>
+       <p className="loading-sub">PRE-RENDERING COSMIC GEOMETRY</p>
     </div>
   );
 }

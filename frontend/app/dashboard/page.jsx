@@ -5,211 +5,241 @@ import { supabase } from '../../lib/supabaseClient';
 import { useAuth } from '../../context/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import Starfield from '../../components/Landing/Starfield';
+import dynamic from 'next/dynamic';
 import JourneyCTA from '../../components/Landing/JourneyCTA';
 import './Dashboard.css';
 
-// Reusing some logic from the landing components for the dashboard widgets
+const DynamicStarfield = dynamic(() => import('../../components/Landing/Starfield'), { ssr: false });
+
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
 };
 
-export default function MissionControl() {
-  const { user, loading: authLoading } = useAuth();
-  const [favorites, setFavorites] = useState([]);
-  const [launches, setLaunches] = useState([]);
-  const [weather, setWeather] = useState(null);
+// Widget Skeleton Component
+const WidgetSkeleton = ({ title, className }) => (
+  <div className={`dash-card ${className} flex flex-col items-center justify-center`}>
+    <div className="w-8 h-8 border-2 border-cyan-500/20 border-t-cyan-500 rounded-full animate-spin mb-4" />
+    <p className="text-[10px] text-gray-500 uppercase tracking-widest font-mono">Syncing {title}...</p>
+  </div>
+);
+
+// --- Widget Components ---
+
+const APODWidget = () => {
   const [apod, setApod] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/apod').then(res => res.json()).then(data => {
+      setApod(data);
+      setLoading(false);
+    });
+  }, []);
+
+  if (loading) return <WidgetSkeleton title="Orbital Photography" className="card-widget" />;
+  if (!apod) return null;
+
+  return (
+    <motion.div variants={fadeInUp} initial="hidden" animate="visible" className="dash-card card-widget group cursor-pointer">
+      <div className="card-top">
+         <div className="flex flex-col">
+            <h3 className="card-title">APOD</h3>
+            <p className="card-subtitle">{apod.date}</p>
+         </div>
+         <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white font-light text-xl">+</div>
+      </div>
+      <div className="card-body">
+         <h4 className="text-white font-bold mb-2 line-clamp-1">{apod.title}</h4>
+         <p className="card-desc line-clamp-2">{apod.explanation}</p>
+      </div>
+      <div className="card-planet-wrap">
+         <img src={apod.url} alt={apod.title} className="card-image" />
+         <div className="card-shadow"></div>
+      </div>
+      <Link href="/apod" className="absolute inset-0 z-20"></Link>
+    </motion.div>
+  );
+};
+
+const NextLaunchWidget = () => {
+  const [nextLaunch, setNextLaunch] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/launches').then(res => res.json()).then(data => {
+      setNextLaunch(data.results?.[0] || null);
+      setLoading(false);
+    });
+  }, []);
+
+  if (loading) return <WidgetSkeleton title="Launch Systems" className="card-wide" />;
+
+  return (
+    <motion.div variants={fadeInUp} initial="hidden" animate="visible" className="dash-card card-wide">
+      <div className="card-top">
+         <div className="flex flex-col">
+            <h3 className="card-title">Next Launch</h3>
+            <p className="card-subtitle">{nextLaunch ? new Date(nextLaunch.net).toLocaleDateString() : 'TBD'}</p>
+         </div>
+      </div>
+      <div className="card-body">
+         {nextLaunch ? (
+           <div className="space-y-4">
+              <h4 className="text-2xl font-bold text-white line-clamp-1">{nextLaunch.name}</h4>
+              <div className="grid grid-cols-2 gap-4">
+                 <div className="p-3 rounded-2xl bg-white/5 border-l-2 border-purple-500">
+                    <span className="text-[8px] uppercase font-black text-gray-400 tracking-widest">Time</span>
+                    <p className="text-sm font-bold text-white font-orbitron">{new Date(nextLaunch.net).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} UTC</p>
+                 </div>
+                 <div className="p-3 rounded-2xl bg-white/5 border-l-2 border-purple-500">
+                    <span className="text-[8px] uppercase font-black text-gray-400 tracking-widest">Pad</span>
+                    <p className="text-sm font-bold text-white line-clamp-1">{nextLaunch.pad?.name || 'Unknown'}</p>
+                 </div>
+              </div>
+           </div>
+         ) : (
+           <p className="card-desc">No upcoming launches detected in the sector.</p>
+         )}
+      </div>
+      <div className="card-planet-wrap">
+         <div className="card-sphere" style={{ background: 'radial-gradient(circle at 30% 30%, #fff, #ef4444 60%)' }}></div>
+         <div className="card-shadow"></div>
+      </div>
+    </motion.div>
+  );
+};
+
+const NewsGridWidget = () => {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/news').then(res => res.json()).then(data => {
+      setNews(data.articles || []);
+      setLoading(false);
+    });
+  }, []);
+
+  if (loading) return <div className="col-span-12 py-24 text-center text-gray-500 font-mono text-[10px] animate-pulse tracking-[0.5em]">SYNCING GLOBAL DISPATCHES...</div>;
+
+  return (
+    <div className="col-span-12 grid grid-cols-12 gap-6 mt-8">
+      {news.slice(0, 4).map((n, i) => (
+        <motion.div key={i} variants={fadeInUp} initial="hidden" animate="visible" className="dash-card dash-news-tile group">
+          <img src={n.urlToImage} alt="" className="news-tile-img" />
+          <div className="z-10 flex flex-col h-full">
+            <span className="text-[8px] text-purple-400 font-black uppercase tracking-widest mb-2">{n.source?.name?.split(' ')[0] || 'NASA'}</span>
+            <h5 className="news-tile-title line-clamp-3">{n.title}</h5>
+            <Link href={n.url} target="_blank" className="mt-auto text-[9px] font-black uppercase text-gray-500 hover:text-white transition-colors tracking-widest">Read Dispatch →</Link>
+          </div>
+        </motion.div>
+      ))}
+    </div>
+  );
+};
+
+// --- Main Dashboard Component ---
+
+export default function MissionControl() {
+  const { user, loading: authLoading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
     if (!authLoading && !user) {
       router.push('/auth/login');
-    } else if (user) {
-      loadAllData();
     }
   }, [user, authLoading]);
 
-  const loadAllData = async () => {
-    setLoading(true);
-    try {
-      const [favs, launchRes, weatherRes, apodRes, newsRes] = await Promise.all([
-        supabase.from('favorites').select('*').eq('user_id', user.id).order('created_at', { ascending: false }),
-        fetch('/api/launches'),
-        fetch('/api/nasa/donki'),
-        fetch('/api/apod'),
-        fetch('/api/news')
-      ]);
-
-      setFavorites(favs.data || []);
-      
-      const lData = await launchRes.json();
-      setLaunches(lData.results || []);
-
-      const wData = await weatherRes.json();
-      setWeather(wData[0] || null);
-
-      const aData = await apodRes.json();
-      setApod(aData);
-
-      const nData = await newsRes.json();
-      setNews(nData.articles || []);
-
-    } catch (err) {
-      console.error('Mission Control Data Error:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (authLoading || loading) {
+  if (authLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#02040a]">
+      <div className="min-h-screen flex items-center justify-center bg-black">
         <motion.div 
           animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
           transition={{ duration: 2, repeat: Infinity }}
           className="text-cyan-400 font-orbitron tracking-widest text-xs uppercase"
         >
-          Initializing Telemetry...
+          Establishing Secure Link...
         </motion.div>
       </div>
     );
   }
 
-  const nextLaunch = launches[0];
+  if (!user) return null;
 
   return (
     <div className="mission-control-root relative">
-      <Starfield />
+      <DynamicStarfield />
       <JourneyCTA />
       
       <div className="dashboard-content relative z-10">
         
-        {/* Welcome Block */}
-        <section className="dash-welcome">
-          <p className="text-cyan-400 font-bold tracking-[0.4em] uppercase text-[10px] mb-2">Systems Nominal // Mission-04</p>
-          <h1>Welcome back, <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">{user?.email?.split('@')[0]}</span></h1>
-          <p>Explore. Discover. Understand.</p>
-        </section>
+        <header className="dash-welcome">
+          <p className="text-purple-500 font-black tracking-[0.6em] uppercase text-[10px] mb-4">Astride // Mission Control</p>
+          <h1 className="text-white">Welcome back, <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-600">{user?.email?.split('@')[0]}</span></h1>
+          <p className="text-gray-400 tracking-widest uppercase text-xs mt-2">All systems nominal // 2026-04-03</p>
+        </header>
 
-        {/* Dynamic Grid */}
         <div className="dash-grid">
-          
-          {/* Main Feature: Solar System 3D Card */}
-          <motion.div 
-            variants={fadeInUp} initial="hidden" animate="visible"
-            className="dash-card card-feature group cursor-pointer"
-          >
+          {/* Solar System 3D Card */}
+          <motion.div variants={fadeInUp} initial="hidden" animate="visible" className="dash-card card-feature group cursor-pointer">
             <div className="relative z-10 flex flex-col h-full justify-between">
               <div>
-                <h3 className="card-title"><span className="status-dot"></span> Solar System 3D</h3>
-                <p className="text-gray-400 max-w-xs mt-4">Explore planets, moons, and celestial bodies in stunning 3D detail.</p>
+                <h3 className="card-title text-4xl">System Explorer</h3>
+                <p className="text-gray-300 max-w-sm mt-6 text-lg line-clamp-2">Explore planets, moons, and celestial bodies in high-fidelity 3D environments.</p>
               </div>
-              <Link href="/solar-system" className="w-fit px-8 py-3 bg-purple-600/80 hover:bg-purple-600 text-white rounded-full font-bold text-xs tracking-widest transition-all">
-                Launch 3D View →
+              <Link href="/solar-system" className="w-fit px-10 py-4 bg-white text-black hover:bg-gray-200 rounded-full font-black text-[10px] tracking-[0.3em] uppercase transition-all">
+                Commence Mission →
               </Link>
             </div>
+            <div className="card-planet-wrap !right-[-5%] !top-[-10%] !w-[400px] !h-[400px]">
+               <div className="card-sphere" style={{ background: 'radial-gradient(circle at 30% 30%, #fff, #3b82f6 60%)' }}></div>
+               <div className="card-shadow"></div>
+            </div>
           </motion.div>
 
-          {/* APOD Widget */}
-          <motion.div 
-            variants={fadeInUp} initial="hidden" animate="visible"
-            className="dash-card card-widget"
-          >
-            <h3 className="card-title">Astronomy Picture of the Day</h3>
-            {apod && (
-              <div className="relative">
-                <img src={apod.url} alt={apod.title} className="w-full h-32 object-cover rounded-xl mb-4 opacity-70 group-hover:opacity-100 transition-opacity" />
-                <h4 className="text-sm font-bold text-white mb-2 line-clamp-1">{apod.title}</h4>
-                <p className="text-[10px] text-gray-500 leading-relaxed line-clamp-2">{apod.explanation}</p>
-                <div className="mt-4 flex items-center justify-between text-[10px] text-gray-600 font-mono">
-                  <span>{apod.date}</span>
-                  <Link href="/apod" className="text-cyan-400 hover:underline">View Full →</Link>
-                </div>
-              </div>
-            )}
-          </motion.div>
+          <APODWidget />
 
           {/* ISS Tracker */}
-          <motion.div 
-            variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
-            className="dash-card card-wide"
-          >
-            <h3 className="card-title"><span className="status-dot"></span> ISS Tracker</h3>
-            <div className="grid grid-cols-2 gap-8 mt-4">
-              <div>
-                <span className="card-meta uppercase tracking-widest">Atmosphere Entry</span>
-                <p className="card-main-val text-2xl">408 km</p>
-              </div>
-              <div>
-                <span className="card-meta uppercase tracking-widest">Velocity</span>
-                <p className="card-main-val text-2xl">7.67 km/s</p>
-              </div>
+          <motion.div variants={fadeInUp} initial="hidden" animate="visible" className="dash-card card-wide">
+            <div className="card-top">
+               <div className="flex flex-col">
+                  <h3 className="card-title">ISS TRACKER</h3>
+                  <p className="card-subtitle text-cyan-400 animate-pulse">LIVE TELEMETRY</p>
+               </div>
             </div>
-            <p className="mt-6 text-[10px] text-gray-500 tracking-[0.3em] font-mono">LIVE TELEMETRY ACTIVE</p>
-          </motion.div>
-
-          {/* Next Launch */}
-          <motion.div 
-            variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
-            className="dash-card card-wide"
-          >
-            <h3 className="card-title">Next Launch</h3>
-            {nextLaunch ? (
-              <div>
-                <h4 className="text-lg font-bold text-white mb-4 line-clamp-1">{nextLaunch.name}</h4>
-                <div className="flex gap-10">
+            <div className="card-body">
+               <div className="grid grid-cols-2 gap-8">
                   <div>
-                    <p className="text-2xl font-bold text-cyan-400 font-orbitron">{new Date(nextLaunch.net).toLocaleDateString()}</p>
-                    <p className="card-meta font-mono mt-1">{new Date(nextLaunch.net).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} UTC</p>
+                    <span className="text-[10px] uppercase font-black text-gray-500 tracking-widest">Altitude</span>
+                    <p className="text-3xl font-orbitron font-bold text-white">408 km</p>
                   </div>
-                  <div className="border-l border-white/10 pl-10">
-                    <p className="text-xs text-gray-400 uppercase tracking-widest">Pad</p>
-                    <p className="text-sm text-white mt-1 line-clamp-1">{nextLaunch.pad?.name || 'TBD'}</p>
+                  <div>
+                    <span className="text-[10px] uppercase font-black text-gray-500 tracking-widest">Velocity</span>
+                    <p className="text-3xl font-orbitron font-bold text-white">7.67 km/s</p>
                   </div>
-                </div>
-              </div>
-            ) : (
-              <p className="text-gray-500">No upcoming launches detected.</p>
-            )}
-          </motion.div>
-
-          {/* Latest News - Separate Tiles */}
-          <motion.div 
-            variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
-            className="col-span-12"
-          >
-            <div className="flex justify-between items-end mb-6">
-              <h3 className="card-title m-0">Latest Dispatches</h3>
-              <Link href="/news" className="text-[9px] text-gray-500 hover:text-white uppercase tracking-[0.3em] transition-colors font-bold">View Archive →</Link>
+               </div>
+               <div className="mt-8 pt-8 border-t border-white/5">
+                  <Link href="/iss" className="text-[10px] font-black text-gray-400 hover:text-white tracking-[0.3em] uppercase transition-all">Open Sat-Link →</Link>
+               </div>
             </div>
-            <div className="grid grid-cols-12 gap-6">
-              {news.slice(0, 4).map((n, i) => (
-                <motion.div 
-                  key={i} 
-                  whileHover={{ y: -5 }}
-                  className="dash-card dash-news-tile group"
-                >
-                  <img src={n.urlToImage} alt="" className="news-tile-img" />
-                  <h5 className="news-tile-title">{n.title}</h5>
-                  <div className="mt-auto flex items-center justify-between">
-                    <span className="text-[8px] text-gray-500 font-mono uppercase">{n.source?.name?.split(' ')[0] || 'NASA'}</span>
-                    <span className="text-[14px] text-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-                  </div>
-                </motion.div>
-              ))}
+            <div className="card-planet-wrap">
+               <div className="card-sphere" style={{ background: 'radial-gradient(circle at 30% 30%, #fff, #06b6d4 60%)' }}></div>
+               <div className="card-shadow"></div>
             </div>
           </motion.div>
 
-          {/* Quick Systems Access - Custom Tiled UI */}
-          <motion.div 
-            variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
-            className="col-span-12 mt-10"
-          >
-             <h3 className="card-title mb-6">Quick Systems Access</h3>
+          <NextLaunchWidget />
+
+          <NewsGridWidget />
+
+          {/* Quick Actions */}
+          <motion.div variants={fadeInUp} initial="hidden" animate="visible" className="col-span-12 mt-16">
+             <div className="flex items-center gap-4 mb-8">
+                <div className="h-[1px] flex-1 bg-white/10"></div>
+                <h3 className="text-[10px] font-black tracking-[0.5em] text-gray-500 uppercase">Auxiliary Systems</h3>
+                <div className="h-[1px] flex-1 bg-white/10"></div>
+             </div>
              <div className="grid grid-cols-2 md:grid-cols-6 gap-6">
                 {[
                   { name: 'Simulation', path: '/simulation', icon: '⚡' },
@@ -217,7 +247,7 @@ export default function MissionControl() {
                   { name: 'Archive', path: '/details', icon: '📖' },
                   { name: 'Gallery', path: '/mars-gallery', icon: '🖼️' },
                   { name: 'Astronomy', path: '/apod', icon: '✨' },
-                  { name: 'Config', path: '/settings', icon: '⚙️' }
+                  { name: 'Settings', path: '/settings', icon: '⚙️' }
                 ].map((action, i) => (
                   <Link key={i} href={action.path} className="quick-action-tile group">
                     <span className="quick-action-icon">{action.icon}</span>
@@ -226,7 +256,6 @@ export default function MissionControl() {
                 ))}
              </div>
           </motion.div>
-
         </div>
       </div>
     </div>

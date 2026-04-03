@@ -9,11 +9,11 @@ export default function ISSFloating() {
   useEffect(() => {
     const fetchISS = async () => {
       try {
-        const res = await fetch('http://api.open-notify.org/iss-now.json');
+        const res = await fetch('/api/iss');
         const data = await res.json();
         setPosition({ 
-          lat: parseFloat(data.iss_position.latitude), 
-          lng: parseFloat(data.iss_position.longitude) 
+          lat: parseFloat(data.latitude), 
+          lng: parseFloat(data.longitude) 
         });
         setLoading(false);
       } catch (err) {

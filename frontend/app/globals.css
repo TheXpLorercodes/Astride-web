@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Orbitron:wght@700;900&display=swap');
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -18,11 +20,13 @@
   --text-secondary: #94a3b8;
   --card-bg: rgba(21, 27, 61, 0.6);
   --border-color: rgba(139, 92, 246, 0.2);
-  --border-subtle: rgba(255,255,255,0.06);
+  --border-subtle: rgba(255, 255, 255, 0.06);
   --nav-height: 80px;
 }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+}
 
 body {
   font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -55,12 +59,23 @@ body {
 }
 
 @keyframes twinkle {
-  0%, 100% { opacity: 0.25; background-position: 0% 0%; }
-  50% { opacity: 0.5; background-position: 100% 100%; }
+
+  0%,
+  100% {
+    opacity: 0.25;
+    background-position: 0% 0%;
+  }
+
+  50% {
+    opacity: 0.5;
+    background-position: 100% 100%;
+  }
 }
 
 /* ── Layout ───────────────────────────────────────────────── */
-.app-wrapper { position: relative; }
+.app-wrapper {
+  position: relative;
+}
 
 .content {
   position: relative;
@@ -77,8 +92,15 @@ body {
 }
 
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ── Typography ──────────────────────────────────────────── */
@@ -110,8 +132,15 @@ body {
 }
 
 @keyframes gradientShift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 /* ── Cards ───────────────────────────────────────────────── */
@@ -151,7 +180,9 @@ body {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* ── Buttons ─────────────────────────────────────────────── */
@@ -281,7 +312,7 @@ body {
   color: white;
   letter-spacing: -2px;
   text-transform: uppercase;
-  text-shadow: 0 0 30px rgba(255,255,255,0.1);
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
 }
 
 .hero-meta {
@@ -319,12 +350,12 @@ body {
   text-transform: uppercase;
   letter-spacing: 1px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 10px 30px rgba(255,255,255,0.1);
+  box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
 }
 
 .btn-v4-explore:hover {
   transform: translateY(-5px) scale(1.05);
-  box-shadow: 0 15px 40px rgba(255,255,255,0.2);
+  box-shadow: 0 15px 40px rgba(255, 255, 255, 0.2);
 }
 
 .v4-scroll-indicator {
@@ -335,10 +366,23 @@ body {
   opacity: 0.5;
 }
 
-.v4-scroll-indicator span { font-size: 0.6rem; letter-spacing: 2px; }
-.indicator-line { width: 1px; height: 60px; background: linear-gradient(to bottom, white, transparent); }
+.v4-scroll-indicator span {
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+}
+
+.indicator-line {
+  width: 1px;
+  height: 60px;
+  background: linear-gradient(to bottom, white, transparent);
+}
 
 @media (max-width: 768px) {
-  .hero-title-v4 { font-size: 5rem; }
-  .grid-3 { grid-template-columns: 1fr !important; }
+  .hero-title-v4 {
+    font-size: 5rem;
+  }
+
+  .grid-3 {
+    grid-template-columns: 1fr !important;
+  }
 }

@@ -44,7 +44,7 @@ export default function LaunchTimer({ data }) {
         <div className="mb-6 px-6 py-2 bg-pink-500/10 border border-pink-500/20 rounded-full text-[10px] font-bold tracking-[0.4em] text-pink-400 uppercase">
           T-Minus Verification // IGNITION
         </div>
-        
+
         <h2 className="text-4xl md:text-6xl font-orbitron font-bold text-white mb-12 tracking-tight">
           {data.name?.split('|')[0] || data.name}
         </h2>

@@ -1,208 +1,238 @@
 :root {
-  --dash-bg: #02040a;
-  --card-bg: rgba(13, 17, 23, 0.6);
-  --card-border: rgba(56, 189, 248, 0.1);
+  --dash-bg: transparent;
+  --card-bg: rgba(255, 255, 255, 0.02);
+  --card-border: rgba(255, 255, 255, 0.08);
   --accent-blue: #0ea5e9;
   --accent-purple: #8b5cf6;
-  --glow-blue: rgba(14, 165, 233, 0.2);
-  --glow-purple: rgba(139, 92, 246, 0.2);
 }
 
 .mission-control-root {
-  background-color: var(--dash-bg);
   min-height: 100vh;
   color: white;
   padding-bottom: 5rem;
+  background: black;
+  /* Base background, Starfield sits on top */
 }
 
 .dashboard-content {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 4rem 2rem;
 }
 
 /* Section Header */
 .dash-welcome {
-  margin-bottom: 3rem;
-  animation: fadeInDown 0.8s ease-out;
+  margin-bottom: 4rem;
 }
 
 .dash-welcome h1 {
   font-family: 'Orbitron', sans-serif;
-  font-size: 2.5rem;
-  font-weight: 700;
+  font-size: 3rem;
+  font-weight: 900;
   margin-bottom: 0.5rem;
-}
-
-.dash-welcome p {
-  color: #94a3b8;
-  font-size: 1rem;
 }
 
 /* Grid Layout */
 .dash-grid {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
-/* Generic Card Styles (Glassmorphism + Glow) */
+/* Planet-Style Card (Redesigned) */
 .dash-card {
-  background: var(--card-bg);
-  backdrop-filter: blur(20px);
-  border: 1px solid var(--card-border);
-  border-radius: 20px;
-  padding: 2rem;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 2.5rem;
+  min-height: 320px;
+  border-radius: 32px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(20px);
   overflow: hidden;
-  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  isolation: isolate;
 }
 
 .dash-card:hover {
-  transform: translateY(-5px);
-  border-color: rgba(56, 189, 248, 0.4);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  transform: translateY(-12px);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--accent-purple);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 255, 255, 0.05);
 }
 
-/* Feature Card (Solar System) */
 .card-feature {
   grid-column: span 8;
-  height: 400px;
-  background-image: linear-gradient(to right, rgba(0,0,0,0.8), transparent), url('https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&q=80');
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.8), transparent), url('https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&q=80');
   background-size: cover;
   background-position: center;
 }
 
-/* Standard Widget */
 .card-widget {
   grid-column: span 4;
 }
 
-/* Wide Widget */
 .card-wide {
   grid-column: span 6;
 }
 
-/* Full Width Widget */
 .card-full {
   grid-column: span 12;
 }
 
-/* Typography & Details */
-.card-title {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 0.9rem;
-  letter-spacing: 2px;
-  color: var(--accent-blue);
-  text-transform: uppercase;
-  margin-bottom: 1.5rem;
+/* Sub-card architecture */
+.card-top {
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.card-title span.status-dot {
-  width: 6px;
-  height: 6px;
-  background: #10b981;
-  border-radius: 50%;
-  box-shadow: 0 0 10px #10b981;
-}
-
-.card-main-val {
-  font-size: 3rem;
-  font-weight: 700;
-  font-family: 'Orbitron', sans-serif;
+  justify-content: space-between;
+  align-items: flex-start;
+  z-index: 5;
   margin-bottom: 0.5rem;
 }
 
-.card-meta {
-  color: #64748b;
-  font-size: 0.8rem;
-  font-weight: 500;
+.card-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: white;
+  margin: 0;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: 0;
 }
 
-/* Animations */
-@keyframes fadeInDown {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
+.card-subtitle {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  margin-top: 0.5rem;
+  letter-spacing: 1px;
 }
 
-/* Miniature News Tiles */
+.card-body {
+  margin-top: 2rem;
+  z-index: 10;
+  max-width: 65%;
+}
+
+.card-desc {
+  font-size: 0.9rem;
+  color: #cbd5e1;
+  line-height: 1.6;
+  opacity: 0.8;
+}
+
+/* Decorative Sphere/Planet Wrap */
+.card-planet-wrap {
+  position: absolute;
+  top: 10%;
+  right: -10%;
+  width: 280px;
+  height: 280px;
+  z-index: 1;
+  transition: transform 0.6s ease;
+  pointer-events: none;
+}
+
+.dash-card:hover .card-planet-wrap {
+  transform: scale(1.1) rotate(10deg) translateX(-15px);
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  mask-image: radial-gradient(circle at center, black 60%, transparent 100%);
+}
+
+.card-sphere {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #fff, var(--accent-purple) 60%);
+}
+
+.card-shadow {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow: inset -20px -20px 40px rgba(0, 0, 0, 0.8), inset 10px 10px 20px rgba(255, 255, 255, 0.1);
+}
+
+/* Specific Widget Styles */
 .dash-news-tile {
   grid-column: span 3;
-  padding: 1.25rem !important;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  padding: 1.5rem !important;
+  min-height: 240px;
 }
 
 .news-tile-img {
-  width: 100%;
-  height: 80px;
+  width: 120px;
+  height: 120px;
   object-fit: cover;
-  border-radius: 12px;
-  opacity: 0.6;
-  transition: opacity 0.3s;
+  border-radius: 50%;
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  opacity: 0.4;
+  transition: opacity 0.3s, transform 0.3s;
 }
 
 .dash-news-tile:hover .news-tile-img {
-  opacity: 1;
+  opacity: 0.8;
+  transform: scale(1.1);
 }
 
 .news-tile-title {
-  font-size: 0.75rem;
-  font-weight: 700;
+  font-size: 1rem;
+  font-weight: 800;
   line-height: 1.4;
   color: white;
-  margin: 0;
+  margin-bottom: 1rem;
+  max-width: 80%;
 }
 
-/* Quick Actions Refinement */
+/* Quick Actions */
 .quick-action-tile {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
-  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
+  gap: 1rem;
   transition: all 0.3s;
 }
 
 .quick-action-tile:hover {
-  background: rgba(14, 165, 233, 0.05);
-  border-color: rgba(14, 165, 233, 0.2);
-  transform: translateY(-3px);
+  background: rgba(14, 165, 233, 0.08);
+  border-color: var(--accent-blue);
+  transform: translateY(-5px);
 }
 
 .quick-action-icon {
-  font-size: 1.25rem;
-  opacity: 0.5;
-  transition: opacity 0.3s, transform 0.3s;
-}
-
-.quick-action-tile:hover .quick-action-icon {
-  opacity: 1;
-  transform: scale(1.1);
+  font-size: 2rem;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
 }
 
 .quick-action-label {
-  font-size: 10px;
+  font-size: 11px;
   text-transform: uppercase;
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  color: #6b7280;
-  transition: color 0.3s;
-}
-
-.quick-action-tile:hover .quick-action-label {
-  color: white;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: #94a3b8;
 }
 
 @media (max-width: 1024px) {
+
+  .card-feature,
+  .card-widget,
+  .card-wide {
+    grid-column: span 12;
+  }
+
   .dash-news-tile {
     grid-column: span 6;
   }
