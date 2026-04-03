@@ -116,7 +116,7 @@ const NewsGridWidget = () => {
 
   useEffect(() => {
     fetch('/api/news').then(res => res.json()).then(data => {
-      setNews(data.articles || []);
+      setNews(data.results || []);
       setLoading(false);
     });
   }, []);
@@ -126,12 +126,17 @@ const NewsGridWidget = () => {
   return (
     <div className="col-span-12 grid grid-cols-12 gap-6 mt-8">
       {news.slice(0, 4).map((n, i) => (
-        <motion.div key={i} variants={fadeInUp} initial="hidden" animate="visible" className="dash-card dash-news-tile group">
-          <img src={n.urlToImage} alt="" className="news-tile-img" />
-          <div className="z-10 flex flex-col h-full">
-            <span className="text-[8px] text-purple-400 font-black uppercase tracking-widest mb-2">{n.source?.name?.split(' ')[0] || 'NASA'}</span>
-            <h5 className="news-tile-title line-clamp-3">{n.title}</h5>
-            <Link href={n.url} target="_blank" className="mt-auto text-[9px] font-black uppercase text-gray-500 hover:text-white transition-colors tracking-widest">Read Dispatch →</Link>
+        <motion.div key={i} variants={fadeInUp} initial="hidden" animate="visible" className="planet-card dash-news-tile group">
+          <div className="card-top">
+             <span className="text-[8px] text-purple-400 font-black uppercase tracking-widest">{n.news_site || 'NASA'}</span>
+          </div>
+          <div className="card-body !mt-4">
+            <h5 className="text-sm font-bold text-white line-clamp-3 group-hover:text-purple-300 transition-colors">{n.title}</h5>
+            <Link href={n.url} target="_blank" className="mt-6 block text-[9px] font-black uppercase text-gray-500 hover:text-white transition-colors tracking-widest">Read Dispatch →</Link>
+          </div>
+          <div className="card-planet-wrap !w-[140px] !h-[140px] !right-[-10%] !top-[-10%]">
+             <img src={n.image_url || n.urlToImage} alt="" className="card-image opacity-40 group-hover:opacity-80 transition-opacity" />
+             <div className="card-shadow"></div>
           </div>
         </motion.div>
       ))}

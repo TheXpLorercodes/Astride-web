@@ -42,23 +42,27 @@ export default function NewsStaggered({ news }) {
         className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12"
       >
         {displayNews.map((article, idx) => (
-          <motion.div key={idx} variants={item} className="group cursor-pointer">
-            <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] backdrop-blur-xl aspect-[16/9]">
-              <img
-                src={article.image || article.urlToImage}
-                alt={article.title}
-                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 opacity-60 group-hover:opacity-90"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#020205] to-transparent opacity-80" />
+          <motion.div key={idx} variants={item} className="planet-card !min-h-[280px] group cursor-pointer">
+            <div className="card-top">
+               <span className="text-[10px] text-purple-400 font-black tracking-widest uppercase">
+                  {article.news_site || article.source?.name || 'NASA News'}
+               </span>
+            </div>
+            
+            <div className="card-body !mt-8">
+               <h4 className="text-xl font-bold text-white leading-tight group-hover:text-purple-300 transition-colors line-clamp-3">
+                 {article.title}
+               </h4>
+               <Link href={article.url} target="_blank" className="mt-8 block text-[10px] font-black uppercase text-gray-500 hover:text-white transition-colors tracking-widest">Read Dispatch →</Link>
+            </div>
 
-              <div className="absolute bottom-0 p-8 w-full">
-                <span className="text-[10px] text-purple-400 font-bold tracking-widest uppercase mb-2 block">
-                  {article.source?.name || 'NASA News'}
-                </span>
-                <h4 className="text-xl font-bold text-white leading-tight group-hover:text-purple-300 transition-colors line-clamp-2">
-                  {article.title}
-                </h4>
-              </div>
+            <div className="card-planet-wrap !w-[180px] !h-[180px] md:!w-[240px] md:!h-[240px] !right-[-5%] !top-[-5%]">
+               <img 
+                 src={article.image_url || article.image || article.urlToImage} 
+                 alt="" 
+                 className="card-image opacity-40 group-hover:opacity-80 transition-opacity" 
+               />
+               <div className="card-shadow"></div>
             </div>
           </motion.div>
         ))}

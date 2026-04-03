@@ -26,9 +26,14 @@ async function LaunchSection() {
 }
 
 async function NewsSection() {
-  const res = await fetch(`https://newsapi.org/v2/everything?q=space+nasa&sortBy=publishedAt&pageSize=4&apiKey=${process.env.NEWS_API_KEY || 'e356cfc7a77d4c0680a65cc65591ac79'}`, { next: { revalidate: 3600 } });
-  const news = await res.json();
-  return <NewsStaggered news={news.articles ? news.articles : []} />;
+  try {
+    const res = await fetch(`https://api.spaceflightnewsapi.net/v4/articles/?limit=4`, { next: { revalidate: 3600 } });
+    const news = await res.json();
+    return <NewsStaggered news={news.results || []} />;
+  } catch (err) {
+    console.error('News fetch error:', err);
+    return null;
+  }
 }
 
 // Low-overhead skeleton for loading states
