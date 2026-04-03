@@ -3,7 +3,19 @@ import React, { useState, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { useRouter } from 'next/navigation';
 import SolarSystemModel from './SolarSystemModel';
+import FavoritesButton from '../../components/Favorites/FavoritesButton';
 import './SolarSystem3D.css';
+
+const planetData = {
+  Mercury: { desc: "The smallest planet and closest to the Sun.", type: "Terrestrial" },
+  Venus: { desc: "The hottest planet in our solar system.", type: "Terrestrial" },
+  Earth: { desc: "Our home, the only known planet with life.", type: "Terrestrial" },
+  Mars: { desc: "The Red Planet, home to Olympus Mons.", type: "Terrestrial" },
+  Jupiter: { desc: "The largest planet, a gas giant with 79 moons.", type: "Gas Giant" },
+  Saturn: { desc: "The ringed planet, second-largest in the system.", type: "Gas Giant" },
+  Uranus: { desc: "An ice giant with a unique sideways tilt.", type: "Ice Giant" },
+  Neptune: { desc: "The most distant major planet from the Sun.", type: "Ice Giant" }
+};
 
 export default function SolarSystemPage() {
   const router = useRouter();
@@ -12,8 +24,8 @@ export default function SolarSystemPage() {
   const [detailsVisible, setDetailsVisible] = useState(false);
 
   const handleSelect = (name) => {
-    // Navigate directly to the planet's detail page
-    router.push(`/details/planets/${name.toLowerCase()}`);
+    setSelectedPlanet(name);
+    setDetailsVisible(true);
   };
 
   return (
@@ -40,13 +52,24 @@ export default function SolarSystemPage() {
         </div>
 
         {detailsVisible && selectedPlanet && (
-          <div className="ss3d-detail-panel">
-             <button className="close-btn" onClick={() => setDetailsVisible(false)}>×</button>
-             <h2 className="gradient-text">{selectedPlanet}</h2>
-             <p>Archival telemetry active for {selectedPlanet}. System metrics stabilized.</p>
-             <a href={`/details/planets?q=${selectedPlanet.toLowerCase()}`} className="btn-v4-explore" style={{ padding: '0.8rem 1.5rem', fontSize: '0.8rem', marginTop: '1rem' }}>
-                Access Database
-             </a>
+          <div className="ss3d-detail-panel card-entry">
+             <div className="panel-header">
+               <h2 className="gradient-text">{selectedPlanet}</h2>
+               <FavoritesButton 
+                 itemId={`planet-${selectedPlanet.toLowerCase()}`} 
+                 itemType="planet" 
+                 itemData={{ title: selectedPlanet, url: `/textures/planets/${selectedPlanet.toLowerCase()}.jpg` }} 
+               />
+             </div>
+             <p className="type-badge">{planetData[selectedPlanet]?.type || 'Celestial Body'}</p>
+             <p>{planetData[selectedPlanet]?.desc || `System metrics for ${selectedPlanet} stabilized.`}</p>
+             
+             <div className="panel-actions">
+               <Link href={`/details/planets/${selectedPlanet.toLowerCase()}`} className="btn-v4-explore">
+                  FULL DATABASE →
+               </Link>
+               <button className="close-btn-v2" onClick={() => setDetailsVisible(false)}>Minimize</button>
+             </div>
           </div>
         )}
       </div>

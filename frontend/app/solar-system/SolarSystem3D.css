@@ -92,19 +92,77 @@
   to { transform: translateX(0); opacity: 1; }
 }
 
-.close-btn {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: none;
-  border: none;
-  color: white;
-  font-size: 1.5rem;
-  cursor: pointer;
-  opacity: 0.5;
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
-.close-btn:hover { opacity: 1; }
+.type-badge {
+  display: inline-block;
+  background: rgba(139, 92, 246, 0.2);
+  color: var(--accent-cyan);
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.ss3d-detail-panel h2 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.ss3d-detail-panel p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #cbd5e1;
+}
+
+.panel-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.btn-v4-explore {
+  background: var(--accent-purple);
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.btn-v4-explore:hover {
+  background: var(--accent-pink);
+  box-shadow: 0 0 15px var(--accent-pink);
+}
+
+.close-btn-v2 {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.card-entry {
+  animation: cardScaleIn 0.4s cubic-bezier(0.1, 0.9, 0.2, 1);
+}
+
+@keyframes cardScaleIn {
+  from { transform: scale(0.9) translateX(20px); opacity: 0; }
+  to { transform: scale(1) translateX(0); opacity: 1; }
+}
 
 .ss3d-loader {
   position: absolute;

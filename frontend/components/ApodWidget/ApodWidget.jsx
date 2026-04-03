@@ -1,11 +1,19 @@
 import React from 'react';
 import Link from 'next/link';
+import FavoritesButton from '../Favorites/FavoritesButton';
 
 export default function ApodWidget({ apodData }) {
   if (!apodData || apodData.error) return null;
 
   return (
-    <div className="cosmos-card" style={{ padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column', height: '100%' }}>
+    <div className="cosmos-card" style={{ padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column', height: '100%', position: 'relative' }}>
+      <div style={{ position: 'absolute', top: '1rem', right: '1rem', zIndex: 10 }}>
+        <FavoritesButton 
+          itemId={`apod-${apodData.date}`} 
+          itemType="apod" 
+          itemData={{ title: apodData.title, url: apodData.url, date: apodData.date }} 
+        />
+      </div>
       <div style={{ height: '200px', position: 'relative' }}>
         {apodData.media_type === 'video' ? (
            <iframe src={apodData.url} style={{width:'100%', height:'100%', border:'none'}} title={apodData.title} />

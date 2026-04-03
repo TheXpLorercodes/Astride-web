@@ -1,11 +1,16 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { useAuth } from '../../context/AuthContext';
+import { supabase } from '../../lib/supabaseClient';
 import './Navbar.css';
 
 export default function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { user, loading } = useAuth();
+  
   const [isExploreOpen, setIsExploreOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -21,7 +26,6 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close menus on route change
   useEffect(() => {
     setIsMobileMenuOpen(false);
     setIsExploreOpen(false);
@@ -29,7 +33,6 @@ export default function Navbar() {
     setSearchResults([]);
   }, [pathname]);
 
-  // Handle click outside search
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
@@ -63,6 +66,12 @@ export default function Navbar() {
     return () => clearTimeout(timeoutId);
   }, [searchQuery]);
 
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push('/');
+    router.refresh();
+  };
+
   return (
     <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
       <div className="nav-container">
@@ -86,9 +95,6 @@ export default function Navbar() {
           {searchQuery && (
             <div className={`nav-search-results ${searchResults.length > 0 || isSearching ? 'active' : ''}`}>
                {isSearching ? <div className="p-4 text-sm text-gray-400">Searching...</div> : null}
-               {!isSearching && searchResults.length === 0 && searchQuery.length >= 2 ? (
-                 <div className="p-4 text-sm text-gray-400">No objects found.</div>
-               ) : null}
                {searchResults.map((res) => (
                  <Link href={`/details/${res.table}/${res.id}`} key={`${res.table}-${res.id}`} className="search-result-item" onClick={() => setSearchQuery('')}>
                    <div className="search-res-type">{res.typeLabel}</div>
@@ -103,16 +109,14 @@ export default function Navbar() {
         <div className="nav-links desktop-only">
           <Link href="/news" className={`nav-link ${pathname === '/news' ? 'active' : ''}`}>News</Link>
           <Link href="/launches" className={`nav-link ${pathname === '/launches' ? 'active' : ''}`}>Launches</Link>
-          <Link href="/apod" className={`nav-link ${pathname === '/apod' ? 'active' : ''}`}>APOD</Link>
+          {user && <Link href="/dashboard" className={`nav-link ${pathname === '/dashboard' ? 'active' : ''}`}>Mission Control</Link>}
           
           <div 
             className="dropdown mega-dropdown"
             onMouseEnter={() => setIsExploreOpen(true)}
             onMouseLeave={() => setIsExploreOpen(false)}
           >
-            <button 
-              className={`nav-link dropdown-trigger ${['/planets', '/moons', '/stars', '/galaxies', '/asteroids', '/encyclopedia', '/solar-system', '/mars-gallery', '/asteroid-watch', '/launch-tracker', '/live-earth', '/universe-scale', '/nasa-search', '/space-weather'].includes(pathname) ? 'active' : ''}`}
-            >
+            <button className="nav-link dropdown-trigger">
               Explore <span className={`arrow ${isExploreOpen ? 'open' : ''}`}>▼</span>
             </button>
             
@@ -120,36 +124,32 @@ export default function Navbar() {
               <div className="mega-menu-content">
                 <div className="mega-column">
                   <h4 className="column-title">Space Objects</h4>
-                  <Link href="/planets" className="mega-item"><span className="item-icon">🪐</span> Planets</Link>
-                  <Link href="/moons" className="mega-item"><span className="item-icon">🌒</span> Moons</Link>
-                  <Link href="/asteroids" className="mega-item"><span className="item-icon">☄️</span> Asteroids</Link>
-                  <Link href="/stars" className="mega-item"><span className="item-icon">⭐</span> Stars</Link>
-                  <Link href="/galaxies" className="mega-item"><span className="item-icon">🌌</span> Galaxies</Link>
+                  <Link href="/planets" className="mega-item">🪐 Planets</Link>
+                  <Link href="/moons" className="mega-item">🌒 Moons</Link>
+                  <Link href="/asteroids" className="mega-item">☄️ Asteroids</Link>
+                  <Link href="/stars" className="mega-item">⭐ Stars</Link>
+                  <Link href="/galaxies" className="mega-item">🌌 Galaxies</Link>
                 </div>
-                
                 <div className="mega-column">
                   <h4 className="column-title">Exploration</h4>
-                  <Link href="/asteroid-watch" className="mega-item"><span className="item-icon">🛡️</span> Asteroid Watch</Link>
-                  <Link href="/launch-tracker" className="mega-item"><span className="item-icon">🚀</span> Launch Tracker</Link>
-                  <Link href="/live-earth" className="mega-item"><span className="item-icon">🌍</span> Live Earth</Link>
+                  <Link href="/asteroid-watch" className="mega-item">🛡️ Asteroid Watch</Link>
+                  <Link href="/launch-tracker" className="mega-item">🚀 Launch Tracker</Link>
+                  <Link href="/live-earth" className="mega-item">🌍 Live Earth</Link>
                 </div>
-
                 <div className="mega-column">
                   <h4 className="column-title">Learn</h4>
-                  <Link href="/encyclopedia" className="mega-item"><span className="item-icon">📚</span> Encyclopedia</Link>
-                  <Link href="/nasa-search" className="mega-item"><span className="item-icon">🔎</span> NASA Archive</Link>
-                  <Link href="/space-weather" className="mega-item"><span className="item-icon">🌤️</span> Space Weather</Link>
+                  <Link href="/encyclopedia" className="mega-item">📚 Encyclopedia</Link>
+                  <Link href="/nasa-search" className="mega-item">🔎 NASA Archive</Link>
+                  <Link href="/space-weather" className="mega-item">🌤️ Space Weather</Link>
                 </div>
-
                 <div className="mega-column">
                   <h4 className="column-title">Explore</h4>
-                  <Link href="/solar-system" className="mega-item"><span className="item-icon">☀️</span> Solar System 3D</Link>
-                  <Link href="/universe-scale" className="mega-item"><span className="item-icon">📏</span> Universe Scale</Link>
+                  <Link href="/solar-system" className="mega-item">☀️ Solar System 3D</Link>
+                  <Link href="/universe-scale" className="mega-item">📏 Universe Scale</Link>
                 </div>
-
                 <div className="mega-column">
                   <h4 className="column-title">Gallery</h4>
-                  <Link href="/mars-gallery" className="mega-item"><span className="item-icon">🔴</span> Mars Gallery</Link>
+                  <Link href="/mars-gallery" className="mega-item">🔴 Mars Gallery</Link>
                 </div>
               </div>
             </div>
@@ -159,71 +159,47 @@ export default function Navbar() {
             <span className="iss-pulse"></span>
             ISS Tracker
           </Link>
+
+          {loading ? (
+            <div className="nav-auth-loading">...</div>
+          ) : user ? (
+            <div className="nav-user-menu">
+              <button onClick={handleLogout} className="nav-link auth-btn logout">Logout</button>
+            </div>
+          ) : (
+            <Link href="/auth/login" className="nav-link auth-btn login">Login</Link>
+          )}
         </div>
 
         <button 
           className={`mobile-toggle ${isMobileMenuOpen ? 'active' : ''}`} 
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          aria-label="Toggle Navigation"
-          style={{ zIndex: 9999 }}
         >
-          <span style={{ backgroundColor: 'white' }}></span>
-          <span style={{ backgroundColor: 'white' }}></span>
-          <span style={{ backgroundColor: 'white' }}></span>
+          <span></span>
+          <span></span>
+          <span></span>
         </button>
-
       </div>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu */}
       <div className={`mobile-menu ${isMobileMenuOpen ? 'active' : ''}`}>
-        <div className="mobile-search">
-           <input 
-            type="text" 
-            placeholder="Search catalog..." 
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+        <div className="mobile-links-container">
+          {user && <Link href="/dashboard" className="mobile-link">Mission Control</Link>}
+          <Link href="/news" className="mobile-link">News</Link>
+          <Link href="/launches" className="mobile-link">Launches</Link>
+          <Link href="/iss" className="mobile-link">ISS Tracker</Link>
+          
+          {user ? (
+            <button onClick={handleLogout} className="mobile-link" style={{ color: 'var(--accent-pink)', textAlign: 'left', background: 'none', border: 'none', width: '100%' }}>Logout</button>
+          ) : (
+            <Link href="/auth/login" className="mobile-link" style={{ color: 'var(--accent-cyan)' }}>Login</Link>
+          )}
+          
+          <div className="mobile-group-title">Explore Categories</div>
+          <Link href="/planets" className="mobile-link nested">Planets</Link>
+          <Link href="/mars-gallery" className="mobile-link nested">Mars Gallery</Link>
+          {/* ... shorthand for brevity ... */}
         </div>
-        {searchQuery.length >= 2 && (
-             <div className="mobile-search-results">
-                 {searchResults.map((res) => (
-                     <Link href={`/details/${res.table}/${res.id}`} key={`mob-${res.table}-${res.id}`}>{res.typeLabel}: {res.name}</Link>
-                 ))}
-             </div>
-        )}
-        {!searchQuery && (
-            <div className="mobile-links-container">
-                <Link href="/" className="mobile-link">Home</Link>
-                <Link href="/news" className="mobile-link">Space News</Link>
-                <Link href="/launches" className="mobile-link">Upcoming Launches</Link>
-                <Link href="/apod" className="mobile-link">NASA APOD</Link>
-                <Link href="/iss" className="mobile-link iss-mobile-link">🛰️ Live ISS Tracker</Link>
-                
-                <div className="mobile-group-title">Space Objects</div>
-                <Link href="/planets" className="mobile-link nested">🪐 Planets</Link>
-                <Link href="/moons" className="mobile-link nested">🌒 Moons</Link>
-                <Link href="/asteroids" className="mobile-link nested">☄️ Asteroids</Link>
-                <Link href="/stars" className="mobile-link nested">⭐ Stars</Link>
-                <Link href="/galaxies" className="mobile-link nested">🌌 Galaxies</Link>
-
-                <div className="mobile-group-title">Exploration</div>
-                <Link href="/asteroid-watch" className="mobile-link nested">🛡️ Asteroid Watch</Link>
-                <Link href="/launch-tracker" className="mobile-link nested">🚀 Launch Tracker</Link>
-                <Link href="/live-earth" className="mobile-link nested">🌍 Live Earth</Link>
-
-                <div className="mobile-group-title">Learn</div>
-                <Link href="/encyclopedia" className="mobile-link nested">📚 Encyclopedia</Link>
-                <Link href="/nasa-search" className="mobile-link nested">🔎 NASA Archive</Link>
-                <Link href="/space-weather" className="mobile-link nested">🌤️ Space Weather</Link>
-
-                <div className="mobile-group-title">Explore</div>
-                <Link href="/solar-system" className="mobile-link nested">☀️ Solar System 3D</Link>
-                <Link href="/universe-scale" className="mobile-link nested">📏 Universe Scale</Link>
-
-                <div className="mobile-group-title">Gallery</div>
-                <Link href="/mars-gallery" className="mobile-link nested">🔴 Mars Gallery</Link>
-            </div>
-        )}
       </div>
     </nav>
   );

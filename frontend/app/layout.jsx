@@ -1,6 +1,7 @@
 import './globals.css';
 import Navbar from '../components/Navbar/Navbar';
 import Assistant from '../components/AICosmicAssistant/Assistant';
+import { AuthProvider } from '../context/AuthContext';
 
 export const metadata = {
   title: { default: 'CosmoVerse — Explore the Infinite Cosmos', template: '%s | CosmoVerse' },
@@ -17,12 +18,14 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" data-scroll-behavior="smooth">
       <body suppressHydrationWarning>
-        <div className="stars-background" aria-hidden="true" />
-        <Navbar />
-        <main className="content">
-          {children}
-        </main>
-        <Assistant />
+        <AuthProvider>
+          <div className="stars-background" aria-hidden="true" />
+          <Navbar />
+          <main className="content">
+            {children}
+          </main>
+          <Assistant />
+        </AuthProvider>
       </body>
     </html>
   );
