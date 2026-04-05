@@ -6,50 +6,36 @@ export default function APODScroll({ data }) {
   if (!data) return null;
 
   return (
-    <section className="relative min-h-[80vh] flex items-center justify-end px-6 md:px-20 py-20">
-      <motion.div
-        initial={{ opacity: 0, y: 50, x: 20 }}
-        whileInView={{ opacity: 1, y: 0, x: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-        className="relative group w-full max-w-2xl"
-      >
-        {/* Glow Effect */}
-        <div className="absolute inset-0 bg-purple-500/10 blur-[80px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-
-        {/* Glass Card */}
-        <div className="relative overflow-hidden rounded-[24px] md:rounded-[32px] border border-white/10 bg-white/[0.03] backdrop-blur-3xl shadow-2xl">
-          <div className="relative h-[250px] md:h-[400px]">
-            {data.media_type === 'video' ? (
-              <iframe src={data.url} className="w-full h-full border-none" title={data.title} />
-            ) : (
-              <img
-                src={data.url}
-                alt={data.title}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-            )}
-            <div className="absolute top-6 left-6 px-4 py-1.5 bg-black/40 backdrop-blur-md border border-white/10 rounded-full text-[10px] font-bold tracking-widest text-purple-400 uppercase">
-              NASA APOD
-            </div>
-          </div>
-
-          <div className="p-6 md:p-10">
-            <h2 className="text-2xl md:text-3xl font-orbitron font-bold text-white mb-4 line-clamp-2">
-              {data.title}
-            </h2>
-            <p className="text-gray-400 text-sm md:text-base leading-relaxed line-clamp-3 mb-6">
-              {data.explanation}
-            </p>
-            <div className="flex items-center justify-between mt-auto">
-              <span className="text-[10px] text-gray-500 tracking-widest uppercase font-mono">{data.date}</span>
-              <button className="text-xs text-purple-400 font-bold tracking-widest uppercase hover:text-white transition-colors">
-                {"Read Abstract // 01"}
-              </button>
-            </div>
-          </div>
+    <div className="flex flex-col items-center text-center w-full max-w-5xl mx-auto">
+      <div className="relative w-full overflow-hidden rounded-[32px] md:rounded-[48px] border border-white/5 shadow-2xl group/img aspect-video mb-16">
+        {data.media_type === 'video' ? (
+          <iframe src={data.url} className="w-full h-full border-none" title={data.title} />
+        ) : (
+          <img
+            src={data.url}
+            alt={data.title}
+            className="w-full h-full object-cover transition-transform duration-1000 group-hover/img:scale-105"
+          />
+        )}
+        <div className="absolute top-8 left-8 px-6 py-2 bg-black/60 backdrop-blur-xl border border-white/10 rounded-full text-[9px] font-black tracking-[0.6em] text-purple-400 uppercase">
+          NASA APOD // {data.date}
         </div>
-      </motion.div>
-    </section>
+      </div>
+
+      <div className="space-y-8 max-w-3xl">
+        <h2 className="text-3xl md:text-6xl font-orbitron font-black text-white tracking-tighter leading-tight drop-shadow-2xl uppercase">
+          {data.title}
+        </h2>
+        <div className="h-[1px] w-24 bg-gradient-to-r from-transparent via-purple-500/40 to-transparent mx-auto" />
+        <p className="text-[#94a3b8] text-base md:text-lg leading-relaxed font-outfit opacity-70">
+          {data.explanation}
+        </p>
+        <div className="pt-10 flex justify-center">
+          <button className="px-8 py-3 rounded-full border border-white/5 bg-white/5 text-[9px] text-[#94a3b8] font-black tracking-[0.5em] uppercase hover:text-white hover:bg-white/10 hover:border-white/10 transition-all">
+            {"Access Archive →"}
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }

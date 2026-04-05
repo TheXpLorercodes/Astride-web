@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Orbitron:wght@700;900&display=swap');
+@import "tailwindcss";
 
 *,
 *::before,
@@ -25,47 +26,24 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  /* scroll-behavior: smooth; */
 }
 
+/* ── Global Background Override ─────────────────────────── */
 body {
   font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: var(--primary-bg);
+  background: #020617; /* Very deep dark base */
   color: var(--text-primary);
   line-height: 1.6;
   overflow-x: hidden;
   min-height: 100vh;
 }
 
-/* ── Stars Background ─────────────────────────────────────── */
-.stars-background {
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(2px 2px at 20% 30%, white, transparent),
-    radial-gradient(2px 2px at 60% 70%, white, transparent),
-    radial-gradient(1px 1px at 50% 50%, white, transparent),
-    radial-gradient(1px 1px at 80% 10%, white, transparent),
-    radial-gradient(2px 2px at 90% 60%, white, transparent),
-    radial-gradient(1px 1px at 33% 80%, white, transparent),
-    radial-gradient(1px 1px at 15% 90%, white, transparent),
-    radial-gradient(1px 1px at 72% 20%, white, transparent),
-    radial-gradient(2px 2px at 45% 45%, white, transparent);
-  background-size: 300% 300%;
-  animation: twinkle 8s ease-in-out infinite;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.35;
-}
-
 @keyframes twinkle {
-
-  0%,
-  100% {
+  0%, 100% {
     opacity: 0.25;
     background-position: 0% 0%;
   }
-
   50% {
     opacity: 0.5;
     background-position: 100% 100%;
@@ -96,7 +74,6 @@ body {
     opacity: 0;
     transform: translateY(20px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
@@ -132,12 +109,9 @@ body {
 }
 
 @keyframes gradientShift {
-
-  0%,
-  100% {
+  0%, 100% {
     background-position: 0% 50%;
   }
-
   50% {
     background-position: 100% 50%;
   }
@@ -180,9 +154,7 @@ body {
 }
 
 @keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+  to { transform: rotate(360deg); }
 }
 
 /* ── Buttons ─────────────────────────────────────────────── */
@@ -275,8 +247,6 @@ body {
   color: var(--accent-purple);
 }
 
-/* ── Responsive ──────────────────────────────────────────── */
-
 /* ── Minimal 3D Hero Redesign (V4) ────────────────────────── */
 .home-v4 {
   min-height: 100vh;
@@ -321,12 +291,6 @@ body {
   color: #64748b;
   margin-top: 2rem;
   font-weight: 800;
-}
-
-.hero-3d-wrapper {
-  position: relative;
-  z-index: 5;
-  transform: translateY(30px);
 }
 
 .hero-bottom-actions {
@@ -378,38 +342,17 @@ body {
 }
 
 @media (max-width: 1024px) {
-  .hero-title-v4 {
-    font-size: clamp(3rem, 15vw, 6rem);
-  }
+  .hero-title-v4 { font-size: clamp(3rem, 15vw, 6rem); }
 }
 
 @media (max-width: 768px) {
-  .page {
-    padding: 1.5rem 1rem;
-  }
-  
-  .hero-title-v4 {
-    font-size: 4rem;
-    letter-spacing: -1px;
-  }
-
-  .grid-3 {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-
-  .hero-bottom-actions {
-    margin-top: 2rem;
-  }
-
-  .btn-v4-explore {
-    padding: 0.8rem 2rem;
-    font-size: 1rem;
-  }
+  .page { padding: 1.5rem 1rem; }
+  .hero-title-v4 { font-size: 4rem; letter-spacing: -1px; }
+  .grid-3 { grid-template-columns: 1fr; gap: 1rem; }
+  .hero-bottom-actions { margin-top: 2rem; }
+  .btn-v4-explore { padding: 0.8rem 2rem; font-size: 1rem; }
 }
 
 @media (max-width: 480px) {
-  .hero-title-v4 {
-    font-size: 3rem;
-  }
+  .hero-title-v4 { font-size: 3rem; }
 }

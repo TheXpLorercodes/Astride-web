@@ -15,13 +15,20 @@ CREATE TABLE IF NOT EXISTS planets (
   name              TEXT NOT NULL,
   image             TEXT,
   description       TEXT,
+  brief_description TEXT,
+  hero_paragraph    TEXT,
   color             TEXT,
   diameter          TEXT,
   distance_from_sun TEXT,
   mass              TEXT,
+  gravity           TEXT,
+  day_length        TEXT,
   orbital_period    TEXT,
+  temperature       TEXT,
   number_of_moons   INTEGER DEFAULT 0,
   has_rings         BOOLEAN DEFAULT false,
+  facts             JSONB DEFAULT '[]',
+  atmosphere        JSONB DEFAULT '[]',
   created_at        TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 

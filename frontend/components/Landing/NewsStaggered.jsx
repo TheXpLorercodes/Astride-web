@@ -24,12 +24,13 @@ export default function NewsStaggered({ news }) {
   };
 
   return (
-    <section className="relative min-h-screen py-40 px-6 md:px-20 max-w-7xl mx-auto">
-      <div className="mb-20 text-center md:text-left">
-        <p className="text-purple-500 font-black tracking-[0.6em] uppercase text-[10px] mb-4">{"Latest Dispatches // SECTOR-7"}</p>
-        <h3 className="text-3xl md:text-5xl font-orbitron font-bold text-white tracking-tight">
-          Cosmic News Feed
+    <div className="w-full py-4">
+      <div className="mb-20 text-center">
+        <p className="text-purple-500 font-black tracking-[0.8em] uppercase text-[9px] mb-6 opacity-80">{"Live Dispatches // SECTOR-07"}</p>
+        <h3 className="text-4xl md:text-6xl font-orbitron font-black text-white tracking-widest uppercase">
+          Cosmic Intels
         </h3>
+        <div className="h-[1px] w-32 bg-white/10 mx-auto mt-10" />
       </div>
 
       <motion.div
@@ -37,40 +38,45 @@ export default function NewsStaggered({ news }) {
         initial="hidden"
         whileInView="show"
         viewport={{ once: true, margin: "-100px" }}
-        className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12"
+        className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20"
       >
         {displayNews.map((article, idx) => (
-          <motion.div key={idx} variants={item} className="planet-card !min-h-[280px] group cursor-pointer">
-            <div className="card-top">
-               <span className="text-[10px] text-purple-400 font-black tracking-widest uppercase">
+          <motion.div key={idx} variants={item} className="relative group cursor-pointer overflow-hidden rounded-[40px] border border-white/5 bg-white/[0.01] hover:bg-white/[0.04] transition-all duration-500 p-10 hover:border-purple-500/30">
+            <div className="relative z-10 flex flex-col h-full">
+               <span className="text-[9px] text-[#94a3b8] font-black tracking-[0.5em] uppercase mb-16">
                   {article.news_site || article.source?.name || 'NASA News'}
                </span>
-            </div>
-            
-            <div className="card-body !mt-8">
-               <h4 className="text-xl font-bold text-white leading-tight group-hover:text-purple-300 transition-colors line-clamp-3">
+               
+               <h4 className="text-2xl md:text-3xl font-orbitron font-black text-white leading-tight group-hover:text-purple-300 transition-colors line-clamp-3 mb-10 tracking-tight">
                  {article.title}
                </h4>
-               <Link href={article.url} target="_blank" className="mt-8 block text-[10px] font-black uppercase text-gray-500 hover:text-white transition-colors tracking-widest">Read Dispatch →</Link>
+               
+               <div className="mt-auto pt-10 border-t border-white/5 flex justify-between items-center">
+                 <Link href={article.url} target="_blank" className="text-[9px] font-black uppercase text-[#94a3b8] group-hover:text-white transition-colors tracking-[0.4em]">Read Dispatch →</Link>
+                 <span className="text-[9px] font-black text-white/10 tracking-[0.5em]">#{idx + 1}</span>
+               </div>
             </div>
 
-            <div className="card-planet-wrap !w-[180px] !h-[180px] md:!w-[240px] md:!h-[240px] !right-[-5%] !top-[-5%]">
+            {/* Subtle background image */}
+            <div className="absolute right-[-10%] top-[-10%] w-[300px] h-[300px] opacity-10 group-hover:opacity-20 transition-opacity duration-1000 rotate-12 blur-sm">
                <img 
                  src={article.image_url || article.image || article.urlToImage} 
                  alt="" 
-                 className="card-image opacity-40 group-hover:opacity-80 transition-opacity" 
+                 className="w-full h-full object-cover rounded-full" 
                />
-               <div className="card-shadow"></div>
+               <div className="absolute inset-0 bg-gradient-to-br from-black via-transparent to-black" />
             </div>
           </motion.div>
         ))}
       </motion.div>
 
-      <div className="mt-20 flex justify-center">
-        <Link href="/news" className="text-sm font-bold tracking-[0.3em] text-gray-500 hover:text-white uppercase transition-colors border-b border-white/10 pb-2">
-          {"View Archive // Deep Feed →"}
+      <div className="mt-24 flex justify-center">
+        <Link href="/news" className="group flex items-center gap-6 text-[10px] font-bold tracking-[0.5em] text-gray-500 hover:text-white uppercase transition-all">
+          <span className="h-[1px] w-12 bg-white/10 group-hover:w-20 transition-all"></span>
+          {"Access Deep-Feed Archive"}
+          <span className="h-[1px] w-12 bg-white/10 group-hover:w-20 transition-all"></span>
         </Link>
       </div>
-    </section>
+    </div>
   );
 }

@@ -18,9 +18,16 @@ export default function SignupPage() {
     setLoading(true);
     setError(null);
 
+    const redirectTo = process.env.NEXT_PUBLIC_SITE_URL 
+      ? `${process.env.NEXT_PUBLIC_SITE_URL}/auth/login` 
+      : `${window.location.origin}/auth/login`;
+
     const { error } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        redirectTo,
+      },
     });
 
     if (error) {

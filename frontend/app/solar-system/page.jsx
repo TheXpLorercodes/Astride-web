@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Canvas } from '@react-three/fiber';
 import { useRouter } from 'next/navigation';
 import SolarSystemModel from './SolarSystemModel';
-import FavoritesButton from '../../components/Favorites/FavoritesButton';
+// import FavoritesButton from '../../components/Favorites/FavoritesButton';
 import './SolarSystem3D.css';
 
 export const dynamic = 'force-dynamic';
@@ -58,11 +58,7 @@ export default function SolarSystemPage() {
           <div className="ss3d-detail-panel card-entry">
              <div className="panel-header">
                <h2 className="gradient-text">{selectedPlanet}</h2>
-               <FavoritesButton 
-                 itemId={`planet-${selectedPlanet.toLowerCase()}`} 
-                 itemType="planet" 
-                 itemData={{ title: selectedPlanet, url: `/textures/planets/${selectedPlanet.toLowerCase()}.jpg` }} 
-               />
+               {/* FavoritesButton removed */}
              </div>
              <p className="type-badge">{planetData[selectedPlanet]?.type || 'Celestial Body'}</p>
              <p>{planetData[selectedPlanet]?.desc || `System metrics for ${selectedPlanet} stabilized.`}</p>

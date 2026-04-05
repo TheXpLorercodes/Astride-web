@@ -7,46 +7,62 @@
 -- ========================================
 -- PLANETS (8 solar system planets)
 -- ========================================
-INSERT INTO planets (id, name, image, description, color, diameter, distance_from_sun, mass, orbital_period, number_of_moons, has_rings) VALUES
+INSERT INTO planets (id, name, image, description, brief_description, hero_paragraph, color, diameter, distance_from_sun, mass, gravity, day_length, orbital_period, temperature, number_of_moons, has_rings, facts, atmosphere) VALUES
   ('11111111-0000-4000-8000-000000000001', 'Mercury',
    'https://upload.wikimedia.org/wikipedia/commons/4/4a/Mercury_in_true_color.jpg',
-   'The smallest and fastest planet, closest to the Sun with extreme temperature swings.',
-   '#8C7853', '4,879 km', '57.9M km', '3.285 × 10²³ kg', '88 days', 0, false),
+   'Smallest and fastest planet.', 'Smallest planet and closest to the Sun.', 'Mercury is a cratered world that experiences extreme temperature swings as it orbits the Sun in just 88 days.',
+   '#8C7853', '4,879 km', '57.9M km', '3.285 × 10²³ kg', '3.7 m/s²', '58.6 days', '88 days', '167°C avg', 0, false, 
+   '["Smallest planet", "Closest to the Sun", "Extreme temperature swings", "Solid cratered surface"]', 
+   '[{"element": "Oxygen", "percentage": 42}, {"element": "Sodium", "percentage": 29}]'),
 
   ('11111111-0002-4000-8000-000000000002', 'Venus',
    'https://upload.wikimedia.org/wikipedia/commons/0/08/Venus_from_Mariner_10.jpg',
-   'The hottest planet with thick clouds of sulfuric acid and a runaway greenhouse effect.',
-   '#FFC649', '12,104 km', '108.2M km', '4.867 × 10²⁴ kg', '225 days', 0, false),
+   'Hottest planet with thick acid clouds.', 'Earth''s "evil twin" with a runaway greenhouse effect.', 'Venus is a hellish world where surface temperatures are high enough to melt lead, trapped by a thick, carbon-dioxide-rich atmosphere.',
+   '#FFC649', '12,104 km', '108.2M km', '4.867 × 10²⁴ kg', '8.87 m/s²', '243 days', '225 days', '464°C avg', 0, false,
+   '["Hottest planet", "Rotates backwards", "Crushing atmosphere", "Volcanic landscape"]',
+   '[{"element": "CO2", "percentage": 96}, {"element": "Nitrogen", "percentage": 3}]'),
 
   ('11111111-0003-4000-8000-000000000003', 'Earth',
    'https://upload.wikimedia.org/wikipedia/commons/9/97/The_Earth_seen_from_Apollo_17.jpg',
-   'Our blue marble home — the only known planet to harbor life.',
-   '#4A90E2', '12,742 km', '149.6M km', '5.972 × 10²⁴ kg', '365.25 days', 1, false),
+   'Our blue marble home.', 'Our blue marble home — the only known world with life.', 'Earth is the third planet from the Sun and the only place we know of so far that’s inhabited by living things.',
+   '#4A90E2', '12,742 km', '149.6M km', '5.972 × 10²⁴ kg', '9.8 m/s²', '24h', '365 days', '15°C avg', 1, false,
+   '["Supports life", "Liquid water on surface", "Protective atmosphere", "Tectonic activity"]',
+   '[{"element": "Nitrogen", "percentage": 78}, {"element": "Oxygen", "percentage": 21}]'),
 
   ('11111111-0004-4000-8000-000000000004', 'Mars',
    'https://upload.wikimedia.org/wikipedia/commons/0/02/OSIRIS_Mars_true_color.jpg',
-   'The red planet with ancient riverbeds, polar ice caps, and the tallest volcano in the solar system.',
-   '#E27B58', '6,779 km', '227.9M km', '6.39 × 10²³ kg', '687 days', 2, false),
+   'The red planet.', 'The Red Planet — a cold, desert world with ancient riverbeds.', 'Mars is a dusty, cold, desert world with a very thin atmosphere. It is home to Olympus Mons, the largest volcano in the solar system.',
+   '#E27B58', '6,779 km', '227.9M km', '6.39 × 10²³ kg', '3.71 m/s²', '24.6h', '687 days', '-65°C avg', 2, false,
+   '["Red planet", "Has polar ice caps", "Mount Olympus", "Evidence of water"]',
+   '[{"element": "CO2", "percentage": 95}, {"element": "Nitrogen", "percentage": 3}]'),
 
   ('11111111-0005-4000-8000-000000000005', 'Jupiter',
    'https://upload.wikimedia.org/wikipedia/commons/2/2b/Jupiter_and_its_shrunken_Great_Red_Spot.jpg',
-   'The largest planet in our solar system, famous for the Great Red Spot storm.',
-   '#C88B3A', '139,820 km', '778.5M km', '1.898 × 10²⁷ kg', '11.86 years', 95, true),
+   'Largest planet with Great Red Spot.', 'The king of planets — a massive gas giant.', 'Jupiter is more than twice as massive as the other planets of our solar system combined, ruled by the Great Red Spot storm.',
+   '#C88B3A', '139,820 km', '778.5M km', '1.898 × 10²⁷ kg', '24.79 m/s²', '9.9h', '11.86 years', '-110°C avg', 95, true,
+   '["Massive gas giant", "Great Red Spot storm", "Strong magnetic field", "Dozens of moons"]',
+   '[{"element": "Hydrogen", "percentage": 90}, {"element": "Helium", "percentage": 10}]'),
 
   ('11111111-0006-4000-8000-000000000006', 'Saturn',
    'https://upload.wikimedia.org/wikipedia/commons/c/c7/Saturn_during_Equinox.jpg',
-   'Famous for its stunning ring system, the most extensive in the solar system.',
-   '#FAD5A5', '116,460 km', '1.4B km', '5.683 × 10²⁶ kg', '29.46 years', 146, true),
+   'Stunning rings.', 'Adorned with the most spectacular ring system.', 'Saturn is the second-largest planet in our solar system, famous for its icy rings and massive moon Titan.',
+   '#FAD5A5', '116,460 km', '1.4B km', '5.683 × 10²⁶ kg', '10.44 m/s²', '10.7h', '29.46 years', '-140°C avg', 146, true,
+   '["Spectacular rings", "Least dense planet", "Hexagonal storm", "Huge moon Titan"]',
+   '[{"element": "Hydrogen", "percentage": 96}, {"element": "Helium", "percentage": 3}]'),
 
   ('11111111-0007-4000-8000-000000000007', 'Uranus',
    'https://upload.wikimedia.org/wikipedia/commons/3/3d/Uranus2.jpg',
-   'The tilted ice giant — rotates on its side with an axial tilt of 98 degrees.',
-   '#4FD0E7', '50,724 km', '2.9B km', '8.681 × 10²⁵ kg', '84 years', 27, true),
+   'Tilted ice giant.', 'An ice giant that tilts on its side as it orbits.', 'Uranus is an ice giant that rotates at a nearly 90-degree angle, tilted completely on its side compared to the orbital plane.',
+   '#4FD0E7', '50,724 km', '2.9B km', '8.681 × 10²⁵ kg', '8.69 m/s²', '17.2h', '84 years', '-195°C avg', 27, true,
+   '["Ice giant", "Rotates on its side", "Extreme axial tilt", "Faint rings"]',
+   '[{"element": "Hydrogen", "percentage": 83}, {"element": "Helium", "percentage": 15}]'),
 
   ('11111111-0008-4000-8000-000000000008', 'Neptune',
    'https://upload.wikimedia.org/wikipedia/commons/6/63/Neptune_-_Voyager_2_%2829347980845%29_flatten_crop.jpg',
-   'The windiest planet in our system with winds reaching 2,100 km/h.',
-   '#4166F5', '49,244 km', '4.5B km', '1.024 × 10²⁶ kg', '164.8 years', 16, true);
+   'Windiest ice giant.', 'The windiest planet — a dark, cold ice giant.', 'Neptune is the most distant planet in our system, whipped by supersonic winds and home to dark, swirling storms.',
+   '#4166F5', '49,244 km', '4.5B km', '1.024 × 10²⁶ kg', '11.15 m/s²', '16.1h', '164.8 years', '-201°C avg', 14, true,
+   '["Windiest planet", "Supersonic winds", "Deep blue color", "Active weather"]',
+   '[{"element": "Hydrogen", "percentage": 80}, {"element": "Helium", "percentage": 19}]');
 
 -- ========================================
 -- STARS (6 types)

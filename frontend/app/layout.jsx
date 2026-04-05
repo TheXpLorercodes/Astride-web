@@ -2,6 +2,7 @@ import './globals.css';
 import Navbar from '../components/Navbar/Navbar';
 import Assistant from '../components/AICosmicAssistant/Assistant';
 import { AuthProvider } from '../context/AuthContext';
+import BackgroundManager from '../components/Background/BackgroundManager';
 
 export const metadata = {
   title: { default: 'CosmoVerse — Explore the Infinite Cosmos', template: '%s | CosmoVerse' },
@@ -19,7 +20,7 @@ export default function RootLayout({ children }) {
     <html lang="en" data-scroll-behavior="smooth">
       <body suppressHydrationWarning>
         <AuthProvider>
-          <div className="stars-background" aria-hidden="true" />
+          <BackgroundManager />
           <Navbar />
           <main className="content">
             {children}

@@ -1,236 +1,322 @@
-/* ObjectDetails.css */
+/* ObjectDetails.css — HIGH FIDELITY REDESIGN */
 .odc-container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 2rem 1rem 6rem;
+  padding: 0;
+  background: black;
+  min-height: 100vh;
+}
+
+/* ── NAVIGATION ── */
+.odc-nav-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 
 .odc-back-btn {
   background: transparent;
   border: 1px solid rgba(255,255,255,0.1);
   color: #94a3b8;
-  padding: 0.5rem 1.25rem;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: all 0.2s;
+  padding: 0.6rem 1.4rem;
+  border-radius: 30px;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  transition: all 0.3s;
 }
+
 .odc-back-btn:hover {
-  background: rgba(255,255,255,0.05);
+  background: white;
+  color: black;
+}
+
+.odc-system-status {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.3em;
+  color: #64748b;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--theme);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--theme);
+  animation: pulse 2s infinite;
+}
+
+/* ── HERO SECTION ── */
+.odc-hero-section {
+  position: relative;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+
+.odc-visual-wrapper-3d {
+  position: relative;
+  margin-bottom: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.odc-planet-sphere-3d {
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  z-index: 10;
+  overflow: hidden;
+}
+
+.odc-planet-clouds-3d {
+  position: absolute;
+  inset: 0;
+  background-image: url('https://www.transparenttextures.com/patterns/clouds.png');
+  background-size: 200%;
+  opacity: 0.3;
+  z-index: 11;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
+.odc-atmosphere-glow {
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  z-index: 5;
+  filter: blur(40px);
+}
+
+.odc-planet-rings-container {
+  position: absolute;
+  width: 850px;
+  height: 250px;
+  transform: rotateX(75deg) rotateY(-15deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.odc-planet-rings {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 45px solid;
+  border-radius: 50%;
+  opacity: 0.3;
+  filter: blur(1px);
+}
+
+.odc-rings-inner {
+  width: 80%;
+  height: 80%;
+  border-width: 20px;
+  opacity: 0.5;
+}
+
+.odc-planet-name-3d {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 6rem;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
   color: white;
 }
 
-/* Header & Siblings Selector */
-.odc-header {
-  margin-bottom: 3rem;
-}
-.odc-db-label {
+.odc-tagline-3d {
   font-family: 'Orbitron', sans-serif;
-  color: #06b6d4;
-  letter-spacing: 2px;
-  margin-bottom: 1rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.6em;
+  color: var(--theme);
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+/* ── SCROLLING CONTENT ── */
+.odc-scrolling-content {
+  padding: 8rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12rem;
+}
+
+.odc-detail-tile {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  border-left: 1px solid rgba(255,255,255,0.05);
+  padding-left: 4rem;
+}
+
+.odc-tile-header {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+  opacity: 0.5;
 }
-.odc-count {
+
+.odc-tile-icon { font-size: 1.2rem; color: var(--theme); }
+.odc-tile-header h3 {
+  font-family: 'Orbitron', sans-serif;
   font-size: 0.8rem;
-  background: rgba(255,255,255,0.1);
-  padding: 0.2rem 0.6rem;
-  border-radius: 4px;
-  color: #94a3b8;
+  letter-spacing: 0.4em;
+  color: white;
 }
 
-.odc-selector-strip {
-  display: flex;
-  gap: 1rem;
-  overflow-x: auto;
-  padding-bottom: 1rem;
-  scrollbar-width: thin;
-  scrollbar-color: var(--theme) rgba(255,255,255,0.05);
+/* OVERVIEW */
+.odc-description-hero {
+  font-size: 1.4rem;
+  line-height: 1.6;
+  color: #cbd5e1;
+  margin-bottom: 4rem;
+  font-weight: 400;
 }
-.odc-selector-strip::-webkit-scrollbar { height: 6px; }
-.odc-selector-strip::-webkit-scrollbar-thumb { background: var(--theme); border-radius: 3px; }
 
-.odc-selector-btn {
-  background: rgba(0,0,0,0.4);
-  border: 1px solid rgba(255,255,255,0.1);
+.odc-facts-grid-3d {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.odc-fact-item-3d {
+  padding: 2rem;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.05);
   border-radius: 12px;
-  padding: 1rem;
-  min-width: 120px;
+  color: #94a3b8;
+  font-size: 1.1rem;
+}
+
+/* METRICS */
+.odc-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+.odc-metric-card {
+  padding: 2.5rem;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 24px;
+}
+
+.odc-metric-val {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2rem;
+  font-weight: 900;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+.odc-metric-lbl {
+  color: #64748b;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-weight: 700;
+}
+
+/* ATMOSPHERE */
+.odc-atmos-list-3d { display: flex; flex-direction: column; gap: 2rem; }
+.odc-atmos-item-3d { width: 100%; }
+.odc-atmos-header-3d {
+  display: flex; justify-content: space-between; margin-bottom: 1rem; color: white; letter-spacing: 0.1em;
+}
+.odc-atmos-bar-bg-3d { height: 4px; background: rgba(255,255,255,0.05); border-radius: 2px; }
+.odc-atmos-bar-fill-3d { height: 100%; border-radius: 2px; box-shadow: 0 0 15px var(--theme); }
+
+/* MOONS */
+.odc-moons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1.5rem;
+}
+
+.odc-moon-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 16px;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.8rem;
-  color: #94a3b8;
   text-decoration: none;
-  font-family: 'Orbitron', sans-serif;
-  font-size: 0.85rem;
-  transition: all 0.3s ease;
-  flex-shrink: 0;
+  transition: all 0.3s;
 }
-.odc-selector-btn:hover {
+
+.odc-moon-card:hover {
   background: rgba(255,255,255,0.05);
-  color: white;
+  border-color: var(--theme);
+  transform: translateY(-5px);
 }
-.odc-selector-btn.active {
-  background: rgba(0,0,0,0.6);
-  color: white;
-}
-.odc-selector-img {
-  width: 60px;
-  height: 60px;
+
+.odc-moon-visual {
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background-size: cover;
-  background-position: center;
+  box-shadow: inset -5px -5px 10px rgba(0,0,0,0.5);
 }
 
-/* Dashboard Visual */
-.odc-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.odc-visual-wrapper {
-  margin: 2rem 0 3rem;
-}
-.odc-planet-sphere {
-  width: 350px;
-  height: 350px;
-  border-radius: 50%;
-  position: relative;
-  overflow: hidden;
-  transition: box-shadow 0.5s ease;
-}
-.odc-galaxy-visual {
-  width: 400px;
-  height: 300px;
-  border-radius: 20px;
-  position: relative;
-  overflow: hidden;
-  transition: box-shadow 0.5s ease;
-}
-
-.odc-scanline {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: var(--theme);
-  opacity: 0.5;
-  box-shadow: 0 0 10px var(--theme);
-  animation: odc-scan 4s linear infinite;
-}
-@keyframes odc-scan {
-  0% { top: -10%; }
-  100% { top: 110%; }
-}
-
-.odc-planet-name {
+.odc-moon-name {
   font-family: 'Orbitron', sans-serif;
-  font-size: 3.5rem;
-  margin-bottom: 0.5rem;
-  text-transform: uppercase;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: white;
 }
 
-/* Data Section */
-.odc-data-section {
-  width: 100%;
-  max-width: 900px;
+/* SELECTOR 3D */
+.odc-selector-strip-3d {
+  display: flex; gap: 2rem; overflow-x: auto; padding: 2rem 0;
+}
+
+.odc-selector-btn-3d {
   background: rgba(255,255,255,0.02);
   border: 1px solid rgba(255,255,255,0.05);
-  padding: 2.5rem;
-  border-radius: 16px;
-  backdrop-filter: blur(10px);
-}
-
-.odc-tabs {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  margin-bottom: 2.5rem;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-  overflow-x: auto;
-}
-.odc-tab-btn {
-  background: none;
-  border: none;
-  color: #94a3b8;
-  font-size: 1.1rem;
-  font-weight: 600;
-  padding-bottom: 1rem;
-  border-bottom: 3px solid transparent;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  white-space: nowrap;
-  font-family: 'Orbitron', sans-serif;
-  letter-spacing: 1px;
-}
-.odc-tab-btn:hover { color: white; }
-
-.odc-facts-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-.odc-facts-list li {
-  background: rgba(0,0,0,0.3);
+  border-radius: 20px;
   padding: 1.5rem;
-  border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.05);
-  font-size: 1.05rem;
-  color: #cbd5e1;
-  line-height: 1.6;
+  min-width: 160px;
+  display: flex; flex-direction: column; align-items: center; gap: 1rem;
+  text-decoration: none; transition: all 0.4s;
 }
 
-.odc-stats-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
-}
-@media (max-width: 768px) { .odc-stats-grid { grid-template-columns: 1fr 1fr; } }
-.odc-stat-box {
-  background: rgba(0,0,0,0.3);
-  padding: 1.5rem;
-  border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.05);
-  text-align: center;
-}
-.odc-stat-lbl {
-  color: #94a3b8;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-top: 1rem;
-}
-.odc-stat-val {
-  font-size: 1.5rem;
-  font-family: 'Orbitron', sans-serif;
+.odc-selector-img-3d { width: 80px; height: 80px; border-radius: 50%; background-size: cover; }
+
+@media (max-width: 768px) {
+  .odc-planet-sphere-3d { width: 280px; height: 280px; }
+  .odc-planet-name-3d { font-size: 3.5rem; }
+  .odc-metrics-grid { grid-template-columns: 1fr; }
+  .odc-detail-tile { padding-left: 2rem; }
 }
 
-.odc-atmos-list { display: flex; flex-direction: column; gap: 1.5rem; }
-.odc-atmos-item { width: 100%; }
-.odc-atmos-header {
-  display: flex; justify-content: space-between; margin-bottom: 0.5rem; color: white; font-weight: 500; text-transform: uppercase; letter-spacing: 1px;
+@keyframes pulse {
+  0% { opacity: 0.4; }
+  50% { opacity: 1; }
+  100% { opacity: 0.4; }
 }
-.odc-atmos-bar-bg { height: 6px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; }
-.odc-atmos-bar-fill { height: 100%; border-radius: 4px; }
-
-.odc-mission-log { display: flex; flex-direction: column; gap: 1rem; }
-.odc-mission-card {
-  padding: 1rem 1.5rem;
-  border-left: 3px solid;
-  background: rgba(0,0,0,0.3);
-  border-radius: 0 8px 8px 0;
-  transition: background 0.3s ease;
-}
-.odc-mission-card:hover {
-  background: rgba(255,255,255,0.05);
-}
-.odc-mission-year { font-weight: 700; margin-bottom: 0.4rem; font-family: 'Orbitron', sans-serif; text-transform: uppercase; letter-spacing: 1px; }
-.odc-mission-name { color: white; font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; }
-.odc-mission-desc { color: #94a3b8; line-height: 1.5; font-size: 0.95rem; }

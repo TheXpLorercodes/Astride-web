@@ -27,60 +27,59 @@ export default function ISSFloating() {
   }, []);
 
   return (
-    <section className="relative min-h-[60vh] flex items-center justify-start px-6 md:px-20 py-20">
-      <motion.div
-        initial={{ opacity: 0, x: -50, scale: 0.95 }}
-        whileInView={{ opacity: 1, x: 0, scale: 1 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-        className="relative p-6 md:p-10 rounded-[30px] md:rounded-[40px] border border-cyan-500/20 bg-cyan-950/10 backdrop-blur-2xl w-full max-w-xl group"
-      >
-        {/* Glow */}
-        <div className="absolute inset-0 bg-cyan-500/5 blur-[100px] pointer-events-none" />
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+      className="relative w-full flex flex-col items-center text-center px-4"
+    >
+      <div className="flex items-center gap-4 mb-4">
+        <div className="w-1.5 h-1.5 rounded-full bg-purple-500 animate-pulse shadow-[0_0_8px_rgba(139,92,246,0.8)]" />
+        <h2 className="text-[10px] font-orbitron font-black tracking-[0.5em] text-white/90 uppercase">
+          {"Telemetry // STRATOS-1"}
+        </h2>
+        <div className="w-1.5 h-1.5 rounded-full bg-purple-500 animate-pulse shadow-[0_0_8px_rgba(139,92,246,0.8)]" />
+      </div>
+      
+      <p className="text-[10px] font-outfit font-bold tracking-[0.3em] text-gray-500 uppercase mb-12">ISS REAL-TIME ORBITAL LINK</p>
 
-        <div className="flex items-center gap-4 mb-8">
-          <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-          <h2 className="text-sm font-orbitron font-bold tracking-[0.3em] text-cyan-400 uppercase">
-            {"ISS Live Link // STRATOS-1"}
-          </h2>
-        </div>
-
-        <div className="space-y-8">
-          <div className="grid grid-cols-2 gap-8">
-            <div className="space-y-2">
-              <span className="text-[8px] md:text-[10px] text-gray-500 uppercase tracking-widest font-mono">Latitude</span>
-              <p className="text-xl md:text-3xl font-orbitron font-medium text-white tabular-nums">
-                {loading ? '---' : position.lat.toFixed(4)}°
-              </p>
-            </div>
-            <div className="space-y-2">
-              <span className="text-[8px] md:text-[10px] text-gray-500 uppercase tracking-widest font-mono">Longitude</span>
-              <p className="text-xl md:text-3xl font-orbitron font-medium text-white tabular-nums">
-                {loading ? '---' : position.lng.toFixed(4)}°
-              </p>
-            </div>
+      <div className="w-full max-w-4xl space-y-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24">
+          <div className="flex flex-col items-center space-y-4">
+            <span className="text-[9px] text-[#94a3b8] uppercase font-black tracking-[0.5em]">Latitude</span>
+            <p className="text-5xl md:text-7xl font-orbitron font-black text-white tabular-nums tracking-tighter">
+              {loading ? '---' : position.lat.toFixed(4)}
+            </p>
           </div>
-
-          <div className="h-[2px] w-full bg-gradient-to-r from-cyan-500/30 to-transparent" />
-
-          <div className="flex items-center justify-between">
-            <div className="flex flex-col gap-1">
-              <span className="text-[10px] text-gray-500 uppercase tracking-widest font-mono">System Status</span>
-              <span className="text-xs font-bold text-cyan-400/80">COMM-LINK ESTABLISHED</span>
-            </div>
-            <motion.div 
-              animate={{ rotate: 360 }}
-              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-              className="w-12 h-12 border-2 border-dashed border-cyan-500/20 rounded-full flex items-center justify-center"
-            >
-              <div className="w-2 h-2 bg-cyan-400 rounded-full" />
-            </motion.div>
+          <div className="flex flex-col items-center space-y-4">
+            <span className="text-[9px] text-[#94a3b8] uppercase font-black tracking-[0.5em]">Longitude</span>
+            <p className="text-5xl md:text-7xl font-orbitron font-black text-white tabular-nums tracking-tighter">
+              {loading ? '---' : position.lng.toFixed(4)}
+            </p>
           </div>
         </div>
 
-        {/* Decorative corner */}
-        <div className="absolute top-0 right-0 w-20 h-20 border-t border-r border-cyan-400/30 rounded-tr-[40px]" />
-      </motion.div>
-    </section>
+        <div className="flex flex-col items-center gap-10 pt-8 border-t border-white/5">
+          <div className="flex flex-col items-center gap-4">
+            <span className="text-[9px] text-[#94a3b8] uppercase tracking-[0.5em] font-black font-mono">System Status</span>
+            <div className="flex items-center gap-4 px-6 py-2 rounded-full border border-green-500/20 bg-green-500/5">
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+              <span className="text-[9px] font-black text-green-400 tracking-[0.3em] uppercase font-mono">COMM-LINK ESTABLISHED</span>
+            </div>
+          </div>
+          
+          <motion.div 
+            animate={{ rotate: 360 }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            className="relative w-20 h-20 border border-dashed border-white/10 rounded-full flex items-center justify-center scale-90 md:scale-100"
+          >
+            <div className="w-2.5 h-2.5 bg-purple-400 rounded-full shadow-[0_0_15px_rgba(168,85,247,0.8)]" />
+            <div className="absolute inset-2 border border-purple-500/20 rounded-full" />
+            <div className="absolute inset-0 border border-purple-500/10 rounded-full animate-ping" style={{ animationDuration: '4s' }} />
+          </motion.div>
+        </div>
+      </div>
+    </motion.div>
   );
 }
