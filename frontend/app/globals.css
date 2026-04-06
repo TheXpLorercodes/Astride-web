@@ -157,6 +157,11 @@ body {
   to { transform: rotate(360deg); }
 }
 
+/* ── Neon Glow Utility ─────────────────────────────────────── */
+.neon-glow {
+  box-shadow: 0 0 8px var(--accent-purple), 0 0 20px var(--accent-cyan);
+}
+
 /* ── Buttons ─────────────────────────────────────────────── */
 .btn-primary {
   display: inline-flex;

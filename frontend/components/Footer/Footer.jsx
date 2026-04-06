@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import BrandMark from '../BrandMark/BrandMark';
 import './Footer.css';
 
 export default function Footer() {
@@ -11,7 +12,7 @@ export default function Footer() {
         {/* Brand Section */}
         <div className="footer-brand">
           <Link href="/" className="footer-logo">
-            <span className="logo-icon">◈</span>
+            <BrandMark className="footer-logo-mark" />
             ASTRIDE
           </Link>
           <p className="footer-tagline">Cognitive Orbital Interface // CX-88223-A</p>
@@ -27,6 +28,7 @@ export default function Footer() {
             <h4>Exploration</h4>
             <Link href="/planets">Planets</Link>
             <Link href="/moons">Moons</Link>
+            <Link href="/satellites">Satellites</Link>
             <Link href="/stars">Stars</Link>
             <Link href="/galaxies">Galaxies</Link>
           </div>

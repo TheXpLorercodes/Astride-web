@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { supabaseServer } from '../../../lib/supabaseServer';
+import { SATELLITES } from '../../../lib/cosmoDataApi';
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
@@ -9,8 +10,8 @@ export async function GET(request) {
     return NextResponse.json({ results: [] });
   }
 
-  const tables = ['planets', 'stars', 'galaxies', 'asteroids', 'missions', 'space_phenomena'];
-  const label = { planets: '🪐 Planet', stars: '⭐ Star', galaxies: '🌌 Galaxy', asteroids: '☄️ Asteroid', missions: '🚀 Mission', space_phenomena: '💫 Phenomenon' };
+  const tables = ['planets', 'stars', 'galaxies', 'asteroids', 'satellites', 'missions', 'space_phenomena'];
+  const label = { planets: '🪐 Planet', stars: '⭐ Star', galaxies: '🌌 Galaxy', asteroids: '☄️ Asteroid', satellites: '🛰️ Satellite', missions: '🚀 Mission', space_phenomena: '💫 Phenomenon' };
 
   const queries = tables.map((table) =>
     supabaseServer
@@ -29,6 +30,20 @@ export async function GET(request) {
       });
     }
   });
+
+  if (!combined.some((item) => item.table === 'satellites')) {
+    SATELLITES.filter((item) => item.name.toLowerCase().includes(q.toLowerCase()))
+      .slice(0, 4)
+      .forEach((item) => {
+        combined.push({
+          id: item.id,
+          name: item.name,
+          description: item.description,
+          table: 'satellites',
+          typeLabel: label.satellites
+        });
+      });
+  }
 
   return NextResponse.json({ results: combined });
 }

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/supabaseClient';
+import BrandMark from '../BrandMark/BrandMark';
 import './Navbar.css';
 
 export default function Navbar() {
@@ -93,7 +94,7 @@ export default function Navbar() {
 
           {/* Logo */}
           <Link href="/" className="logo">
-            <span className="logo-icon">◈</span>
+            <BrandMark className="logo-mark" />
             Astride
           </Link>
 
@@ -151,6 +152,7 @@ export default function Navbar() {
                     <h4 className="column-title">Space Objects</h4>
                     <Link href="/planets" className="mega-item">🪐 Planets</Link>
                     <Link href="/moons" className="mega-item">🌒 Moons</Link>
+                    <Link href="/satellites" className="mega-item">Satellites</Link>
                     <Link href="/asteroids" className="mega-item">☄️ Asteroids</Link>
                     <Link href="/stars" className="mega-item">⭐ Stars</Link>
                     <Link href="/galaxies" className="mega-item">🌌 Galaxies</Link>
@@ -226,6 +228,7 @@ export default function Navbar() {
           <div className="mobile-group-title">Explore Categories</div>
           <Link href="/planets" className="mobile-link nested">🪐 Planets</Link>
           <Link href="/moons" className="mobile-link nested">🌒 Moons</Link>
+          <Link href="/satellites" className="mobile-link nested">Satellites</Link>
           <Link href="/asteroids" className="mobile-link nested">☄️ Asteroids</Link>
           <Link href="/stars" className="mobile-link nested">⭐ Stars</Link>
           <Link href="/galaxies" className="mobile-link nested">🌌 Galaxies</Link>

@@ -41,6 +41,8 @@ export default function SpaceGridClient({ items, table, searchPlaceholder }) {
             if (item.distance_from_earth) stats.push({ label: 'Distance', value: item.distance_from_earth });
             if (item.star_type) stats.push({ label: 'Type', value: item.star_type });
             if (item.galaxy_type) stats.push({ label: 'Type', value: item.galaxy_type });
+            if (item.orbit_type) stats.push({ label: 'Orbit', value: item.orbit_type });
+            if (item.velocity) stats.push({ label: 'Velocity', value: item.velocity });
             
             return (
               <SpaceCard

@@ -1,11 +1,12 @@
 'use client';
-import { usePathname } from 'next/navigation';
 
 export default function BackgroundManager() {
-  const pathname = usePathname();
-  
-  // Show globally on every page as requested
   return (
-    <div className="fixed inset-0 z-[-1] pointer-events-none bg-black" />
+    <div className="fixed inset-0 z-[-1] pointer-events-none overflow-hidden bg-black">
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,#000000_0%,#010101_45%,#000000_100%)]" />
+      <div className="absolute inset-0 opacity-90 [background-image:radial-gradient(1px_1px_at_4%_10%,rgba(255,255,255,0.72),transparent),radial-gradient(1px_1px_at_8%_14%,rgba(255,255,255,0.95),transparent),radial-gradient(1px_1px_at_11%_62%,rgba(255,255,255,0.56),transparent),radial-gradient(1px_1px_at_13%_34%,rgba(255,255,255,0.56),transparent),radial-gradient(1.5px_1.5px_at_17%_22%,rgba(255,255,255,0.7),transparent),radial-gradient(1.5px_1.5px_at_20%_72%,rgba(255,255,255,0.78),transparent),radial-gradient(1px_1px_at_23%_52%,rgba(255,255,255,0.52),transparent),radial-gradient(1px_1px_at_27%_84%,rgba(255,255,255,0.48),transparent),radial-gradient(1px_1px_at_34%_26%,rgba(255,255,255,0.7),transparent),radial-gradient(1px_1px_at_37%_68%,rgba(255,255,255,0.58),transparent),radial-gradient(1.5px_1.5px_at_42%_16%,rgba(255,255,255,0.88),transparent),radial-gradient(1px_1px_at_45%_63%,rgba(255,255,255,0.52),transparent),radial-gradient(1px_1px_at_49%_42%,rgba(255,255,255,0.64),transparent),radial-gradient(1px_1px_at_52%_8%,rgba(255,255,255,0.6),transparent),radial-gradient(1px_1px_at_57%_10%,rgba(255,255,255,0.74),transparent),radial-gradient(1px_1px_at_61%_83%,rgba(255,255,255,0.5),transparent),radial-gradient(1px_1px_at_64%_66%,rgba(255,255,255,0.6),transparent),radial-gradient(1.5px_1.5px_at_72%_30%,rgba(255,255,255,0.82),transparent),radial-gradient(1px_1px_at_74%_86%,rgba(255,255,255,0.42),transparent),radial-gradient(1px_1px_at_79%_18%,rgba(255,255,255,0.74),transparent),radial-gradient(1px_1px_at_83%_72%,rgba(255,255,255,0.46),transparent),radial-gradient(1px_1px_at_86%_54%,rgba(255,255,255,0.58),transparent),radial-gradient(1.5px_1.5px_at_91%_74%,rgba(255,255,255,0.74),transparent),radial-gradient(1px_1px_at_95%_28%,rgba(255,255,255,0.52),transparent)]" />
+      <div className="absolute inset-0 opacity-65 [background-image:radial-gradient(1px_1px_at_3%_48%,rgba(255,255,255,0.22),transparent),radial-gradient(1px_1px_at_5%_55%,rgba(255,255,255,0.32),transparent),radial-gradient(1px_1px_at_9%_82%,rgba(255,255,255,0.2),transparent),radial-gradient(1px_1px_at_18%_8%,rgba(255,255,255,0.28),transparent),radial-gradient(1px_1px_at_21%_39%,rgba(255,255,255,0.22),transparent),radial-gradient(1px_1px_at_31%_47%,rgba(255,255,255,0.24),transparent),radial-gradient(1px_1px_at_36%_88%,rgba(255,255,255,0.18),transparent),radial-gradient(1px_1px_at_43%_28%,rgba(255,255,255,0.2),transparent),radial-gradient(1px_1px_at_53%_76%,rgba(255,255,255,0.2),transparent),radial-gradient(1px_1px_at_58%_57%,rgba(255,255,255,0.18),transparent),radial-gradient(1px_1px_at_69%_58%,rgba(255,255,255,0.26),transparent),radial-gradient(1px_1px_at_73%_12%,rgba(255,255,255,0.18),transparent),radial-gradient(1px_1px_at_82%_41%,rgba(255,255,255,0.22),transparent),radial-gradient(1px_1px_at_88%_88%,rgba(255,255,255,0.18),transparent),radial-gradient(1px_1px_at_96%_24%,rgba(255,255,255,0.18),transparent)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_46%,rgba(0,0,0,0.2)_76%,rgba(0,0,0,0.7)_100%)]" />
+    </div>
   );
 }
