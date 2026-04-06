@@ -6,16 +6,25 @@ export const metadata = {
   description: 'Astronomy Picture of the Day gallery.',
 };
 
+export const dynamic = 'force-dynamic';
+
 export default async function ApodPage({ searchParams }) {
+  const resolvedParams = await searchParams;
   const NASA_KEY = process.env.NASA_API_KEY;
   let items = [];
   
   // Use dates or count
-  const count = searchParams.count || 12;
+  const count = resolvedParams?.count || 12;
   
   if (NASA_KEY) {
      try {
-       const res = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${NASA_KEY}&thumbs=true&count=${count}`);
+       const controller = new AbortController();
+       const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+       
+       const res = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${NASA_KEY}&thumbs=true&count=${count}`, {
+         signal: controller.signal
+       });
+       clearTimeout(timeoutId);
        if (res.ok) {
           items = await res.json();
        }
