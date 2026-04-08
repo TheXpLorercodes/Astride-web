@@ -8,7 +8,7 @@ import Navbar from '../../components/Navbar/Navbar';
 export default function PlanetaryEvolutionSimulator() {
   const {
     systemType, setSystemType,
-    targetName, setTargetName, loadPreset,
+    targetName, loadPreset,
     currentState, updateParameter,
     result,
     stepSize, setStepSize, advanceTime,
@@ -117,7 +117,7 @@ export default function PlanetaryEvolutionSimulator() {
                 </div>
                 <select 
                   value={currentState.coreStatus}
-                  onChange={(e) => updateParameter('coreStatus', e.target.value as any)}
+                  onChange={(e) => updateParameter('coreStatus', e.target.value as 'Active' | 'Inactive')}
                   className="w-full bg-black/50 border border-white/20 rounded-lg p-2 mb-2 text-sm text-white outline-none focus:border-cyan-400 appearance-none"
                 >
                   <option value="Active">Active (Protected)</option>
@@ -151,7 +151,7 @@ export default function PlanetaryEvolutionSimulator() {
             {aiReport ? (
               <p className="text-sm text-gray-300 leading-relaxed font-light">{aiReport}</p>
             ) : (
-              <p className="text-sm text-gray-500 italic">Click 'Analyze Changes' to generate a heuristical report comparing baseline to current simulation state.</p>
+              <p className="text-sm text-gray-500 italic">Click &quot;Analyze Changes&quot; to generate a heuristical report comparing baseline to current simulation state.</p>
             )}
           </div>
         </section>

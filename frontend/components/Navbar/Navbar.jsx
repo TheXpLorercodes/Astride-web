@@ -177,6 +177,7 @@ export default function Navbar() {
                   <div className="mega-column">
                     <h4 className="column-title">Gallery</h4>
                     <Link href="/mars-gallery" className="mega-item">🔴 Mars Gallery</Link>
+                    <Link href="/astronauts" className="mega-item">👨‍🚀 Astronaut Records</Link>
                   </div>
                 </div>
               </div>
@@ -233,8 +234,7 @@ export default function Navbar() {
           <Link href="/stars" className="mobile-link nested">⭐ Stars</Link>
           <Link href="/galaxies" className="mobile-link nested">🌌 Galaxies</Link>
           <Link href="/solar-system" className="mobile-link nested">☀️ Solar System 3D</Link>
-          <Link href="/mars-gallery" className="mobile-link nested">🔴 Mars Gallery</Link>
-        </div>
+          <Link href="/mars-gallery" className="mobile-link nested">🔴 Mars Gallery</Link>          <Link href="/astronauts" className="mobile-link nested">👨‍🚀 Astronaut Records</Link>        </div>
       </div>
     </>
   );

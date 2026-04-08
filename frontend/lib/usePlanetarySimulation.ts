@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback } from 'react'
 import { runSimulationStep, SimulationInput, SimulationResult } from './planetarySimulation'
 import { generateEvolutionReport } from './planetaryAIAnalyst'
 
@@ -47,7 +47,7 @@ export function usePlanetarySimulation() {
     setState(prev => ({ ...prev, eventLog: [...prev.eventLog, msg] }))
   }, [])
 
-  const updateTarget = useCallback((system: typeof state.systemType, target: string) => {
+  const updateTarget = useCallback((system: PlanetaryState['systemType'], target: string) => {
     const preset = system === 'Solar System' ? solarSystemPresets[target] : exoplanetPresets[target]
     if (!preset) return
     const sim = runSimulationStep(preset)

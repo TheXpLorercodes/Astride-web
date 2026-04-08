@@ -21,6 +21,15 @@ export default function FloatingTile({ children, accent = 'purple', index = 0 })
       aura: 'rgba(6,182,212,0.13)',
       grid: 'rgba(255,255,255,0.035)',
     },
+    aurora: {
+      border: 'hover:border-emerald-400/50',
+      glow: 'hover:shadow-[0_0_80px_-20px_rgba(16,185,129,0.35)]',
+      corner: 'from-emerald-400',
+      scan: 'rgba(16,185,129,0.03)',
+      beam: 'rgba(34,211,238,0.24)',
+      aura: 'rgba(16,185,129,0.12)',
+      grid: 'rgba(255,255,255,0.035)',
+    },
   };
 
   const a = accentMap[accent] ?? accentMap.purple;

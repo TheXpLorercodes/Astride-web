@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "next lint",
+    "sync:iss": "node scripts/sync_iss_crew.mjs",
+    "sync:astronauts": "node scripts/sync_astronauts.mjs",
+    "sync:launches": "node scripts/sync_launches.mjs"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",

@@ -484,3 +484,84 @@ export async function fetchSatellites() {
 }
 export async function fetchMissions() { return fetchTable('missions'); }
 export async function fetchSpacePhenomena() { return fetchTable('space_phenomena'); }
+
+export async function fetchISSInfo() {
+  const fallbackIssData = {
+    id: 1,
+    built_date: 'November 20, 1998',
+    participating_countries: 15,
+    construction_details: 'Assembled in low Earth orbit over 136 consecutive space flights using both the US Space Shuttle and Russian Proton/Soyuz rockets. It began with the Zarya module in 1998 and has been continuously occupied since November 2000.',
+    crew_stay_duration: 'Standard expeditions last roughly 6 months (180 days). However, extended scientific missions studying the long-term effects of microgravity on the human body can last over a full year (e.g., Frank Rubio/Scott Kelly).',
+    modules: [
+      {"name": "Zarya", "type": "Functional Cargo Block", "agency": "Roscosmos (Russia)", "purpose": "Original power & propulsion."},
+      {"name": "Unity (Node 1)", "type": "Connecting Node", "agency": "NASA (USA)", "purpose": "First US segment, connecting nodes."},
+      {"name": "Zvezda", "type": "Service Module", "agency": "Roscosmos (Russia)", "purpose": "Life support systems."},
+      {"name": "Destiny", "type": "Laboratory Module", "agency": "NASA (USA)", "purpose": "Primary US research facility."},
+      {"name": "Columbus", "type": "Science Laboratory", "agency": "ESA (Europe)", "purpose": "Multidisciplinary scientific lab."},
+      {"name": "Kibo", "type": "Experiment Module", "agency": "JAXA (Japan)", "purpose": "Largest single module, specialized experiments."},
+      {"name": "Cupola", "type": "Observatory", "agency": "ESA/NASA", "purpose": "7-window module for robotic ops and Earth watching."}
+    ],
+    astronauts: [] // Will be populated dynamically
+  };
+
+  try {
+    // 1. Automatically fetch the live crew from Open-Notify API
+    let liveAstronauts = [];
+    try {
+      const astroRes = await fetch('http://api.open-notify.org/astros.json', { next: { revalidate: 3600 } });
+      if (astroRes.ok) {
+        const astroData = await astroRes.json();
+        const issCrewLive = astroData.people.filter(p => p.craft === 'ISS');
+        
+        // Dictionary to append photos and roles for known currently active people
+        const KNOWN_ASTRONAUTS = {
+          "Oleg Kononenko": { photo: "https://upload.wikimedia.org/wikipedia/commons/e/ea/Oleg_Kononenko_%28expedition_69%29.jpg", agency: "Roscosmos", role: "Commander" },
+          "Nikolai Chub": { photo: "https://upload.wikimedia.org/wikipedia/commons/2/23/Nikolai_Chub_in_2022.jpg", agency: "Roscosmos", role: "Flight Engineer" },
+          "Tracy Caldwell Dyson": { photo: "https://upload.wikimedia.org/wikipedia/commons/f/ff/Tracy_Caldwell_Dyson_official_portrait_2023.jpg", agency: "NASA", role: "Flight Engineer" },
+          "Matthew Dominick": { photo: "https://upload.wikimedia.org/wikipedia/commons/b/ba/Matthew_Dominick_NASA_Astronaut_%28cropped%29.jpg", agency: "NASA", role: "Flight Engineer" },
+          "Michael Barratt": { photo: "https://upload.wikimedia.org/wikipedia/commons/4/4b/Michael_R._Barratt.jpg", agency: "NASA", role: "Flight Engineer" },
+          "Jeanette Epps": { photo: "https://upload.wikimedia.org/wikipedia/commons/d/df/Jeanette_J._Epps_official_portrait_in_an_EMU_spacesuit_%282023%29.jpg", agency: "NASA", role: "Flight Engineer" },
+          "Alexander Grebenkin": { photo: "https://upload.wikimedia.org/wikipedia/commons/2/20/Alexander_Grebenkin_Expedition_71.jpg", agency: "Roscosmos", role: "Flight Engineer" },
+          "Butch Wilmore": { photo: "https://upload.wikimedia.org/wikipedia/commons/2/2e/Barry_E._Wilmore_portrait.jpg", agency: "NASA", role: "Commander (Starliner)" },
+          "Sunita Williams": { photo: "https://upload.wikimedia.org/wikipedia/commons/8/87/Sunita_Williams_Official_Portrait_2_cropped.jpg", agency: "NASA", role: "Pilot (Starliner)" }
+        };
+
+        liveAstronauts = issCrewLive.map(astro => {
+          const knownData = KNOWN_ASTRONAUTS[astro.name] || {};
+          return {
+            name: astro.name,
+            agency: knownData.agency || "Space Agency",
+            role: knownData.role || "Expedition Crew",
+            photo: knownData.photo || null
+          };
+        });
+      }
+    } catch (apiErr) {
+      console.log('[CosmoAPI] Open-Notify live fetch warning:', apiErr.message);
+    }
+
+    // 2. Fetch the current existing context from Supabase table if it exists
+    const { data: dbData } = await supabaseServer
+      .from('iss_info')
+      .select('*')
+      .eq('id', 1)
+      .maybeSingle();
+
+    // 3. Merge live Open-Notify info with fallback/db structure
+    const finalData = dbData || fallbackIssData;
+    if (liveAstronauts.length > 0) {
+      finalData.astronauts = liveAstronauts;
+    }
+
+    // 4. Silently sync the newly assembled live data back into Supabase for storage
+    // (If the table doesn't exist yet, it safely ignores the sql error and just returns the live assembled object)
+    if (liveAstronauts.length > 0) {
+      await supabaseServer.from('iss_info').upsert({ id: 1, ...finalData });
+    }
+
+    return { data: finalData, error: null };
+  } catch {
+    return { data: fallbackIssData, error: null };
+  }
+}
+

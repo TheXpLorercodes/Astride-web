@@ -23,11 +23,6 @@ export function generateEvolutionReport(initialState, currentState, timeElapsed)
     return Math.abs(current - initial) > threshold;
   };
 
-  // Helper to detect categorical changes
-  const hasCategoryChanged = (initial, current) => {
-    return initial !== current;
-  };
-
   // Extract key parameters
   const {
     systemType: initialSystem,

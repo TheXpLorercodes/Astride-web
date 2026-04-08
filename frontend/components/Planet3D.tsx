@@ -8,7 +8,7 @@ import { OrbitControls } from '@react-three/drei'
  * Props:
  *   biome: string indicating current biome, used to select material colour/texture.
  */
-const biomeMaterials: Record<string, any> = {
+const biomeMaterials: Record<string, string> = {
   Frozen: '#a0c4ff',
   Volcanic: '#ff6b6b',
   Desert: '#c2b280',

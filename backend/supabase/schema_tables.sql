@@ -91,7 +91,35 @@ CREATE TABLE IF NOT EXISTS asteroids (
 CREATE INDEX idx_asteroids_name ON asteroids (name);
 
 -- ========================================
--- 5. MISSIONS
+-- 5. SATELLITES
+-- ========================================
+CREATE TABLE IF NOT EXISTS satellites (
+  id             UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name           TEXT NOT NULL,
+  image          TEXT,
+  description    TEXT,
+  color          TEXT,
+  operator       TEXT,
+  mission_type   TEXT,
+  orbit_type     TEXT,
+  altitude       TEXT,
+  velocity       TEXT,
+  launch_date    TEXT,
+  status         TEXT,
+  mass           TEXT,
+  power          TEXT,
+  orbital_period TEXT,
+  inclination    TEXT,
+  dimensions     TEXT,
+  facts          JSONB DEFAULT '[]',
+  main_parts     JSONB DEFAULT '[]',
+  created_at     TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX idx_satellites_name ON satellites (name);
+
+-- ========================================
+-- 6. MISSIONS
 -- ========================================
 CREATE TABLE IF NOT EXISTS missions (
   id          UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -110,7 +138,7 @@ CREATE INDEX idx_missions_name ON missions (name);
 CREATE INDEX idx_missions_status ON missions (status);
 
 -- ========================================
--- 6. SPACE PHENOMENA
+-- 7. SPACE PHENOMENA
 -- ========================================
 CREATE TABLE IF NOT EXISTS space_phenomena (
   id              UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -129,7 +157,7 @@ CREATE INDEX idx_phenomena_name ON space_phenomena (name);
 CREATE INDEX idx_phenomena_type ON space_phenomena (phenomenon_type);
 
 -- ========================================
--- 7. CROSS REFERENCES (relationships)
+-- 8. CROSS REFERENCES (relationships)
 -- ========================================
 CREATE TABLE IF NOT EXISTS cross_references (
   id            UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -151,6 +179,7 @@ ALTER TABLE planets          ENABLE ROW LEVEL SECURITY;
 ALTER TABLE stars            ENABLE ROW LEVEL SECURITY;
 ALTER TABLE galaxies         ENABLE ROW LEVEL SECURITY;
 ALTER TABLE asteroids        ENABLE ROW LEVEL SECURITY;
+ALTER TABLE satellites       ENABLE ROW LEVEL SECURITY;
 ALTER TABLE missions         ENABLE ROW LEVEL SECURITY;
 ALTER TABLE space_phenomena  ENABLE ROW LEVEL SECURITY;
 ALTER TABLE cross_references ENABLE ROW LEVEL SECURITY;
@@ -159,6 +188,7 @@ CREATE POLICY "public_read_planets"    ON planets          FOR SELECT USING (tru
 CREATE POLICY "public_read_stars"      ON stars            FOR SELECT USING (true);
 CREATE POLICY "public_read_galaxies"   ON galaxies         FOR SELECT USING (true);
 CREATE POLICY "public_read_asteroids"  ON asteroids        FOR SELECT USING (true);
+CREATE POLICY "public_read_satellites" ON satellites       FOR SELECT USING (true);
 CREATE POLICY "public_read_missions"   ON missions         FOR SELECT USING (true);
 CREATE POLICY "public_read_phenomena"  ON space_phenomena  FOR SELECT USING (true);
 CREATE POLICY "public_read_xref"       ON cross_references FOR SELECT USING (true);

@@ -13,9 +13,77 @@ import Footer from '../components/Footer/Footer';
 
 const DynamicISSFloating = nextDynamic(() => import('../components/Landing/ISSFloating'));
 
-const SectionSkeleton = () => (
-  <div className="h-64 flex items-center justify-center">
-    <div className="w-8 h-8 border-2 border-cyan-500/20 border-t-cyan-500 rounded-full animate-spin" />
+const ApodSkeleton = () => (
+  <div className="w-full animate-pulse transition-all">
+    <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-8 lg:gap-12 items-stretch opacity-60">
+      <div className="relative min-h-[300px] md:min-h-[420px] overflow-hidden rounded-[28px] md:rounded-[36px] bg-white/5 border border-white/5" />
+      <div className="flex flex-col justify-center items-start text-left min-h-full px-1 md:px-2 space-y-6">
+        <div className="w-full max-w-[34rem] space-y-4">
+          <div className="h-10 md:h-14 bg-white/10 rounded-lg w-full" />
+          <div className="h-10 md:h-14 bg-white/10 rounded-lg w-4/5" />
+          <div className="h-[1px] w-24 bg-white/20 my-6" />
+          <div className="space-y-3">
+            <div className="h-4 bg-white/5 rounded w-full" />
+            <div className="h-4 bg-white/5 rounded w-full" />
+            <div className="h-4 bg-white/5 rounded w-5/6" />
+            <div className="h-4 bg-white/5 rounded w-4/6" />
+          </div>
+          <div className="pt-6">
+            <div className="h-10 bg-white/10 rounded-full w-40" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+const IssSkeleton = () => (
+  <div className="w-full max-w-[1000px] mx-auto py-10 md:py-16 animate-pulse opacity-60">
+    <div className="bg-[#0e0f14] border border-[#232533] mx-auto flex flex-col w-full rounded-sm h-[600px] md:h-[450px]">
+       <div className="h-16 border-b border-[#232533] px-6 py-5 flex justify-between items-center">
+         <div className="h-4 bg-white/10 w-48 rounded" />
+         <div className="h-4 bg-white/10 w-32 rounded" />
+       </div>
+       <div className="flex-1 flex flex-col lg:flex-row p-8 lg:p-12 gap-12">
+         <div className="flex-1 space-y-10">
+           <div className="grid grid-cols-2 gap-y-10">
+              <div className="space-y-2"><div className="h-3 bg-white/5 w-16" /><div className="h-8 bg-white/10 w-24 rounded" /></div>
+              <div className="space-y-2"><div className="h-3 bg-white/5 w-16" /><div className="h-8 bg-white/10 w-24 rounded" /></div>
+              <div className="space-y-2"><div className="h-3 bg-white/5 w-16" /><div className="h-8 bg-white/10 w-24 rounded" /></div>
+              <div className="space-y-2"><div className="h-3 bg-white/5 w-16" /><div className="h-8 bg-white/10 w-24 rounded" /></div>
+           </div>
+         </div>
+         <div className="flex-[0.8] bg-[#0c0d12] border border-[#232533] rounded-sm" />
+       </div>
+    </div>
+  </div>
+);
+
+const LaunchSkeleton = () => (
+  <div className="w-full max-w-[1080px] mx-auto flex flex-col items-center animate-pulse opacity-60">
+    <div className="h-6 bg-white/10 w-48 rounded-full mb-8" />
+    <div className="h-16 md:h-20 bg-white/10 w-3/4 max-w-[600px] rounded-lg mb-12" />
+    <div className="grid grid-cols-3 gap-4 md:gap-6 w-full max-w-[860px]">
+      <div className="h-32 md:h-40 bg-white/5 border border-white/5 rounded-[24px]" />
+      <div className="h-32 md:h-40 bg-white/5 border border-white/5 rounded-[24px]" />
+      <div className="h-32 md:h-40 bg-white/5 border border-white/5 rounded-[24px]" />
+    </div>
+  </div>
+);
+
+const NewsSkeleton = () => (
+  <div className="w-full animate-pulse opacity-60 space-y-8">
+    <div className="h-8 w-64 bg-white/10 rounded mb-10" />
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {[1, 2, 3, 4].map(i => (
+        <div key={i} className="flex flex-col space-y-4">
+          <div className="h-48 bg-white/5 rounded-xl" />
+          <div className="h-4 bg-white/10 w-full rounded" />
+          <div className="h-4 bg-white/10 w-3/4 rounded" />
+          <div className="h-3 bg-white/5 w-1/2 rounded mt-2" />
+        </div>
+      ))}
+    </div>
   </div>
 );
 
@@ -48,7 +116,7 @@ export default function LandingPage() {
       try {
         const [apodRes, launchRes, newsRes] = await Promise.all([
           fetch('/api/apod'),
-          fetch('https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=1'),
+          fetch('https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=5'),
           fetch('https://api.spaceflightnewsapi.net/v4/articles/?limit=4')
         ]);
 
@@ -56,8 +124,14 @@ export default function LandingPage() {
         const launchData = await launchRes.json();
         const newsData = await newsRes.json();
 
+        let nextLaunch = null;
+        if (launchData.results) {
+          const now = new Date();
+          nextLaunch = launchData.results.find(l => new Date(l.net) > now) || launchData.results[0];
+        }
+
         setApod(apodData);
-        setLaunch(launchData.results ? launchData.results[0] : null);
+        setLaunch(nextLaunch);
         setNews(newsData.results || []);
       } catch (err) {
         console.error('Fetch error:', err);
@@ -122,27 +196,27 @@ export default function LandingPage() {
           <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-purple-500/20 to-transparent" />
 
           <FloatingTile index={0}>
-            <Suspense fallback={<SectionSkeleton />}>
+            <Suspense fallback={<ApodSkeleton />}>
               <APODScroll data={apod} />
             </Suspense>
           </FloatingTile>
 
-          <FloatingTile index={1}>
+          <FloatingTile index={1} accent="purple">
             <div className="flex flex-col items-center text-center">
-              <Suspense fallback={<SectionSkeleton />}>
+              <Suspense fallback={<IssSkeleton />}>
                 <DynamicISSFloating />
               </Suspense>
             </div>
           </FloatingTile>
 
           <div className="w-full flex justify-center">
-            <Suspense fallback={<SectionSkeleton />}>
+            <Suspense fallback={<LaunchSkeleton />}>
               <LaunchTimer data={launch} />
             </Suspense>
           </div>
 
           <div className="w-full">
-            <Suspense fallback={<SectionSkeleton />}>
+            <Suspense fallback={<NewsSkeleton />}>
               <NewsStaggered news={news} />
             </Suspense>
           </div>
