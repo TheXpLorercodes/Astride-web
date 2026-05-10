@@ -1,9 +1,49 @@
 // CosmoData API — Server-side data functions
 // Used in Server Components and API Routes
 
+import 'server-only';
+import { createClient } from '@supabase/supabase-js';
 import { supabaseServer } from './supabaseServer';
 
+const supabaseAdmin = process.env.SUPABASE_SERVICE_ROLE_KEY
+  ? createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY, {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+      },
+    })
+  : null;
+
+const OPEN_NOTIFY_CREW_URLS = [
+  'https://api.open-notify.org/astros.json',
+  'http://api.open-notify.org/astros.json',
+];
+
+async function fetchOpenNotifyCrew() {
+  let lastError = null;
+
+  for (const url of OPEN_NOTIFY_CREW_URLS) {
+    try {
+      const res = await fetch(url, { next: { revalidate: 3600 } });
+      if (!res.ok) {
+        lastError = new Error(`Open Notify returned ${res.status} for ${url}`);
+        continue;
+      }
+
+      return await res.json();
+    } catch (error) {
+      lastError = error;
+    }
+  }
+
+  throw lastError || new Error('Open Notify crew feed unavailable');
+}
+
 const VALID_TABLES = ['planets', 'stars', 'galaxies', 'asteroids', 'missions', 'space_phenomena', 'satellites'];
+
+function isMissingSupabaseTableError(error) {
+  return error?.code === 'PGRST205' || (typeof error?.message === 'string' && error.message.includes('Could not find the table'));
+}
 
 export const EXOPLANETS = [
   { id: 'proxima-b', name: 'Proxima Centauri b', description: 'An exoplanet orbiting within the habitable zone of the red dwarf star Proxima Centauri.', color: '#ef4444', image: 'https://upload.wikimedia.org/wikipedia/commons/f/f6/Proxima_Centauri_b_ESO.jpg', diameter: '1.1 Earths', distance_from_sun: '4.24 light-years', is_exoplanet: true },
@@ -373,7 +413,6 @@ export async function fetchTable(table, orderBy = 'created_at', options = {}) {
 }
 
 export async function fetchById(table, id) {
-  // 1. Check static data (Exoplanets/Moons) - Kept as fallback for now
   if (table === 'planets') {
     const exo = EXOPLANETS.find(e => e.id === id || e.name.toLowerCase() === id.toLowerCase());
     if (exo) return { data: exo, error: null };
@@ -383,8 +422,30 @@ export async function fetchById(table, id) {
     if (moon) return { data: moon, error: null };
   }
   if (table === 'satellites') {
+    const { data: liveSatellite, error: liveSatelliteError } = await supabaseServer
+      .from('satellites')
+      .select('*')
+      .eq('id', id)
+      .maybeSingle();
+
+    if (liveSatellite) return { data: liveSatellite, error: null };
+
+    const { data: liveSatelliteByName, error: liveSatelliteByNameError } = await supabaseServer
+      .from('satellites')
+      .select('*')
+      .ilike('name', id)
+      .maybeSingle();
+
+    if (liveSatelliteByName) return { data: liveSatelliteByName, error: null };
+
     const satellite = SATELLITES.find(s => s.id === id || s.name.toLowerCase() === id.toLowerCase());
     if (satellite) return { data: satellite, error: null };
+
+    const liveError = liveSatelliteError || liveSatelliteByNameError;
+    if (liveError && !isMissingSupabaseTableError(liveError)) {
+      console.error(`[CosmoAPI] fetch ${table}/${id} error:`, liveError);
+    }
+    return { data: null, error: liveError };
   }
 
   // 2. Try fetching by ID (UUID/Primary Key)
@@ -413,8 +474,14 @@ export async function fetchById(table, id) {
 }
 
 export async function fetchAllCelestialObjects() {
+  const results = await Promise.all([
+    fetchTable('planets'),
+    fetchTable('stars'),
+    fetchTable('galaxies'),
+    fetchTable('asteroids'),
+    fetchSatellites(),
+  ]);
   const tables = ['planets', 'stars', 'galaxies', 'asteroids', 'satellites'];
-  const results = await Promise.all(tables.map(t => fetchTable(t)));
   const allObjects = [];
   results.forEach((res, idx) => {
      if (res.data) {
@@ -508,40 +575,38 @@ export async function fetchISSInfo() {
     // 1. Automatically fetch the live crew from Open-Notify API
     let liveAstronauts = [];
     try {
-      const astroRes = await fetch('http://api.open-notify.org/astros.json', { next: { revalidate: 3600 } });
-      if (astroRes.ok) {
-        const astroData = await astroRes.json();
-        const issCrewLive = astroData.people.filter(p => p.craft === 'ISS');
-        
-        // Dictionary to append photos and roles for known currently active people
-        const KNOWN_ASTRONAUTS = {
-          "Oleg Kononenko": { photo: "https://upload.wikimedia.org/wikipedia/commons/e/ea/Oleg_Kononenko_%28expedition_69%29.jpg", agency: "Roscosmos", role: "Commander" },
-          "Nikolai Chub": { photo: "https://upload.wikimedia.org/wikipedia/commons/2/23/Nikolai_Chub_in_2022.jpg", agency: "Roscosmos", role: "Flight Engineer" },
-          "Tracy Caldwell Dyson": { photo: "https://upload.wikimedia.org/wikipedia/commons/f/ff/Tracy_Caldwell_Dyson_official_portrait_2023.jpg", agency: "NASA", role: "Flight Engineer" },
-          "Matthew Dominick": { photo: "https://upload.wikimedia.org/wikipedia/commons/b/ba/Matthew_Dominick_NASA_Astronaut_%28cropped%29.jpg", agency: "NASA", role: "Flight Engineer" },
-          "Michael Barratt": { photo: "https://upload.wikimedia.org/wikipedia/commons/4/4b/Michael_R._Barratt.jpg", agency: "NASA", role: "Flight Engineer" },
-          "Jeanette Epps": { photo: "https://upload.wikimedia.org/wikipedia/commons/d/df/Jeanette_J._Epps_official_portrait_in_an_EMU_spacesuit_%282023%29.jpg", agency: "NASA", role: "Flight Engineer" },
-          "Alexander Grebenkin": { photo: "https://upload.wikimedia.org/wikipedia/commons/2/20/Alexander_Grebenkin_Expedition_71.jpg", agency: "Roscosmos", role: "Flight Engineer" },
-          "Butch Wilmore": { photo: "https://upload.wikimedia.org/wikipedia/commons/2/2e/Barry_E._Wilmore_portrait.jpg", agency: "NASA", role: "Commander (Starliner)" },
-          "Sunita Williams": { photo: "https://upload.wikimedia.org/wikipedia/commons/8/87/Sunita_Williams_Official_Portrait_2_cropped.jpg", agency: "NASA", role: "Pilot (Starliner)" }
-        };
+      const astroData = await fetchOpenNotifyCrew();
+      const issCrewLive = astroData.people.filter(p => p.craft === 'ISS');
 
-        liveAstronauts = issCrewLive.map(astro => {
-          const knownData = KNOWN_ASTRONAUTS[astro.name] || {};
-          return {
-            name: astro.name,
-            agency: knownData.agency || "Space Agency",
-            role: knownData.role || "Expedition Crew",
-            photo: knownData.photo || null
-          };
-        });
-      }
+      // Dictionary to append photos and roles for known currently active people
+      const KNOWN_ASTRONAUTS = {
+        "Oleg Kononenko": { photo: "https://upload.wikimedia.org/wikipedia/commons/e/ea/Oleg_Kononenko_%28expedition_69%29.jpg", agency: "Roscosmos", role: "Commander" },
+        "Nikolai Chub": { photo: "https://upload.wikimedia.org/wikipedia/commons/2/23/Nikolai_Chub_in_2022.jpg", agency: "Roscosmos", role: "Flight Engineer" },
+        "Tracy Caldwell Dyson": { photo: "https://upload.wikimedia.org/wikipedia/commons/f/ff/Tracy_Caldwell_Dyson_official_portrait_2023.jpg", agency: "NASA", role: "Flight Engineer" },
+        "Matthew Dominick": { photo: "https://upload.wikimedia.org/wikipedia/commons/b/ba/Matthew_Dominick_NASA_Astronaut_%28cropped%29.jpg", agency: "NASA", role: "Flight Engineer" },
+        "Michael Barratt": { photo: "https://upload.wikimedia.org/wikipedia/commons/4/4b/Michael_R._Barratt.jpg", agency: "NASA", role: "Flight Engineer" },
+        "Jeanette Epps": { photo: "https://upload.wikimedia.org/wikipedia/commons/d/df/Jeanette_J._Epps_official_portrait_in_an_EMU_spacesuit_%282023%29.jpg", agency: "NASA", role: "Flight Engineer" },
+        "Alexander Grebenkin": { photo: "https://upload.wikimedia.org/wikipedia/commons/2/20/Alexander_Grebenkin_Expedition_71.jpg", agency: "Roscosmos", role: "Flight Engineer" },
+        "Butch Wilmore": { photo: "https://upload.wikimedia.org/wikipedia/commons/2/2e/Barry_E._Wilmore_portrait.jpg", agency: "NASA", role: "Commander (Starliner)" },
+        "Sunita Williams": { photo: "https://upload.wikimedia.org/wikipedia/commons/8/87/Sunita_Williams_Official_Portrait_2_cropped.jpg", agency: "NASA", role: "Pilot (Starliner)" }
+      };
+
+      liveAstronauts = issCrewLive.map(astro => {
+        const knownData = KNOWN_ASTRONAUTS[astro.name] || {};
+        return {
+          name: astro.name,
+          agency: knownData.agency || "Space Agency",
+          role: knownData.role || "Expedition Crew",
+          photo: knownData.photo || null
+        };
+      });
     } catch (apiErr) {
       console.log('[CosmoAPI] Open-Notify live fetch warning:', apiErr.message);
     }
 
     // 2. Fetch the current existing context from Supabase table if it exists
-    const { data: dbData } = await supabaseServer
+    const issClient = supabaseAdmin || supabaseServer;
+    const { data: dbData } = await issClient
       .from('iss_info')
       .select('*')
       .eq('id', 1)
@@ -555,8 +620,13 @@ export async function fetchISSInfo() {
 
     // 4. Silently sync the newly assembled live data back into Supabase for storage
     // (If the table doesn't exist yet, it safely ignores the sql error and just returns the live assembled object)
-    if (liveAstronauts.length > 0) {
-      await supabaseServer.from('iss_info').upsert({ id: 1, ...finalData });
+    if (liveAstronauts.length > 0 && supabaseAdmin) {
+      const { error: syncError } = await supabaseAdmin.from('iss_info').upsert({ id: 1, ...finalData });
+      if (syncError) {
+        console.warn('[CosmoAPI] ISS info sync warning:', syncError.message);
+      }
+    } else if (liveAstronauts.length > 0) {
+      console.warn('[CosmoAPI] SUPABASE_SERVICE_ROLE_KEY missing; skipping iss_info sync.');
     }
 
     return { data: finalData, error: null };

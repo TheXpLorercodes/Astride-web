@@ -4,9 +4,9 @@ import { SATELLITES } from '../../../lib/cosmoDataApi';
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
-  const q = searchParams.get('q') || '';
+  const q = (searchParams.get('q') || '').trim();
 
-  if (q.length < 2) {
+  if (q.length < 2 || q.length > 80) {
     return NextResponse.json({ results: [] });
   }
 

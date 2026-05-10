@@ -113,29 +113,40 @@ export default function LandingPage() {
 
   useEffect(() => {
     async function fetchData() {
-      try {
-        const [apodRes, launchRes, newsRes] = await Promise.all([
-          fetch('/api/apod'),
-          fetch('https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=5'),
-          fetch('https://api.spaceflightnewsapi.net/v4/articles/?limit=4')
-        ]);
+      const fetchJson = async (url, fallback) => {
+        try {
+          const response = await fetch(url);
+          const payload = await response.json().catch(() => ({}));
 
-        const apodData = await apodRes.json();
-        const launchData = await launchRes.json();
-        const newsData = await newsRes.json();
+          if (!response.ok) {
+            throw new Error(payload?.error || `Request failed with status ${response.status}`);
+          }
 
-        let nextLaunch = null;
-        if (launchData.results) {
-          const now = new Date();
-          nextLaunch = launchData.results.find(l => new Date(l.net) > now) || launchData.results[0];
+          return payload;
+        } catch (error) {
+          console.error(`[LandingPage] ${url} failed:`, error);
+          return fallback;
         }
+      };
 
-        setApod(apodData);
-        setLaunch(nextLaunch);
-        setNews(newsData.results || []);
-      } catch (err) {
-        console.error('Fetch error:', err);
+      const [apodData, launchData, newsData] = await Promise.all([
+        fetchJson('/api/apod', null),
+        fetchJson('/api/launches?mode=upcoming&limit=5', { results: [] }),
+        fetchJson('/api/news?limit=4', { results: [] }),
+      ]);
+
+      let nextLaunch = null;
+      const upcomingLaunches = launchData?.results || [];
+      if (upcomingLaunches.length > 0) {
+        const now = new Date();
+        nextLaunch = upcomingLaunches.find((launchItem) => new Date(launchItem.net) > now) || upcomingLaunches[0];
       }
+
+      if (apodData) {
+        setApod(apodData);
+      }
+      setLaunch(nextLaunch);
+      setNews(newsData?.results || []);
     }
     fetchData();
   }, []);

@@ -1,7 +1,8 @@
 'use client';
 import { useState } from 'react';
 import { supabase } from '../../../lib/supabaseClient';
-import { useRouter } from 'next/navigation';
+import { persistDashboardAuthSession, normalizeDashboardRedirectTarget } from '../../../lib/dashboardAuthClient';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import '../auth.css';
 
@@ -12,6 +13,9 @@ export default function SignupPage() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTarget = normalizeDashboardRedirectTarget(searchParams.get('redirectTo'));
+  const loginHref = `/auth/login?redirectTo=${encodeURIComponent(redirectTarget)}`;
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -19,10 +23,10 @@ export default function SignupPage() {
     setError(null);
 
     const redirectTo = process.env.NEXT_PUBLIC_SITE_URL 
-      ? `${process.env.NEXT_PUBLIC_SITE_URL}/auth/login` 
-      : `${window.location.origin}/auth/login`;
+      ? `${process.env.NEXT_PUBLIC_SITE_URL}/auth/login?redirectTo=${encodeURIComponent(redirectTarget)}` 
+      : `${window.location.origin}/auth/login?redirectTo=${encodeURIComponent(redirectTarget)}`;
 
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -33,11 +37,23 @@ export default function SignupPage() {
     if (error) {
       setError(error.message);
       setLoading(false);
+    } else if (data?.session?.access_token) {
+      const sessionResult = await persistDashboardAuthSession(data.session.access_token);
+
+      if (!sessionResult.ok) {
+        await supabase.auth.signOut();
+        setError(sessionResult.error || 'Unable to secure the dashboard session.');
+        setLoading(false);
+        return;
+      }
+
+      router.replace(redirectTarget);
+      router.refresh();
     } else {
       setSuccess(true);
       setLoading(false);
       setTimeout(() => {
-        router.push('/auth/login');
+        router.replace(loginHref);
       }, 3000);
     }
   };
@@ -87,7 +103,7 @@ export default function SignupPage() {
 
         <div className="auth-footer">
           Already have an account? 
-          <Link href="/auth/login" className="auth-link">Login</Link>
+          <Link href={loginHref} className="auth-link">Login</Link>
         </div>
       </div>
     </div>

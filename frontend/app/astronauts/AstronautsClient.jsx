@@ -1,7 +1,9 @@
 'use client';
-import React, { useMemo, useState } from 'react';
+import React, { useDeferredValue, useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './Astronauts.css';
+
+const FALLBACK_IMAGE = 'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png';
 
 const parseDurationDays = (duration) => {
   if (!duration || typeof duration !== 'string') return null;
@@ -39,8 +41,14 @@ export default function AstronautsClient({ initialAstronauts }) {
   const [sortKey, setSortKey] = useState('launch');
   const [sortDir, setSortDir] = useState('asc');
   const [view, setView] = useState('grid');
+  const deferredSearch = useDeferredValue(search.trim());
+  const [isHydrated, setIsHydrated] = useState(false);
 
   const astronautList = Array.isArray(initialAstronauts) ? initialAstronauts : [];
+
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
 
   const nationOptions = useMemo(() => {
     const nations = new Set();
@@ -65,12 +73,36 @@ export default function AstronautsClient({ initialAstronauts }) {
     });
   }, [astronautList]);
 
+  const inSpaceAstronauts = useMemo(() => {
+    return [...enrichedAstronauts]
+      .filter((astro) => astro.in_space)
+      .sort((a, b) => {
+        const aName = a.name || '';
+        const bName = b.name || '';
+        return aName.localeCompare(bName);
+      });
+  }, [enrichedAstronauts]);
+
   const filteredAstronauts = useMemo(() => {
     let list = enrichedAstronauts;
 
-    if (search) {
-      const query = search.toLowerCase();
-      list = list.filter((astro) => astro.name?.toLowerCase().includes(query));
+    if (deferredSearch) {
+      const query = deferredSearch.toLowerCase();
+      list = list.filter((astro) => {
+        const searchTarget = [
+          astro.name,
+          astro.nationality,
+          astro.agency?.name,
+          astro.agency?.abbrev,
+          astro.status?.name,
+          astro.bio,
+        ]
+          .filter(Boolean)
+          .join(' ')
+          .toLowerCase();
+
+        return searchTarget.includes(query);
+      });
     }
 
     if (inSpaceOnly) {
@@ -124,7 +156,7 @@ export default function AstronautsClient({ initialAstronauts }) {
     };
 
     return [...list].sort(compare);
-  }, [enrichedAstronauts, search, inSpaceOnly, nation, missions, sortKey, sortDir]);
+  }, [enrichedAstronauts, deferredSearch, inSpaceOnly, nation, missions, sortKey, sortDir]);
 
   const handleSort = (key) => {
     if (key === sortKey) {
@@ -169,6 +201,52 @@ export default function AstronautsClient({ initialAstronauts }) {
             A living archive of human spaceflight, filtered by mission tempo, time in orbit, and expedition cadence.
           </p>
         </motion.header>
+
+        {inSpaceAstronauts.length > 0 && (
+          <section className="astro-spotlight">
+            <div className="astro-spotlight-header">
+              <span className="astro-spotlight-tag">In Space Now</span>
+              <div>
+                <h2>{inSpaceAstronauts.length} astronauts currently marked in orbit</h2>
+                <p>
+                  These records are highlighted from the live database so the active crew stands out immediately.
+                </p>
+              </div>
+            </div>
+
+            <div className="astro-spotlight-grid">
+              {inSpaceAstronauts.slice(0, 6).map((astro) => {
+                const agencyLabel = astro.agency?.abbrev || astro.agency?.name || astro.nationality || 'Orbital Crew';
+                const imageSrc = astro.profile_image || astro.profile_image_thumbnail || FALLBACK_IMAGE;
+
+                return (
+                  <article key={astro.id} className="astro-spotlight-card">
+                    <img
+                      src={imageSrc}
+                      alt={astro.name}
+                      loading="lazy"
+                      decoding="async"
+                      onError={(event) => {
+                        if (event.currentTarget.dataset.fallbackApplied === 'true') {
+                          event.currentTarget.style.visibility = 'hidden';
+                          return;
+                        }
+
+                        event.currentTarget.dataset.fallbackApplied = 'true';
+                        event.currentTarget.src = FALLBACK_IMAGE;
+                      }}
+                    />
+                    <div className="astro-spotlight-copy">
+                      <span className="astro-status in-space">In Space</span>
+                      <h3>{astro.name}</h3>
+                      <p>{agencyLabel}</p>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </section>
+        )}
 
         <section className="astro-toolbar">
           <div className="astro-toolbar-main">
@@ -272,10 +350,11 @@ export default function AstronautsClient({ initialAstronauts }) {
 
             <div className="astro-counts">
               <span>Showing</span>
-              <strong>{showingCount} Humans</strong>
+              <strong>{showingCount} Records</strong>
               <span className="astro-count-divider" />
-              <span>0 Non-Humans</span>
-              <span className="astro-count-tag">Human</span>
+              <strong>{inSpaceAstronauts.length}</strong>
+              <span>in space</span>
+              <span className="astro-count-tag">Live crew</span>
             </div>
 
             <button type="button" className="astro-reset" onClick={resetFilters}>
@@ -302,32 +381,40 @@ export default function AstronautsClient({ initialAstronauts }) {
 
         {filteredAstronauts.length > 0 ? (
           <motion.div layout className={`astro-grid ${view === 'list' ? 'list' : ''}`}>
-            <AnimatePresence>
+            <AnimatePresence initial={false}>
               {filteredAstronauts.map((astro, index) => {
                 const statusText = astro.in_space ? 'In Space' : (astro.status?.name || 'Unknown');
                 const statusClass = statusText.toLowerCase().replace(/\s+/g, '-');
                 const missionCount = astro.flights_count || 0;
                 const daysInSpace = formatDays(astro._daysInSpace);
                 const daysSpacewalking = formatDays(astro._daysSpacewalking);
+                const imageSrc = astro.profile_image || astro.profile_image_thumbnail || FALLBACK_IMAGE;
 
                 return (
                   <motion.article
                     key={astro.id}
                     layout
-                    initial={{ opacity: 0, y: 18 }}
+                    initial={false}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 18 }}
-                    transition={{ duration: 0.4, delay: index * 0.04 }}
+                    transition={{ duration: 0.25 }}
                     className="astro-card"
                   >
                     <div className="astro-card-media">
                       <span className="astro-card-index">{String(index + 1).padStart(3, '0')}</span>
                       <img
-                        src={astro.profile_image}
+                        src={imageSrc}
                         alt={astro.name}
                         loading="lazy"
+                        decoding="async"
                         onError={(e) => {
-                          e.currentTarget.src = 'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png';
+                          if (e.currentTarget.dataset.fallbackApplied === 'true') {
+                            e.currentTarget.style.visibility = 'hidden';
+                            return;
+                          }
+
+                          e.currentTarget.dataset.fallbackApplied = 'true';
+                          e.currentTarget.src = FALLBACK_IMAGE;
                         }}
                       />
                     </div>

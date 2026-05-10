@@ -5,11 +5,67 @@ import './ISSTracker.css';
 
 const ISSMap = dynamic(() => import('./ISSMap'), { ssr: false });
 
+const ASTRONAUT_FALLBACK_IMAGE = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(`
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 750">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#0f172a"/>
+      <stop offset="1" stop-color="#111827"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="28%" r="70%">
+      <stop offset="0" stop-color="#22d3ee" stop-opacity="0.35"/>
+      <stop offset="0.5" stop-color="#a855f7" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="600" height="750" rx="36" fill="url(#bg)"/>
+  <rect width="600" height="750" rx="36" fill="url(#glow)"/>
+  <circle cx="300" cy="290" r="120" fill="none" stroke="#22d3ee" stroke-opacity="0.18" stroke-width="6"/>
+  <circle cx="300" cy="290" r="78" fill="none" stroke="#f472b6" stroke-opacity="0.22" stroke-width="4" stroke-dasharray="10 10"/>
+  <path d="M300 170l40 82 90 13-65 63 15 89-80-42-80 42 15-89-65-63 90-13z" fill="#fbbf24" fill-opacity="0.12" stroke="#fbbf24" stroke-opacity="0.35" stroke-width="4"/>
+  <text x="300" y="530" text-anchor="middle" fill="#f8fafc" font-family="Orbitron, Arial, sans-serif" font-size="36" letter-spacing="8">CREW</text>
+  <text x="300" y="580" text-anchor="middle" fill="#94a3b8" font-family="Spline Sans Mono, monospace" font-size="16" letter-spacing="6">NO IMAGE</text>
+</svg>
+`)}`;
+
 export default function ISSClient({ issDbData }) {
   const [issData, setIssData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [path, setPath] = useState([]);
+  const telemetryCards = [
+    {
+      label: 'Velocity',
+      accent: 'pink',
+      value: loading ? '---' : `${issData?.velocity.toFixed(2)} km/h`,
+    },
+    {
+      label: 'Altitude',
+      accent: 'cyan',
+      value: loading ? '---' : `${issData?.altitude.toFixed(2)} km`,
+    },
+    {
+      label: 'Coordinates',
+      accent: 'violet',
+      value: loading ? '---' : `${issData?.latitude.toFixed(4)}°, ${issData?.longitude.toFixed(4)}°`,
+      isCoord: true,
+    },
+    {
+      label: 'Visibility',
+      accent: 'amber',
+      value: loading ? '---' : issData?.visibility,
+      valueClassName: 'iss-panel-value--visibility',
+    },
+  ];
+  const archiveStats = issDbData
+    ? [
+        { label: 'Construction Origin', value: issDbData.built_date, accent: 'pink' },
+        { label: 'Member Nations', value: issDbData.participating_countries, accent: 'cyan' },
+        { label: 'Expedition Duration', value: issDbData.crew_stay_duration, accent: 'violet' },
+      ]
+    : [];
+  const moduleAccents = ['pink', 'cyan', 'violet', 'amber'];
+  const astronautAccents = ['pink', 'cyan', 'violet', 'amber'];
 
   useEffect(() => {
     let intervalId;
@@ -70,98 +126,118 @@ export default function ISSClient({ issDbData }) {
         </div>
 
         {/* Dashboard Panels */}
-        <div className="iss-dashboard-grid">
-          <div className="iss-panel">
-            <div className="iss-panel-label">Velocity</div>
-            <div className="iss-panel-value">
-              {loading ? '---' : issData?.velocity.toFixed(2)} <span className="iss-panel-unit">km/h</span>
+        <div className="iss-dashboard-shell">
+          <div className="iss-section-head">
+            <div>
+              <p className="iss-section-eyebrow">Live telemetry</p>
+              <h2 className="iss-section-title">Orbital snapshot</h2>
+            </div>
+            <p className="iss-section-copy">
+              <span className="iss-copy-accent iss-copy-accent--pink">Real-time orbital telemetry.</span>
+              <span> Speed, altitude, coordinates, and visibility are rendered as luminous control tiles.</span>
+            </p>
+          </div>
+
+          <div className="iss-orbital-strip">
+            <div className="iss-orbital-chip iss-orbital-chip--pink">
+              <span className="iss-orbital-chip-label">Track</span>
+              <strong>{loading ? 'Warming up' : `${path.length} trail points`}</strong>
+            </div>
+            <div className="iss-orbital-chip iss-orbital-chip--cyan">
+              <span className="iss-orbital-chip-label">Speed</span>
+              <strong>{telemetryCards[0].value}</strong>
+            </div>
+            <div className="iss-orbital-chip iss-orbital-chip--violet">
+              <span className="iss-orbital-chip-label">Light</span>
+              <strong>{telemetryCards[3].value}</strong>
+            </div>
+            <div className="iss-orbital-chip iss-orbital-chip--amber">
+              <span className="iss-orbital-chip-label">Altitude</span>
+              <strong>{telemetryCards[1].value}</strong>
             </div>
           </div>
-          <div className="iss-panel">
-            <div className="iss-panel-label">Altitude</div>
-            <div className="iss-panel-value">
-              {loading ? '---' : issData?.altitude.toFixed(2)} <span className="iss-panel-unit">km</span>
-            </div>
-          </div>
-          <div className="iss-panel">
-            <div className="iss-panel-label">Coordinates</div>
-            <div className="iss-panel-value coord">
-              {loading ? '---' : `${issData?.latitude.toFixed(4)}°, ${issData?.longitude.toFixed(4)}°`}
-            </div>
-          </div>
-          <div className="iss-panel">
-            <div className="iss-panel-label">Visibility</div>
-            <div className="iss-panel-value" style={{ textTransform: 'capitalize', color: issData?.visibility === 'daylight' ? '#fbbf24' : '#94a3b8' }}>
-              {loading ? '---' : issData?.visibility}
-            </div>
+
+          <div className="iss-dashboard-grid">
+            {telemetryCards.map((card) => (
+              <div key={card.label} className={`iss-panel iss-panel--${card.accent}`}>
+                <div className="iss-panel-label">{card.label}</div>
+                <div className={`iss-panel-value ${card.isCoord ? 'coord' : ''} ${card.valueClassName || ''}`.trim()} style={card.label === 'Visibility' ? { textTransform: 'capitalize', color: issData?.visibility === 'daylight' ? '#fbbf24' : '#94a3b8' } : undefined}>
+                  {card.value}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
         {/* Database Static Info Area */}
         {issDbData && (
-          <div className="mt-16 border-t border-white/10 pt-16 space-y-20 max-w-[1200px] mx-auto">
-            
-            <div className="text-center mb-12">
-              <h2 className="text-2xl md:text-3xl font-orbitron font-bold uppercase text-white tracking-[0.15em] mb-3">
-                Station Archives
-              </h2>
-              <p className="text-gray-400 font-mono text-[11px] tracking-[0.3em]">EXPEDITION & STRUCTURAL RECORDS</p>
+          <div className="iss-archive-shell">
+            <div className="iss-section-head iss-section-head--center">
+              <div>
+                <p className="iss-section-eyebrow">Station archives</p>
+                <h2 className="iss-section-title">Expedition and structural records</h2>
+              </div>
+              <p className="iss-section-copy">
+                <span className="iss-copy-accent iss-copy-accent--cyan">Mission dossier.</span>
+                <span> Structural history, module inventory, and crew records are arranged in color-coded cards.</span>
+              </p>
+            </div>
+
+            <div className="iss-archive-banner">
+              {archiveStats.map((item) => (
+                <div key={item.label} className={`iss-archive-metric iss-archive-metric--${item.accent}`}>
+                  <span>{item.label}</span>
+                  <strong>{item.value}</strong>
+                </div>
+              ))}
             </div>
 
             {/* Station Overview block */}
-            <section>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-1.5 h-1.5 rounded-full bg-pink-500 shadow-[0_0_8px_#ec4899]"></div>
-                <h3 className="text-sm font-bold text-white uppercase tracking-[0.2em]">Orbital Structure</h3>
-                <div className="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent ml-4"></div>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-5 text-gray-300 font-sans">
-                <div className="md:col-span-5 p-6 rounded-2xl bg-[#0a0a0e] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
-                  <div className="space-y-6">
-                    <div>
-                      <h4 className="text-[10px] tracking-[0.25em] text-pink-500 font-mono uppercase mb-2">Construction Origin</h4>
-                      <p className="text-lg text-white font-medium">{issDbData.built_date}</p>
-                    </div>
-                    <div>
-                      <h4 className="text-[10px] tracking-[0.25em] text-pink-500 font-mono uppercase mb-2">Member Nations</h4>
-                      <p className="text-lg text-white font-medium">{issDbData.participating_countries} <span className="text-xs text-gray-500 font-normal">AGENCIES</span></p>
-                    </div>
-                    <div>
-                      <h4 className="text-[10px] tracking-[0.25em] text-pink-500 font-mono uppercase mb-2">Expedition Duration</h4>
-                      <p className="text-sm text-gray-400 leading-relaxed">{issDbData.crew_stay_duration}</p>
-                    </div>
-                  </div>
+            <section className="iss-archive-panel">
+              <div className="iss-archive-panel-copy">
+                <div className="iss-info-section-head iss-info-section-head--archive">
+                  <div className="iss-info-section-mark"></div>
+                  <h3>Orbital structure</h3>
                 </div>
-                
-                <div className="md:col-span-7 p-6 rounded-2xl bg-gradient-to-br from-[#0a0a0e] to-transparent border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
-                  <h4 className="text-[10px] tracking-[0.25em] text-pink-500 font-mono uppercase mb-4">Structural Assembly</h4>
-                  <p className="text-[15px] text-gray-400 leading-8">{issDbData.construction_details}</p>
+
+                <h4 className="iss-archive-panel-title">Assembled in orbital layers</h4>
+                <p className="iss-archive-panel-text">{issDbData.construction_details}</p>
+              </div>
+
+              <div className="iss-archive-facts">
+                <div className="iss-archive-fact iss-archive-fact--pink">
+                  <span>Construction Origin</span>
+                  <strong>{issDbData.built_date}</strong>
+                </div>
+                <div className="iss-archive-fact iss-archive-fact--cyan">
+                  <span>Member Nations</span>
+                  <strong>{issDbData.participating_countries}</strong>
+                </div>
+                <div className="iss-archive-fact iss-archive-fact--violet">
+                  <span>Expedition Duration</span>
+                  <strong>{issDbData.crew_stay_duration}</strong>
                 </div>
               </div>
             </section>
 
             {/* Modules Grid */}
             {issDbData.modules && issDbData.modules.length > 0 && (
-              <section>
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]"></div>
-                  <h3 className="text-sm font-bold text-white uppercase tracking-[0.2em]">Core Modules</h3>
-                  <div className="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent ml-4"></div>
+              <section className="iss-info-section">
+                <div className="iss-info-section-head">
+                  <div className="iss-info-section-mark iss-info-section-mark--cyan"></div>
+                  <h3>Core modules</h3>
                 </div>
-                
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+
+                <div className="iss-module-grid">
                   {issDbData.modules.map((mod, idx) => (
-                    <div key={idx} className="p-5 bg-white/[0.02] hover:bg-white/[0.04] transition-colors border border-white/5 rounded-xl flex flex-col justify-between h-full">
-                      <div>
-                        <div className="flex justify-between items-start mb-3">
-                          <h4 className="text-base font-semibold text-white tracking-wide">{mod.name}</h4>
-                          <span className="text-[9px] font-mono text-cyan-400 bg-cyan-400/10 px-2 py-1 rounded tracking-wider uppercase border border-cyan-400/20">{mod.type}</span>
-                        </div>
-                        <p className="text-sm text-gray-400 leading-relaxed">{mod.purpose}</p>
+                    <div key={idx} className={`iss-module-card iss-module-card--${moduleAccents[idx % moduleAccents.length]}`}>
+                      <div className="iss-module-card-top">
+                        <span className="iss-module-chip">{mod.type}</span>
+                        <h4>{mod.name}</h4>
                       </div>
-                      <div className="mt-5 pt-4 border-t border-white/5">
-                        <p className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">{mod.agency}</p>
+                      <p className="text-sm text-gray-400 leading-relaxed">{mod.purpose}</p>
+                      <div className="iss-module-footer">
+                        <p>{mod.agency}</p>
                       </div>
                     </div>
                   ))}
@@ -171,35 +247,29 @@ export default function ISSClient({ issDbData }) {
 
             {/* Astronauts Grid */}
             {issDbData.astronauts && issDbData.astronauts.length > 0 && (
-              <section>
-                <div className="flex items-center gap-3 mb-8">
-                  <div className="w-1.5 h-1.5 rounded-full bg-purple-500 shadow-[0_0_8px_#a855f7]"></div>
-                  <h3 className="text-sm font-bold text-white uppercase tracking-[0.2em]">Active Crew Manifest</h3>
-                  <div className="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent ml-4"></div>
+              <section className="iss-info-section">
+                <div className="iss-info-section-head">
+                  <div className="iss-info-section-mark iss-info-section-mark--violet"></div>
+                  <h3>Active crew manifest</h3>
                 </div>
-                
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
+
+                <div className="iss-astronaut-grid">
                   {issDbData.astronauts.map((astro, idx) => (
-                    <div key={idx} className="group relative overflow-hidden rounded-xl bg-white/[0.02] border border-white/5 transition-all hover:bg-white/[0.05] hover:border-purple-500/30">
-                      <div className="aspect-[4/5] w-full overflow-hidden bg-[#050508]">
-                         {astro.photo ? (
-                           <img 
-                             src={astro.photo} 
-                             alt={astro.name} 
-                             className="w-full h-full object-cover object-top opacity-70 grayscale-[50%] group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700" 
-                           />
-                         ) : (
-                           <div className="w-full h-full flex flex-col items-center justify-center text-gray-600 font-mono gap-2">
-                             <div className="w-10 h-10 border border-gray-600 rounded-full flex items-center justify-center text-sm">?</div>
-                             <span className="tracking-widest text-[9px] uppercase">No Visual</span>
-                           </div>
-                         )}
-                         <div className="absolute inset-0 bg-gradient-to-t from-[#09090b] via-[#09090b]/40 to-transparent" />
+                    <div key={idx} className={`iss-astronaut-card iss-astronaut-card--${astronautAccents[idx % astronautAccents.length]} group relative overflow-hidden transition-all`}>
+                      <div className="iss-astronaut-avatar">
+                        <img
+                          src={ASTRONAUT_FALLBACK_IMAGE}
+                          alt={astro.name}
+                          className="iss-astronaut-avatar-image iss-astronaut-photo--placeholder"
+                          loading="lazy"
+                          decoding="async"
+                        />
                       </div>
-                      <div className="absolute bottom-0 left-0 right-0 p-5">
-                        <div className="text-[9px] tracking-[0.2em] font-mono text-purple-400 uppercase mb-1">{astro.agency} &middot; {astro.role}</div>
-                        <h4 className="text-sm font-orbitron font-medium text-white tracking-wider truncate">{astro.name}</h4>
+                      <div className="iss-astronaut-copy">
+                        <div className="iss-astronaut-meta">{astro.agency} &middot; {astro.role}</div>
+                        <h4>{astro.name}</h4>
                       </div>
+                      <div className="iss-astronaut-orb" />
                     </div>
                   ))}
                 </div>

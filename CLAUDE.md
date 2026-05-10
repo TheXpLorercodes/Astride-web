@@ -64,6 +64,7 @@ The application requires several environment variables:
 - `NASA_API_KEY`: For NASA API access
 - `NEXT_PUBLIC_SUPABASE_URL`: Supabase project URL
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Supabase anon key
+- `AUTH_COOKIE_SECRET`: Dedicated signing secret for the server-enforced dashboard auth cookie
 
 ### Component Structure
 - Pages are in `app/` directory with corresponding route files

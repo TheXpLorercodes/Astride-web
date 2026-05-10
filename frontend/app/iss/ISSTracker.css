@@ -1,23 +1,48 @@
 /* ISSTracker.css */
 .iss-container {
-  max-width: 1400px;
+  position: relative;
+  max-width: 1440px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 2rem 1.25rem 4rem;
+  overflow: hidden;
+}
+
+.iss-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at top left, rgba(236, 72, 153, 0.12), transparent 28%),
+    radial-gradient(circle at 84% 18%, rgba(34, 211, 238, 0.1), transparent 24%),
+    radial-gradient(circle at 50% 100%, rgba(168, 85, 247, 0.1), transparent 28%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.iss-header,
+.iss-content {
+  position: relative;
+  z-index: 1;
 }
 
 .iss-header {
-  margin-bottom: 2rem;
+  margin-bottom: 1.75rem;
 }
 
 .iss-title {
-  font-family: 'Orbitron', sans-serif;
-  color: var(--accent-pink);
   margin: 0;
+  font-family: 'Orbitron', sans-serif;
+  color: #f9a8d4;
+  letter-spacing: 0.12em;
+  text-shadow: 0 0 18px rgba(236, 72, 153, 0.22);
 }
 
 .iss-desc {
-  color: var(--text-secondary);
-  font-size: 1.1rem;
+  max-width: 760px;
+  margin: 0;
+  color: rgba(226, 232, 240, 0.76);
+  font-size: 1.02rem;
+  line-height: 1.7;
 }
 
 .iss-pulse-indicator {
@@ -35,42 +60,898 @@
   100% { box-shadow: 0 0 0 0 rgba(236, 72, 153, 0); }
 }
 
-.iss-dashboard-grid {
+.iss-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.iss-map-wrapper {
+  background: linear-gradient(180deg, rgba(8, 10, 18, 0.96), rgba(6, 8, 14, 0.92));
+  box-shadow: 0 24px 70px -42px rgba(0, 0, 0, 0.9);
+}
+
+.iss-dashboard-shell,
+.iss-archive-shell {
+  position: relative;
+  overflow: hidden;
+  padding: 1.6rem;
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(10, 12, 20, 0.95), rgba(6, 8, 14, 0.9));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 24px 80px -55px rgba(0, 0, 0, 0.95), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(18px);
+}
+
+.iss-dashboard-shell::before,
+.iss-archive-shell::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(236, 72, 153, 0.18), transparent 34%),
+    radial-gradient(circle at 88% 18%, rgba(34, 211, 238, 0.12), transparent 30%),
+    radial-gradient(circle at 50% 100%, rgba(168, 85, 247, 0.1), transparent 32%);
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+.iss-dashboard-shell::after,
+.iss-archive-shell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  pointer-events: none;
+}
+
+.iss-archive-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 0.25rem;
+}
+
+.iss-section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.25rem;
+  margin-bottom: 1.2rem;
+}
+
+.iss-section-head--center {
+  align-items: flex-start;
+}
+
+.iss-section-head > div {
+  min-width: 0;
+}
+
+.iss-section-eyebrow {
+  margin: 0 0 0.5rem;
+  color: #67e8f9;
+  font-family: 'Spline Sans Mono', monospace;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+}
+
+.iss-section-title {
+  margin: 0;
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(1.25rem, 2vw, 1.8rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.iss-section-copy {
+  max-width: 520px;
+  margin: 0;
+  padding: 1rem 1.1rem;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.5) 55%, rgba(15, 23, 42, 0.22));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(241, 245, 249, 0.88);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 16px 34px -28px rgba(0, 0, 0, 0.92);
+  line-height: 1.7;
+}
+
+.iss-section-copy span {
+  display: inline;
+}
+
+.iss-section-copy span + span {
+  display: block;
+  margin-top: 0.35rem;
+}
+
+.iss-copy-accent {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.iss-copy-accent--pink {
+  color: #f472b6;
+}
+
+.iss-copy-accent--cyan {
+  color: #67e8f9;
+}
+
+.iss-copy-accent--violet {
+  color: #c084fc;
+}
+
+.iss-copy-accent--amber {
+  color: #fbbf24;
+}
+
+.iss-orbital-strip,
+.iss-archive-banner {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 0.8rem;
+}
+
+.iss-orbital-chip,
+.iss-archive-metric {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1rem 1.05rem;
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 18px 36px -28px rgba(0, 0, 0, 0.9);
+}
+
+.iss-orbital-chip::before,
+.iss-archive-metric::before,
+.iss-panel::before,
+.iss-module-card::before,
+.iss-astronaut-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent), rgba(255, 255, 255, 0.16), transparent 82%);
+  opacity: 0.95;
+}
+
+.iss-orbital-chip::after,
+.iss-archive-metric::after,
+.iss-panel::after,
+.iss-module-card::after,
+.iss-astronaut-card::after {
+  content: '';
+  position: absolute;
+  inset: auto -15% -55% auto;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent-soft), transparent 68%);
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.iss-orbital-chip strong,
+.iss-archive-metric strong {
+  position: relative;
+  z-index: 1;
+  color: #ffffff;
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(0.9rem, 1.8vw, 1.08rem);
+  letter-spacing: 0.06em;
+}
+
+.iss-orbital-chip-label,
+.iss-archive-metric span,
+.iss-module-footer p,
+.iss-astronaut-meta {
+  position: relative;
+  z-index: 1;
+  color: rgba(226, 232, 240, 0.78);
+  font-family: 'Spline Sans Mono', monospace;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+}
+
+.iss-orbital-chip--pink,
+.iss-archive-metric--pink,
+.iss-panel--pink,
+.iss-module-card--pink,
+.iss-astronaut-card--pink {
+  --accent: #f472b6;
+  --accent-soft: rgba(244, 114, 182, 0.22);
+}
+
+.iss-orbital-chip--cyan,
+.iss-archive-metric--cyan,
+.iss-panel--cyan,
+.iss-module-card--cyan,
+.iss-astronaut-card--cyan {
+  --accent: #22d3ee;
+  --accent-soft: rgba(34, 211, 238, 0.2);
+}
+
+.iss-orbital-chip--violet,
+.iss-archive-metric--violet,
+.iss-panel--violet,
+.iss-module-card--violet,
+.iss-astronaut-card--violet {
+  --accent: #a855f7;
+  --accent-soft: rgba(168, 85, 247, 0.2);
+}
+
+.iss-orbital-chip--amber,
+.iss-archive-metric--amber,
+.iss-panel--amber,
+.iss-module-card--amber,
+.iss-astronaut-card--amber {
+  --accent: #fbbf24;
+  --accent-soft: rgba(251, 191, 36, 0.18);
+}
+
+.iss-orbital-chip--pink,
+.iss-archive-metric--pink,
+.iss-panel--pink,
+.iss-module-card--pink,
+.iss-astronaut-card--pink,
+.iss-orbital-chip--cyan,
+.iss-archive-metric--cyan,
+.iss-panel--cyan,
+.iss-module-card--cyan,
+.iss-astronaut-card--cyan,
+.iss-orbital-chip--violet,
+.iss-archive-metric--violet,
+.iss-panel--violet,
+.iss-module-card--violet,
+.iss-astronaut-card--violet,
+.iss-orbital-chip--amber,
+.iss-archive-metric--amber,
+.iss-panel--amber,
+.iss-module-card--amber,
+.iss-astronaut-card--amber {
+  --accent-fallback: #ec4899;
 }
 
 .iss-panel {
-  background: rgba(236, 72, 153, 0.05);
-  border: 1px solid rgba(236, 72, 153, 0.2);
-  border-radius: 12px;
-  padding: 1.5rem;
-  text-align: center;
+  --accent: #ec4899;
+  --accent-soft: rgba(236, 72, 153, 0.18);
+}
+
+.iss-panel::before,
+.iss-module-card::before,
+.iss-astronaut-card::before {
+  height: 2px;
+}
+
+.iss-panel::after,
+.iss-module-card::after,
+.iss-astronaut-card::after {
+  inset: auto -20% -48% auto;
+  width: 180px;
+  height: 180px;
+}
+
+.iss-panel .iss-panel-label {
+  color: rgba(243, 244, 246, 0.78);
+}
+
+.iss-panel--pink,
+.iss-panel--cyan,
+.iss-panel--violet,
+.iss-panel--amber {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 18px 40px -28px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.02);
+}
+
+.iss-panel--pink {
+  background: linear-gradient(180deg, rgba(244, 114, 182, 0.14), rgba(255, 255, 255, 0.02));
+}
+
+.iss-panel--cyan {
+  background: linear-gradient(180deg, rgba(34, 211, 238, 0.14), rgba(255, 255, 255, 0.02));
+}
+
+.iss-panel--violet {
+  background: linear-gradient(180deg, rgba(168, 85, 247, 0.14), rgba(255, 255, 255, 0.02));
+}
+
+.iss-panel--amber {
+  background: linear-gradient(180deg, rgba(251, 191, 36, 0.14), rgba(255, 255, 255, 0.02));
+}
+
+.iss-panel-value--visibility {
+  text-shadow: 0 0 18px rgba(255, 255, 255, 0.08);
+}
+
+.iss-archive-banner {
+  margin-top: 0.2rem;
+}
+
+.iss-archive-panel {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(240px, 0.9fr);
+  gap: 0.9rem;
+  padding: 1rem;
+  border-radius: 24px;
+  background: linear-gradient(140deg, rgba(10, 12, 18, 0.96), rgba(7, 9, 14, 0.9));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 24px 52px -34px rgba(0, 0, 0, 0.95);
+  overflow: hidden;
+}
+
+.iss-archive-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(34, 211, 238, 0.14), transparent 30%),
+    radial-gradient(circle at 100% 100%, rgba(168, 85, 247, 0.12), transparent 34%);
+  pointer-events: none;
+}
+
+.iss-archive-panel-copy,
+.iss-archive-facts {
+  position: relative;
+  z-index: 1;
+}
+
+.iss-archive-panel-copy {
+  padding: 0.35rem 0.35rem 0.35rem 0.45rem;
+}
+
+.iss-archive-panel-title {
+  margin: 0.2rem 0 0.55rem;
+  color: #ffffff;
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(1.05rem, 1.7vw, 1.55rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.iss-archive-panel-text {
+  margin: 0;
+  max-width: 64ch;
+  color: rgba(241, 245, 249, 0.82);
+  font-size: 0.96rem;
+  line-height: 1.8;
+}
+
+.iss-archive-facts {
+  display: grid;
+  gap: 0.7rem;
+  align-content: start;
+}
+
+.iss-archive-fact {
+  position: relative;
+  overflow: hidden;
+  padding: 0.85rem 0.95rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.iss-archive-fact::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), transparent 75%);
+}
+
+.iss-archive-fact span {
+  display: block;
+  margin-bottom: 0.28rem;
+  color: rgba(226, 232, 240, 0.74);
+  font-family: 'Spline Sans Mono', monospace;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+.iss-archive-fact strong {
+  color: #ffffff;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.98rem;
+  letter-spacing: 0.05em;
+}
+
+.iss-archive-metric {
+  min-height: 120px;
+  justify-content: center;
+}
+
+.iss-overview-card-rhythm > div {
+  padding: 0.1rem 0;
+}
+
+.iss-overview-card-rhythm h4 {
+  color: #fda4af;
+}
+
+.iss-overview-card-rhythm p {
+  color: rgba(241, 245, 249, 0.88);
+}
+
+.iss-module-card,
+.iss-astronaut-card {
+  --accent: #ec4899;
+  --accent-soft: rgba(236, 72, 153, 0.18);
+}
+
+.iss-module-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: 220px;
+  padding: 1.25rem;
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(9, 11, 18, 0.96), rgba(5, 7, 12, 0.9));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 18px 40px -30px rgba(0, 0, 0, 0.96);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.iss-module-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(34, 211, 238, 0.22);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 24px 55px -36px rgba(0, 0, 0, 1);
+}
+
+.iss-module-chip {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.42rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #67e8f9;
+  font-family: 'Spline Sans Mono', monospace;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.iss-module-card--pink .iss-module-chip {
+  color: #fbcfe8;
+  border-color: rgba(244, 114, 182, 0.24);
+  background: rgba(244, 114, 182, 0.1);
+}
+
+.iss-module-card--cyan .iss-module-chip {
+  color: #a5f3fc;
+  border-color: rgba(34, 211, 238, 0.24);
+  background: rgba(34, 211, 238, 0.1);
+}
+
+.iss-module-card--violet .iss-module-chip {
+  color: #ddd6fe;
+  border-color: rgba(168, 85, 247, 0.24);
+  background: rgba(168, 85, 247, 0.1);
+}
+
+.iss-module-card--amber .iss-module-chip {
+  color: #fde68a;
+  border-color: rgba(251, 191, 36, 0.24);
+  background: rgba(251, 191, 36, 0.1);
+}
+
+.iss-module-footer {
+  margin-top: auto;
+  padding-top: 0.9rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.iss-module-card--pink {
+  background: linear-gradient(180deg, rgba(244, 114, 182, 0.13), rgba(5, 7, 12, 0.9));
+}
+
+.iss-module-card--cyan {
+  background: linear-gradient(180deg, rgba(34, 211, 238, 0.13), rgba(5, 7, 12, 0.9));
+}
+
+.iss-module-card--violet {
+  background: linear-gradient(180deg, rgba(168, 85, 247, 0.13), rgba(5, 7, 12, 0.9));
+}
+
+.iss-module-card--amber {
+  background: linear-gradient(180deg, rgba(251, 191, 36, 0.13), rgba(5, 7, 12, 0.9));
+}
+
+.iss-astronaut-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 340px;
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(10, 12, 18, 0.96), rgba(5, 6, 10, 0.9));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 20px 48px -34px rgba(0, 0, 0, 0.96);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.iss-astronaut-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(168, 85, 247, 0.34);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 28px 60px -36px rgba(0, 0, 0, 1);
+}
+
+.iss-astronaut-card--pink {
+  background: linear-gradient(180deg, rgba(244, 114, 182, 0.12), rgba(5, 6, 10, 0.9));
+}
+
+.iss-astronaut-card--cyan {
+  background: linear-gradient(180deg, rgba(34, 211, 238, 0.12), rgba(5, 6, 10, 0.9));
+}
+
+.iss-astronaut-card--violet {
+  background: linear-gradient(180deg, rgba(168, 85, 247, 0.12), rgba(5, 6, 10, 0.9));
+}
+
+.iss-astronaut-card--amber {
+  background: linear-gradient(180deg, rgba(251, 191, 36, 0.12), rgba(5, 6, 10, 0.9));
+}
+
+.iss-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.iss-panel {
+  position: relative;
+  overflow: hidden;
+  min-height: 150px;
+  padding: 1.35rem 1.25rem 1.2rem;
+  text-align: left;
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 18px 40px -28px rgba(0, 0, 0, 0.9);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.iss-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(236, 72, 153, 0.85), rgba(34, 211, 238, 0.7), transparent 80%);
+  opacity: 0.8;
+}
+
+.iss-panel:hover {
+  transform: translateY(-2px);
+  border-color: rgba(236, 72, 153, 0.28);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 24px 50px -32px rgba(0, 0, 0, 0.95);
 }
 
 .iss-panel-label {
-  color: var(--text-secondary);
-  font-size: 0.9rem;
+  color: rgba(203, 213, 225, 0.7);
+  font-size: 0.72rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 0.5rem;
+  letter-spacing: 0.26em;
+  margin-bottom: 0.8rem;
 }
 
 .iss-panel-value {
-  font-size: 1.8rem;
-  font-weight: 700;
+  font-size: clamp(1.45rem, 3vw, 2.1rem);
+  font-weight: 800;
   font-family: 'Orbitron', monospace;
-  color: white;
+  color: #ffffff;
+  line-height: 1.1;
 }
 
 .iss-panel-value.coord {
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  word-break: break-word;
 }
 
 .iss-panel-unit {
-  font-size: 1rem;
-  color: var(--accent-pink);
+  display: inline-block;
+  margin-left: 0.4rem;
+  font-size: 0.88rem;
+  color: #f9a8d4;
+}
+
+.iss-info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.iss-info-section-head {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.iss-info-section-head h3 {
+  margin: 0;
+  color: #ffffff;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.iss-info-section-mark {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: #ec4899;
+  box-shadow: 0 0 12px rgba(236, 72, 153, 0.7);
+}
+
+.iss-info-section-mark--cyan {
+  background: #22d3ee;
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.7);
+}
+
+.iss-info-section-mark--violet {
+  background: #a855f7;
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.72);
+}
+
+.iss-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.iss-overview-grid > .iss-overview-card:first-child {
+  grid-column: span 5;
+}
+
+.iss-overview-grid > .iss-overview-card--accent {
+  grid-column: span 7;
+}
+
+.iss-overview-card {
+  position: relative;
+  overflow: hidden;
+  padding: 1.4rem;
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(10, 12, 18, 0.96), rgba(6, 8, 12, 0.92));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 20px 45px -34px rgba(0, 0, 0, 0.95);
+}
+
+.iss-overview-card--accent {
+  background: linear-gradient(145deg, rgba(10, 12, 18, 0.96), rgba(7, 11, 20, 0.92));
+  border-color: rgba(34, 211, 238, 0.18);
+}
+
+.iss-overview-card h4 {
+  color: #f9a8d4;
+}
+
+.iss-overview-card p {
+  margin-bottom: 0;
+  color: rgba(226, 232, 240, 0.72);
+}
+
+.iss-module-grid,
+.iss-astronaut-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.iss-module-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  min-height: 152px;
+  padding: 1rem 1rem 0.95rem;
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(9, 11, 18, 0.96), rgba(5, 7, 12, 0.92));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 18px 40px -30px rgba(0, 0, 0, 0.96);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.iss-module-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(34, 211, 238, 0.22);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 24px 55px -36px rgba(0, 0, 0, 1);
+}
+
+.iss-module-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.38rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(34, 211, 238, 0.09);
+  border: 1px solid rgba(34, 211, 238, 0.22);
+  color: #67e8f9;
+  font-family: 'Spline Sans Mono', monospace;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.iss-module-card-top {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.iss-module-card-top h4 {
+  margin: 0;
+  color: #ffffff;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.92rem;
+  letter-spacing: 0.06em;
+  line-height: 1.35;
+}
+
+.iss-module-card p {
+  margin: 0;
+  color: rgba(226, 232, 240, 0.76);
+  line-height: 1.75;
+  font-size: 0.86rem;
+}
+
+.iss-module-footer {
+  margin-top: auto;
+  padding-top: 0.9rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.iss-module-footer p {
+  margin: 0;
+  color: rgba(148, 163, 184, 0.9);
+}
+
+.iss-astronaut-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.95rem;
+  overflow: hidden;
+  min-height: 124px;
+  padding: 0.95rem 1rem;
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(10, 12, 18, 0.96), rgba(5, 6, 10, 0.92));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 20px 48px -34px rgba(0, 0, 0, 0.96);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.iss-astronaut-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(168, 85, 247, 0.34);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 28px 60px -36px rgba(0, 0, 0, 1);
+}
+
+.iss-astronaut-avatar {
+  position: relative;
+  flex: 0 0 auto;
+  width: 78px;
+  height: 78px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.08), rgba(3, 4, 10, 0.92));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.iss-astronaut-avatar-image,
+.iss-astronaut-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.95;
+  filter: saturate(0.95) contrast(1.05);
+}
+
+.iss-astronaut-copy {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  margin-top: 0;
+  padding: 0;
+}
+
+.iss-astronaut-meta {
+  margin-bottom: 0.35rem;
+}
+
+.iss-astronaut-copy h4 {
+  margin: 0;
+  color: #ffffff;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.98rem;
+  letter-spacing: 0.08em;
+}
+
+.iss-astronaut-orb {
+  flex: 0 0 auto;
+  width: 12px;
+  height: 12px;
+  margin-top: -0.75rem;
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 14px var(--accent-soft);
+}
+
+.iss-astronaut-card--pink .iss-astronaut-meta {
+  color: #f9a8d4;
+}
+
+.iss-astronaut-card--cyan .iss-astronaut-meta {
+  color: #67e8f9;
+}
+
+.iss-astronaut-card--violet .iss-astronaut-meta {
+  color: #c084fc;
+}
+
+.iss-astronaut-card--amber .iss-astronaut-meta {
+  color: #fbbf24;
+}
+
+.iss-astronaut-card--pink h4 {
+  color: #fff1f2;
+}
+
+.iss-astronaut-card--cyan h4 {
+  color: #ecfeff;
+}
+
+.iss-astronaut-card--violet h4 {
+  color: #f5f3ff;
+}
+
+.iss-astronaut-card--amber h4 {
+  color: #fffbeb;
+}
+
+.iss-astronaut-card--pink .iss-astronaut-orb {
+  background: #f472b6;
+  box-shadow: 0 0 16px rgba(244, 114, 182, 0.35);
+}
+
+.iss-astronaut-card--cyan .iss-astronaut-orb {
+  background: #22d3ee;
+  box-shadow: 0 0 16px rgba(34, 211, 238, 0.35);
+}
+
+.iss-astronaut-card--violet .iss-astronaut-orb {
+  background: #a855f7;
+  box-shadow: 0 0 16px rgba(168, 85, 247, 0.35);
+}
+
+.iss-astronaut-card--amber .iss-astronaut-orb {
+  background: #fbbf24;
+  box-shadow: 0 0 16px rgba(251, 191, 36, 0.35);
 }
 
 .leaflet-container {
@@ -80,4 +961,57 @@
 /* Smooth move transitions for ISS marker delivery app style */
 .leaflet-marker-pane .leaflet-marker-icon {
   transition: transform 1.5s linear !important;
+}
+
+@media (max-width: 1100px) {
+  .iss-overview-grid > .iss-overview-card:first-child,
+  .iss-overview-grid > .iss-overview-card--accent {
+    grid-column: span 12;
+  }
+}
+
+@media (max-width: 900px) {
+  .iss-container {
+    padding: 1.25rem 0.9rem 3rem;
+  }
+
+  .iss-dashboard-shell,
+  .iss-archive-shell {
+    padding: 1.1rem;
+    border-radius: 22px;
+  }
+
+  .iss-section-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .iss-section-copy {
+    max-width: none;
+  }
+
+  .iss-orbital-strip,
+  .iss-archive-banner {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+
+  .iss-astronaut-card {
+    min-height: 320px;
+  }
+}
+
+@media (max-width: 640px) {
+  .iss-panel {
+    min-height: 132px;
+  }
+
+  .iss-module-card,
+  .iss-overview-card,
+  .iss-astronaut-card {
+    border-radius: 20px;
+  }
+
+  .iss-astronaut-copy {
+    margin-top: -64px;
+  }
 }

@@ -24,14 +24,42 @@ function loadEnv() {
 loadEnv();
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY; 
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!supabaseUrl || !supabaseKey) {
-  console.error('Missing Supabase credentials in .env.local');
+  console.error('Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY in .env.local');
+  console.error('The sync requires the service role key because RLS blocks anon writes.');
   process.exit(1);
 }
 
-const supabase = createClient(supabaseUrl, supabaseKey);
+const supabase = createClient(supabaseUrl, supabaseKey, {
+  auth: { persistSession: false, autoRefreshToken: false }
+});
+
+const OPEN_NOTIFY_URLS = [
+  'https://api.open-notify.org/astros.json',
+  'http://api.open-notify.org/astros.json',
+];
+
+async function fetchOpenNotifyCrew() {
+  let lastError = null;
+
+  for (const url of OPEN_NOTIFY_URLS) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) {
+        lastError = new Error(`Open Notify returned ${res.status} for ${url}`);
+        continue;
+      }
+
+      return await res.json();
+    } catch (error) {
+      lastError = error;
+    }
+  }
+
+  throw lastError || new Error('Open Notify crew feed unavailable');
+}
 
 // Basic knowledge base to match known photos and agency data
 const KNOWN_ASTRONAUTS = {
@@ -50,9 +78,7 @@ async function syncISSCrew() {
   console.log('Fetching live crew from Open-Notify API (by Natronics)...');
   
   try {
-    const res = await fetch('http://api.open-notify.org/astros.json');
-    if (!res.ok) throw new Error('API down');
-    const data = await res.json();
+    const data = await fetchOpenNotifyCrew();
     
     // Filter out only people currently on the ISS (removes Tiangong etc)
     const issCrewLive = data.people.filter(p => p.craft === 'ISS');

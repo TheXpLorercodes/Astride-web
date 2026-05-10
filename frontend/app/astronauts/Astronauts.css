@@ -93,6 +93,95 @@
   line-height: 1.6;
 }
 
+.astro-spotlight {
+  margin-bottom: 28px;
+  padding: 22px;
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(10, 16, 24, 0.96), rgba(7, 10, 16, 0.88));
+  border: 1px solid rgba(25, 214, 255, 0.16);
+  box-shadow: 0 24px 60px -42px rgba(0, 0, 0, 0.85);
+}
+
+.astro-spotlight-header {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.astro-spotlight-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: rgba(25, 214, 170, 0.14);
+  border: 1px solid rgba(25, 214, 170, 0.32);
+  color: #7af1c6;
+  font-family: 'Spline Sans Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+.astro-spotlight-header h2 {
+  margin: 0;
+  font-size: clamp(1.2rem, 2.2vw, 1.8rem);
+  font-weight: 500;
+}
+
+.astro-spotlight-header p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  line-height: 1.6;
+  max-width: 720px;
+}
+
+.astro-spotlight-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+}
+
+.astro-spotlight-card {
+  display: grid;
+  grid-template-columns: 88px 1fr;
+  gap: 14px;
+  align-items: center;
+  padding: 12px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.astro-spotlight-card img {
+  width: 88px;
+  height: 88px;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+.astro-spotlight-copy {
+  min-width: 0;
+}
+
+.astro-spotlight-copy h3 {
+  margin: 10px 0 6px;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.astro-spotlight-copy p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
 .astro-toolbar {
   background: var(--panel);
   border: 1px solid var(--panel-border);
@@ -347,6 +436,7 @@
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 20px;
   overflow: hidden;
+  min-height: 340px;
   transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
   box-shadow: 0 16px 40px -28px rgba(0, 0, 0, 0.8);
 }
@@ -369,6 +459,7 @@
   object-fit: cover;
   transition: transform 0.6s ease;
   filter: saturate(1.05);
+  background: #0b0d12;
 }
 
 .astro-card:hover .astro-card-media img {
@@ -516,6 +607,15 @@
 
   .astro-toolbar-main {
     gap: 12px;
+  }
+
+  .astro-spotlight-card {
+    grid-template-columns: 72px 1fr;
+  }
+
+  .astro-spotlight-card img {
+    width: 72px;
+    height: 72px;
   }
 }
 

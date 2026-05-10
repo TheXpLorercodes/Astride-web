@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { supabase } from '../../lib/supabaseClient';
 import { useAuth } from '../../context/AuthContext';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import nextDynamic from 'next/dynamic';
 import JourneyCTA from '../../components/Landing/JourneyCTA';
@@ -132,11 +131,11 @@ const NewsGridWidget = () => {
           <div className="card-top">
              <span className="text-[8px] text-purple-400 font-black uppercase tracking-widest">{n.news_site || 'NASA'}</span>
           </div>
-          <div className="card-body !mt-4">
+          <div className="card-body mt-4!">
             <h5 className="text-sm font-bold text-white line-clamp-3 group-hover:text-purple-300 transition-colors">{n.title}</h5>
             <Link href={n.url} target="_blank" className="mt-6 block text-[9px] font-black uppercase text-gray-500 hover:text-white transition-colors tracking-widest">Read Dispatch →</Link>
           </div>
-          <div className="card-planet-wrap !w-[140px] !h-[140px] !right-[-10%] !top-[-10%]">
+          <div className="card-planet-wrap w-35! h-35! right-[-10%]! top-[-10%]!">
              <img src={n.image_url || n.urlToImage} alt="" className="card-image opacity-40 group-hover:opacity-80 transition-opacity" />
              <div className="card-shadow"></div>
           </div>
@@ -150,13 +149,6 @@ const NewsGridWidget = () => {
 
 export default function MissionControl() {
   const { user, loading: authLoading } = useAuth();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!authLoading && !user) {
-      router.push('/auth/login');
-    }
-  }, [user, authLoading]);
 
   if (authLoading) {
     return (
@@ -183,7 +175,7 @@ export default function MissionControl() {
         
         <header className="dash-welcome">
           <p className="text-purple-500 font-black tracking-[0.6em] uppercase text-[10px] mb-4">{"Astride // Mission Control"}</p>
-          <h1 className="text-white">Welcome back, <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-600">{user?.email?.split('@')[0]}</span></h1>
+          <h1 className="text-white">Welcome back, <span className="text-transparent bg-clip-text bg-linear-to-r from-white to-gray-600">{user?.email?.split('@')[0]}</span></h1>
           <p className="text-gray-400 tracking-widest uppercase text-xs mt-2">{"All systems nominal // 2026-04-03"}</p>
         </header>
 
@@ -199,7 +191,7 @@ export default function MissionControl() {
                 Commence Mission →
               </Link>
             </div>
-            <div className="card-planet-wrap !right-[-5%] !top-[-10%] !w-[400px] !h-[400px]">
+            <div className="card-planet-wrap right-[-5%]! top-[-10%]! w-100! h-100!">
                <div className="card-sphere" style={{ background: 'radial-gradient(circle at 30% 30%, #fff, #3b82f6 60%)' }}></div>
                <div className="card-shadow"></div>
             </div>
@@ -243,9 +235,9 @@ export default function MissionControl() {
           {/* Quick Actions */}
           <motion.div variants={fadeInUp} initial="hidden" animate="visible" className="col-span-12 mt-16">
              <div className="flex items-center gap-4 mb-8">
-                <div className="h-[1px] flex-1 bg-white/10"></div>
+                 <div className="h-px flex-1 bg-white/10"></div>
                 <h3 className="text-[10px] font-black tracking-[0.5em] text-gray-500 uppercase">Auxiliary Systems</h3>
-                <div className="h-[1px] flex-1 bg-white/10"></div>
+                 <div className="h-px flex-1 bg-white/10"></div>
              </div>
              <div className="grid grid-cols-2 md:grid-cols-6 gap-6">
                 {[

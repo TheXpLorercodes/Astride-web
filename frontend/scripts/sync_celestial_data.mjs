@@ -4,14 +4,17 @@ import dotenv from 'dotenv';
 dotenv.config({ path: '.env.local' });
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!supabaseUrl || !supabaseKey) {
-  console.error('Supabase credentials are missing from .env.local');
+  console.error('Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY in .env.local');
+  console.error('The sync requires the service role key because RLS blocks anon writes.');
   process.exit(1);
 }
 
-const supabase = createClient(supabaseUrl, supabaseKey);
+const supabase = createClient(supabaseUrl, supabaseKey, {
+  auth: { persistSession: false, autoRefreshToken: false }
+});
 
 const PLANETS = [
   ['Mercury', { gravity: '3.7 m/s^2', day_length: '58.6 Earth days', orbital_period: '88 Earth days', temperature: '167 C avg', number_of_moons: 0, has_rings: false, brief_description: 'The smallest planet and the closest world to the Sun.', hero_paragraph: 'Mercury is a rocky inner planet with a heavily cratered surface, a huge iron core, and extreme day-to-night temperature swings.', facts: ['Smallest planet in the Solar System', 'Closest planet to the Sun', 'Long solar day of 176 Earth days', 'No moons and no rings'], atmosphere: [{ element: 'Oxygen', percentage: 42 }, { element: 'Sodium', percentage: 29 }, { element: 'Hydrogen', percentage: 22 }] }],

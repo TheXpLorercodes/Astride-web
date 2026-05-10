@@ -1,7 +1,8 @@
 'use client';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
+import LaunchTimer from '../../components/Landing/LaunchTimer';
 import './Launches.css';
 
 const sortOptions = [
@@ -48,6 +49,7 @@ const getStatusClass = (status) => {
 };
 
 export default function LaunchesClient({ initialLaunches }) {
+  const [now, setNow] = useState(Date.now());
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
   const [providerFilter, setProviderFilter] = useState('All');
@@ -59,6 +61,11 @@ export default function LaunchesClient({ initialLaunches }) {
   const [view, setView] = useState('grid');
 
   const launchList = Array.isArray(initialLaunches) ? initialLaunches : [];
+
+  useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 60000);
+    return () => clearInterval(timer);
+  }, []);
 
   const enrichedLaunches = useMemo(() => {
     return launchList.map((launch) => {
@@ -81,6 +88,14 @@ export default function LaunchesClient({ initialLaunches }) {
       };
     });
   }, [launchList]);
+
+  const nextLaunch = useMemo(() => {
+    const upcomingLaunches = enrichedLaunches
+      .filter((launch) => launch._netTime && launch._netTime >= now)
+      .sort((a, b) => a._netTime - b._netTime);
+
+    return upcomingLaunches[0] || enrichedLaunches[0] || null;
+  }, [enrichedLaunches, now]);
 
   const statusOptions = useMemo(() => {
     const statuses = new Set();
@@ -231,6 +246,23 @@ export default function LaunchesClient({ initialLaunches }) {
             Track the next wave of orbital missions, flight windows, and launch providers in real time.
           </p>
         </motion.header>
+
+        {nextLaunch && (
+          <section className="launch-countdown-hero">
+            <LaunchTimer data={nextLaunch} />
+            <div className="launch-countdown-hero-actions">
+              <div className="launch-countdown-hero-copy">
+                <p className="launch-countdown-eyebrow">Launch tracker</p>
+                <p>
+                  Open the dedicated mission view for detailed timing, site data, and flight context.
+                </p>
+              </div>
+              <Link className="launch-countdown-hero-link" href={`/launches/${nextLaunch.id}`}>
+                Open tracker
+              </Link>
+            </div>
+          </section>
+        )}
 
         <section className="launch-toolbar">
           <div className="launch-toolbar-main">
@@ -419,8 +451,8 @@ export default function LaunchesClient({ initialLaunches }) {
                       </div>
 
                       <div className="launch-card-cta">
-                        <Link className="launch-track-link" href={`/launch-tracker?launch=${launch.id}`}>
-                          Track launch -&gt;
+                        <Link className="launch-track-link launch-track-button" href={`/launches/${launch.id}`}>
+                          Launch Tracker
                         </Link>
                         <span className="launch-countdown-chip">{countdown}</span>
                       </div>

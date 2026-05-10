@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/supabaseClient';
+import { clearDashboardAuthSession } from '../../lib/dashboardAuthClient';
 import BrandMark from '../BrandMark/BrandMark';
 import './Navbar.css';
 
@@ -76,8 +77,9 @@ export default function Navbar() {
   }, [searchQuery]);
 
   const handleLogout = async () => {
+    await clearDashboardAuthSession();
     await supabase.auth.signOut();
-    router.push('/');
+    router.replace('/');
     router.refresh();
   };
 
@@ -160,7 +162,6 @@ export default function Navbar() {
                   <div className="mega-column">
                     <h4 className="column-title">Exploration</h4>
                     <Link href="/asteroid-watch" className="mega-item">🛡️ Asteroid Watch</Link>
-                    <Link href="/launch-tracker" className="mega-item">🚀 Launch Tracker</Link>
                     <Link href="/live-earth" className="mega-item">🌍 Live Earth</Link>
                   </div>
                   <div className="mega-column">

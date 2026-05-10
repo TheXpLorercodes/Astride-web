@@ -1,7 +1,8 @@
 'use client';
 import { useState } from 'react';
 import { supabase } from '../../../lib/supabaseClient';
-import { useRouter } from 'next/navigation';
+import { persistDashboardAuthSession, normalizeDashboardRedirectTarget } from '../../../lib/dashboardAuthClient';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import '../auth.css';
 
@@ -11,13 +12,16 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTarget = normalizeDashboardRedirectTarget(searchParams.get('redirectTo'));
+  const signupHref = `/auth/signup?redirectTo=${encodeURIComponent(redirectTarget)}`;
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
@@ -26,7 +30,17 @@ export default function LoginPage() {
       setError(error.message);
       setLoading(false);
     } else {
-      router.push('/dashboard');
+      const accessToken = data?.session?.access_token;
+      const sessionResult = await persistDashboardAuthSession(accessToken);
+
+      if (!sessionResult.ok) {
+        await supabase.auth.signOut();
+        setError(sessionResult.error || 'Unable to secure the dashboard session.');
+        setLoading(false);
+        return;
+      }
+
+      router.replace(redirectTarget);
       router.refresh();
     }
   };
@@ -71,7 +85,7 @@ export default function LoginPage() {
 
         <div className="auth-footer">
             Don&apos;t have an account?{' '}
-          <Link href="/auth/signup" className="auth-link">Sign Up</Link>
+          <Link href={signupHref} className="auth-link">Sign Up</Link>
         </div>
       </div>
     </div>

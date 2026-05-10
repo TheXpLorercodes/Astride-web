@@ -2,8 +2,11 @@ import { NextResponse } from 'next/server';
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
-  const rover = searchParams.get('rover') || 'curiosity';
-  const sol = searchParams.get('sol') || '100';
+  const allowedRovers = new Set(['curiosity', 'perseverance', 'opportunity', 'spirit']);
+  const roverInput = (searchParams.get('rover') || 'curiosity').toLowerCase();
+  const rover = allowedRovers.has(roverInput) ? roverInput : 'curiosity';
+  const parsedSol = Number.parseInt(searchParams.get('sol') || '100', 10);
+  const sol = Number.isFinite(parsedSol) ? Math.min(Math.max(parsedSol, 0), 5000) : 100;
   
   // Using images-api as it's more stable than the specialized mars-photos API
   const query = `mars rover ${rover} sol ${sol}`;

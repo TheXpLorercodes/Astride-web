@@ -41,6 +41,26 @@ const PAST_URL = 'https://ll.thespacedevs.com/2.2.0/launch/previous/';
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+function buildTrackerProfileRows(launches) {
+  return launches.map((launch, index) => {
+    const missionName = launch.mission?.name || launch.name || 'Launch tracker';
+    const providerName = launch.launch_service_provider?.name || 'Mission Control';
+    const siteName = launch.pad?.name || launch.pad?.location?.name || 'Launch site pending';
+    const summary = launch.mission?.description
+      || `${providerName} is tracking ${missionName} from ${siteName}.`;
+
+    return {
+      launch_id: launch.id,
+      prev_launch_id: index > 0 ? launches[index - 1].id : null,
+      next_launch_id: index < launches.length - 1 ? launches[index + 1].id : null,
+      tracker_title: missionName,
+      tracker_summary: summary,
+      hero_image: launch.image || launch.infographic || launch.pad?.map_image || launch.pad?.location?.map_image || null,
+      updated_at: new Date().toISOString(),
+    };
+  });
+}
+
 const mapLaunch = (launch) => {
   return {
     id: launch.id,
@@ -107,6 +127,26 @@ async function syncEndpoint(label, baseUrl, maxTotal = 200) {
 async function syncLaunches() {
   const upcomingTotal = await syncEndpoint('upcoming', UPCOMING_URL, 200);
   const pastTotal = await syncEndpoint('past', PAST_URL, 200);
+
+  const { data: launchRows, error: launchRowsError } = await supabase
+    .from('launches')
+    .select('id, name, net, image, infographic, launch_service_provider, mission, pad')
+    .order('net', { ascending: true });
+
+  if (launchRowsError) {
+    console.warn('Could not build launch tracker profiles:', launchRowsError.message);
+  } else if (Array.isArray(launchRows) && launchRows.length > 0) {
+    const trackerProfiles = buildTrackerProfileRows(launchRows);
+    const { error: trackerError } = await supabase
+      .from('launch_tracker_profiles')
+      .upsert(trackerProfiles, { onConflict: 'launch_id' });
+
+    if (trackerError) {
+      console.warn('Launch tracker profile sync warning:', trackerError.message);
+    } else {
+      console.log(`Synced ${trackerProfiles.length} launch tracker profiles.`);
+    }
+  }
 
   const { count, error: countError } = await supabase
     .from('launches')
