@@ -41,7 +41,7 @@ export default function Footer() {
           </div>
           <div className="link-column">
             <h4>Knowledge</h4>
-            <Link href="/encyclopedia">Encyclopedia</Link>
+            <Link href="/planetary-evolution">Simulation Engine</Link>
             <Link href="/news">Space News</Link>
             <Link href="/mars-gallery">Mars Gallery</Link>
           </div>

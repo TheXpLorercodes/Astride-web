@@ -28,6 +28,14 @@ const securityHeaders = [
 ];
 
 const nextConfig = {
+  // Transpile ESM-only three.js packages so webpack can bundle them correctly
+  transpilePackages: [
+    'three',
+    '@react-three/fiber',
+    '@react-three/drei',
+    'zustand',
+    'use-sync-external-store',
+  ],
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'apod.nasa.gov' },

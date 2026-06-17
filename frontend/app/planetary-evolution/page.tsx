@@ -1,9 +1,14 @@
 'use client';
 
 import React from 'react';
-import Planet3D from '../../components/PlanetaryEvolution/Planet3D';
+import dynamic from 'next/dynamic';
 import { usePlanetaryEvolution, PRESETS } from '../../hooks/usePlanetaryEvolution';
 import Navbar from '../../components/Navbar/Navbar';
+
+const Planet3D = dynamic(() => import('../../components/PlanetaryEvolution/Planet3D'), {
+  ssr: false,
+  loading: () => <div className="w-full h-full flex items-center justify-center text-gray-500 text-sm">Loading 3D engine...</div>,
+});
 
 export default function PlanetaryEvolutionSimulator() {
   const {
