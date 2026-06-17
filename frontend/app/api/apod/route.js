@@ -1,5 +1,17 @@
 import { NextResponse } from 'next/server';
 
+const APOD_FALLBACK = {
+  title: 'Milky Way Over Earth',
+  explanation:
+    'NASA APOD is temporarily unavailable, so Astride is showing a local cosmic fallback while the upstream service recovers.',
+  date: new Date().toISOString().slice(0, 10),
+  media_type: 'image',
+  url: '/milky-way.jpg',
+  hdurl: '/milky-way.jpg',
+  copyright: 'Astride',
+  fallback: true,
+};
+
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const date = (searchParams.get('date') || '').trim();
@@ -27,7 +39,12 @@ export async function GET(request) {
     return NextResponse.json(data, {
       headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400' },
     });
-  } catch (err) {
-    return NextResponse.json({ error: err.message }, { status: 503 });
+  } catch {
+    return NextResponse.json(APOD_FALLBACK, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=3600',
+        'X-Astride-Fallback': 'apod',
+      },
+    });
   }
 }

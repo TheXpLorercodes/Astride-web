@@ -116,15 +116,13 @@ export default function LandingPage() {
       const fetchJson = async (url, fallback) => {
         try {
           const response = await fetch(url);
-          const payload = await response.json().catch(() => ({}));
 
           if (!response.ok) {
-            throw new Error(payload?.error || `Request failed with status ${response.status}`);
+            return fallback;
           }
 
-          return payload;
-        } catch (error) {
-          console.error(`[LandingPage] ${url} failed:`, error);
+          return await response.json().catch(() => fallback);
+        } catch {
           return fallback;
         }
       };
