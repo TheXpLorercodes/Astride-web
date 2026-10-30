@@ -8,6 +8,7 @@ function MapController({ position }) {
   const map = useMap();
 
   React.useEffect(() => {
+    if (!position) return;
     map.flyTo(position, map.getZoom(), { animate: true, duration: 1.5 });
   }, [map, position]);
 
@@ -64,21 +65,22 @@ const issIcon = new L.divIcon({
 });
 
 export default function ISSMap({ issData, path }) {
-  if (!issData) return null;
+  const position = issData ? [Number(issData.latitude), Number(issData.longitude)] : null;
+  const center = position || [0, 0];
 
   return (
-    <MapContainer center={[issData.latitude, issData.longitude]} zoom={3} style={{ height: '100%', width: '100%' }}>
-      <MapController position={[issData.latitude, issData.longitude]} />
+    <MapContainer center={center} zoom={position ? 3 : 1} style={{ height: '100%', width: '100%' }}>
+      {position && <MapController position={position} />}
       <TileLayer
-        url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+        url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
-      <Marker position={[issData.latitude, issData.longitude]} icon={issIcon}>
+      {position && <Marker position={position} icon={issIcon}>
         <Popup>
           <strong>ISS Current Location</strong><br />
-          Alt: {issData.altitude.toFixed(2)} km
+          Alt: {Number(issData.altitude).toFixed(2)} km
         </Popup>
-      </Marker>
+      </Marker>}
       {path.length > 1 && <Polyline positions={path} color="#ec4899" weight={2} opacity={0.6} />}
     </MapContainer>
   );
